@@ -1,7 +1,5 @@
-import { cn } from "@/lib/utils";
-
 interface Props {
-  value: number; // 0-100
+  value: number;
   size?: number;
   stroke?: number;
   tone: "success" | "warning" | "destructive";
@@ -34,7 +32,7 @@ export function CircularUtilisation({ value, size = 56, stroke = 6, tone }: Prop
           style={{ transition: "stroke-dashoffset 0.6s ease" }}
         />
       </svg>
-      <span className={cn("absolute text-xs font-bold", `text-${tone}`)}>{value}%</span>
+      <span className="absolute text-xs font-bold" style={{ color: toneColor[tone] }}>{value}%</span>
     </div>
   );
 }

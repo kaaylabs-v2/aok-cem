@@ -82,8 +82,8 @@ export function EventCard({ event, onClick }: Props) {
         </div>
         <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-background">
           <div
-            className={cn("h-full rounded-full transition-all", `bg-${tone}`)}
-            style={{ width: `${Math.min(pct, 100)}%` }}
+            className="h-full rounded-full transition-all"
+            style={{ width: `${Math.min(pct, 100)}%`, backgroundColor: `hsl(var(--${tone}))` }}
           />
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
