@@ -169,7 +169,7 @@ const Index = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {visible.map((e, i) => <EventCard key={e.id} event={e} onClick={openEvent} index={i} />)}
+                    {visible.map((e) => <EventCard key={e.id} event={e} onClick={openEvent} />)}
                   </div>
                 )}
               </section>
