@@ -86,7 +86,7 @@ export function EventCard({ event, onClick }: Props) {
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
           <span className="inline-flex items-center gap-1">
-            <Users className="h-3.5 w-3.5" strokeWidth={1.75} /> {remaining} seats left
+            <Users className="h-3.5 w-3.5" strokeWidth={1.75} /> {remaining} seats left of {event.capacity}
           </span>
           <div className="flex items-center gap-2">
             {event.waitlist > 0 && (
