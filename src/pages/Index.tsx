@@ -75,7 +75,7 @@ const Index = () => {
               {/* Header */}
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">Portfolio overview</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gradient-brand">Portfolio overview</p>
                   <h1 className="mt-1 text-3xl font-bold tracking-tight md:text-4xl">Welcome back, Elena</h1>
                   <p className="mt-1 text-sm text-muted-foreground">Here's what's happening across your event portfolio today.</p>
                 </div>
