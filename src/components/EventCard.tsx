@@ -1,6 +1,7 @@
 import { Calendar, MapPin, Users, AlertTriangle, Heart, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { CircularUtilisation } from "./CircularUtilisation";
+import { TickBar } from "./TickBar";
 import { PortfolioEvent, utilisation, utilisationTone, isUnderperforming } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -80,11 +81,8 @@ export function EventCard({ event, onClick }: Props) {
             {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
           </span>
         </div>
-        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-foreground/5">
-          <div
-            className="h-full rounded-full transition-all"
-            style={{ width: `${Math.min(pct, 100)}%`, backgroundColor: `hsl(var(--${tone}))` }}
-          />
+        <div className="mt-2">
+          <TickBar value={pct} tone={tone} ticks={44} />
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
           <span className="inline-flex items-center gap-1">
