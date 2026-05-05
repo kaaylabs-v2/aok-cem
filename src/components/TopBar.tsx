@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Bell, ChevronDown, Search, Building2, Check } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { NavLink, useLocation } from "react-router-dom";
+import { Bell, ChevronDown, Search, Building2, Check, Settings as SettingsIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -15,8 +15,16 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { notifications as initial, NotificationItem } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/aok-logo.png";
 
-const tenants = ["Acme Events Group", "Northwind Live", "Helix Conferences"];
+const tenants = ["AOK Events", "Northwind Live", "Helix Conferences"];
+const navItems = [
+  { label: "Dashboard", to: "/" },
+  { label: "Events", to: "/events" },
+  { label: "Inventory", to: "/inventory" },
+  { label: "Waitlist", to: "/waitlist" },
+  { label: "Analytics", to: "/analytics" },
+];
 
 interface Props {
   onOpenNotification: (n: NotificationItem) => void;
@@ -25,108 +33,152 @@ interface Props {
 export function TopBar({ onOpenNotification }: Props) {
   const [tenant, setTenant] = useState(tenants[0]);
   const [notifs, setNotifs] = useState(initial);
+  const [searchOpen, setSearchOpen] = useState(false);
   const unread = notifs.filter((n) => n.unread).length;
+  const { pathname } = useLocation();
+  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
 
   const markAll = () => setNotifs((ns) => ns.map((n) => ({ ...n, unread: false })));
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-md md:px-6">
-      <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
+    <header className="sticky top-0 z-30 px-4 pt-4 md:px-6 md:pt-5">
+      <div className="mx-auto flex max-w-7xl items-center gap-3 rounded-full border border-border/60 bg-card/80 py-2 pl-3 pr-2 shadow-sm backdrop-blur-xl md:gap-4 md:pl-4">
+        {/* Brand + tenant */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex shrink-0 items-center gap-2 rounded-full pr-2 transition-colors hover:bg-secondary/60">
+              <div className="h-8 w-8 overflow-hidden rounded-full">
+                <img src={logo} alt="AOK Events" className="h-full w-full object-cover" />
+              </div>
+              <span className="hidden font-display text-sm font-semibold sm:inline">{tenant}</span>
+              <ChevronDown className="hidden h-3.5 w-3.5 text-muted-foreground sm:block" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-60">
+            <DropdownMenuLabel>Switch organisation</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {tenants.map((t) => (
+              <DropdownMenuItem key={t} onClick={() => setTenant(t)} className="justify-between">
+                {t}
+                {t === tenant && <Check className="h-4 w-4 text-primary" />}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="gap-2 px-2 font-medium">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-accent-foreground">
-              <Building2 className="h-3.5 w-3.5" />
-            </div>
-            <span className="hidden sm:inline">{tenant}</span>
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-64">
-          <DropdownMenuLabel>Switch organisation</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {tenants.map((t) => (
-            <DropdownMenuItem key={t} onClick={() => setTenant(t)} className="justify-between">
-              {t}
-              {t === tenant && <Check className="h-4 w-4 text-primary" />}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <div className="ml-auto hidden flex-1 max-w-md md:block">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input placeholder="Search events, venues, attendees…" className="pl-9 bg-secondary/60 border-transparent focus-visible:bg-background" />
-        </div>
-      </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            {unread > 0 && (
-              <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
-                {unread}
-              </span>
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-80 p-0">
-          <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
-            <p className="text-sm font-semibold">Notifications</p>
-            <button onClick={markAll} className="text-xs text-primary hover:underline">Mark all read</button>
-          </div>
-          <div className="max-h-96 overflow-y-auto">
-            {notifs.map((n) => (
-              <button
-                key={n.id}
-                onClick={() => onOpenNotification(n)}
+        {/* Pill nav */}
+        <nav className="hidden flex-1 items-center justify-center gap-1 md:flex">
+          {navItems.map((item) => {
+            const active = isActive(item.to);
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
                 className={cn(
-                  "flex w-full gap-3 border-b border-border/60 px-3 py-3 text-left transition-colors hover:bg-secondary/60",
-                  n.unread && "bg-accent/30"
+                  "rounded-full px-4 py-1.5 text-sm font-medium transition-all",
+                  active
+                    ? "bg-gradient-primary text-primary-foreground shadow-sm"
+                    : "text-foreground/70 hover:bg-secondary hover:text-foreground"
                 )}
               >
-                <span className={cn("mt-1 h-2 w-2 shrink-0 rounded-full", n.unread ? "bg-primary" : "bg-transparent")} />
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium">{n.title}</p>
-                  <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{n.body}</p>
-                  <p className="mt-1 text-[11px] text-muted-foreground">{n.time}</p>
-                </div>
-                <Badge variant="outline" className="h-5 shrink-0 text-[10px] capitalize">
-                  {n.type === "underperform" ? "alert" : n.type}
-                </Badge>
-              </button>
-            ))}
-          </div>
-        </DropdownMenuContent>
-      </DropdownMenu>
+                {item.label}
+              </NavLink>
+            );
+          })}
+        </nav>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className="flex items-center gap-2 rounded-full pr-2 transition-colors hover:bg-secondary/60">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback className="bg-gradient-primary text-xs font-semibold text-primary-foreground">EM</AvatarFallback>
-            </Avatar>
-            <ChevronDown className="hidden h-4 w-4 text-muted-foreground sm:block" />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold">Elena Martins</span>
-              <span className="text-xs font-normal text-muted-foreground">elena@acme.events</span>
+        {/* Right cluster */}
+        <div className="ml-auto flex items-center gap-1.5 md:ml-0">
+          {searchOpen ? (
+            <div className="relative animate-fade-in">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                autoFocus
+                onBlur={() => setSearchOpen(false)}
+                placeholder="Search events…"
+                className="h-9 w-44 rounded-full border-border/60 bg-secondary/60 pl-9 md:w-56"
+              />
             </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile settings</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Audit trail</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-destructive">Sign out</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          ) : (
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full" onClick={() => setSearchOpen(true)}>
+              <Search className="h-4 w-4" />
+            </Button>
+          )}
+
+          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
+            <SettingsIcon className="h-4 w-4" />
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full">
+                <Bell className="h-4 w-4" />
+                {unread > 0 && (
+                  <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
+                    {unread}
+                  </span>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80 p-0">
+              <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
+                <p className="text-sm font-semibold">Notifications</p>
+                <button onClick={markAll} className="text-xs text-primary hover:underline">Mark all read</button>
+              </div>
+              <div className="max-h-96 overflow-y-auto">
+                {notifs.map((n) => (
+                  <button
+                    key={n.id}
+                    onClick={() => onOpenNotification(n)}
+                    className={cn(
+                      "flex w-full gap-3 border-b border-border/60 px-3 py-3 text-left transition-colors hover:bg-secondary/60",
+                      n.unread && "bg-accent/30"
+                    )}
+                  >
+                    <span className={cn("mt-1 h-2 w-2 shrink-0 rounded-full", n.unread ? "bg-primary" : "bg-transparent")} />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium">{n.title}</p>
+                      <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{n.body}</p>
+                      <p className="mt-1 text-[11px] text-muted-foreground">{n.time}</p>
+                    </div>
+                    <Badge variant="outline" className="h-5 shrink-0 text-[10px] capitalize">
+                      {n.type === "underperform" ? "alert" : n.type}
+                    </Badge>
+                  </button>
+                ))}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="ml-1 flex items-center gap-2 rounded-full bg-card/70 py-1 pl-1 pr-3 transition-colors hover:bg-secondary/60">
+                <Avatar className="h-7 w-7">
+                  <AvatarFallback className="bg-gradient-primary text-[11px] font-semibold text-primary-foreground">EM</AvatarFallback>
+                </Avatar>
+                <div className="hidden text-left leading-tight sm:block">
+                  <p className="text-xs font-semibold">Elena Martins</p>
+                  <p className="text-[10px] text-muted-foreground">Ev Manager</p>
+                </div>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold">Elena Martins</span>
+                  <span className="text-xs font-normal text-muted-foreground">elena@aok.events</span>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile settings</DropdownMenuItem>
+              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>Audit trail</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-destructive">Sign out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
     </header>
   );
 }
