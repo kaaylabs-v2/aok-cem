@@ -1,16 +1,179 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useMemo, useState } from "react";
+import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { events as allEvents, venues, eventTypes, utilisation, isUnderperforming, PortfolioEvent, EventStatus, NotificationItem } from "@/data/portfolio";
+import { StatCard } from "@/components/StatCard";
+import { EventCard } from "@/components/EventCard";
+import { EventDrawer } from "@/components/EventDrawer";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
+import { TopBar } from "@/components/TopBar";
+import { AppSidebar } from "@/components/AppSidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { Badge } from "@/components/ui/badge";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+type StatusTab = "all" | EventStatus;
+
+const Index = () => {
+  const [scope, setScope] = useState<"upcoming" | "past">("upcoming");
+  const [statusTab, setStatusTab] = useState<StatusTab>("all");
+  const [venue, setVenue] = useState<string>("all");
+  const [type, setType] = useState<string>("all");
+  const [sort, setSort] = useState<"date" | "util" | "name">("date");
+  const [selected, setSelected] = useState<PortfolioEvent | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+
+  const visible = useMemo(() => {
+    let list = allEvents.filter((e) => (scope === "past" ? e.past : !e.past));
+    if (statusTab !== "all") list = list.filter((e) => e.status === statusTab);
+    if (venue !== "all") list = list.filter((e) => e.venue === venue);
+    if (type !== "all") list = list.filter((e) => e.type === type);
+    if (sort === "date") list = [...list].sort((a, b) => +new Date(a.date) - +new Date(b.date));
+    if (sort === "util") list = [...list].sort((a, b) => utilisation(b) - utilisation(a));
+    if (sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    return list;
+  }, [scope, statusTab, venue, type, sort]);
+
+  const summary = useMemo(() => {
+    const upcoming = allEvents.filter((e) => !e.past);
+    const totalBookings = upcoming.reduce((s, e) => s + e.booked, 0);
+    const totalCapacity = upcoming.reduce((s, e) => s + e.capacity, 0);
+    const avgUtil = totalCapacity ? Math.round((totalBookings / totalCapacity) * 100) : 0;
+    return {
+      totalEvents: upcoming.length,
+      totalBookings,
+      avgUtil,
+      underperforming: upcoming.filter(isUnderperforming).length,
+    };
+  }, []);
+
+  const openEvent = (e: PortfolioEvent) => { setSelected(e); setDrawerOpen(true); };
+  const onNotification = (n: NotificationItem) => {
+    if (n.type === "waitlist") setWaitlistOpen(true);
+    else if (n.eventId) {
+      const ev = allEvents.find((e) => e.id === n.eventId);
+      if (ev) openEvent(ev);
+    } else {
+      const first = allEvents.find((e) => !e.past);
+      if (first) openEvent(first);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-gradient-bg">
+        <AppSidebar />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <TopBar onOpenNotification={onNotification} />
+
+          <main className="flex-1 px-4 py-6 md:px-8 md:py-8">
+            <div className="mx-auto w-full max-w-7xl space-y-8">
+              {/* Header */}
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary">Portfolio overview</p>
+                  <h1 className="mt-1 text-3xl font-bold tracking-tight md:text-4xl">Welcome back, Elena</h1>
+                  <p className="mt-1 text-sm text-muted-foreground">Here's what's happening across your event portfolio today.</p>
+                </div>
+                <Button variant="outline" onClick={() => setWaitlistOpen(true)} className="gap-2">
+                  <ClipboardList className="h-4 w-4" />
+                  Manage waitlist
+                  <Badge className="ml-1 h-5 bg-primary text-primary-foreground">4</Badge>
+                </Button>
+              </div>
+
+              {/* Stats */}
+              <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <StatCard icon={CalendarIcon} label="Total events" value={summary.totalEvents} sub="Upcoming portfolio" trend={12} accent="primary" />
+                <StatCard icon={Users2} label="Total bookings" value={summary.totalBookings.toLocaleString()} sub="Across all venues" trend={8} accent="success" />
+                <StatCard icon={TrendingUp} label="Avg. utilisation" value={`${summary.avgUtil}%`} sub="Weighted by capacity" trend={summary.avgUtil >= 65 ? 4 : -3} accent="primary" />
+                <StatCard icon={ListChecks} label="Need attention" value={summary.underperforming} sub="Underperforming events" trend={-15} accent="warning" />
+              </section>
+
+              {/* Filters */}
+              <section className="sticky top-16 z-20 -mx-4 border-y border-border bg-background/85 px-4 py-3 backdrop-blur-md md:-mx-8 md:px-8">
+                <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3">
+                  <Tabs value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
+                    <TabsList className="bg-secondary/70">
+                      <TabsTrigger value="all">All</TabsTrigger>
+                      <TabsTrigger value="available">Available</TabsTrigger>
+                      <TabsTrigger value="partial">Partial</TabsTrigger>
+                      <TabsTrigger value="full">Full</TabsTrigger>
+                      <TabsTrigger value="waitlisted">Waitlisted</TabsTrigger>
+                      <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+
+                  <div className="ml-auto flex flex-wrap items-center gap-2">
+                    <div className="hidden items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-xs md:flex">
+                      <Filter className="h-3.5 w-3.5 text-muted-foreground" />
+                      <span className="text-muted-foreground">Filters:</span>
+                    </div>
+                    <Select value={venue} onValueChange={setVenue}>
+                      <SelectTrigger className="h-9 w-[170px]"><SelectValue placeholder="Venue" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All venues</SelectItem>
+                        {venues.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Select value={type} onValueChange={setType}>
+                      <SelectTrigger className="h-9 w-[150px]"><SelectValue placeholder="Type" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All types</SelectItem>
+                        {eventTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
+                      <SelectTrigger className="h-9 w-[150px]">
+                        <ArrowUpDown className="mr-1 h-3.5 w-3.5" /> <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="date">Sort: Date</SelectItem>
+                        <SelectItem value="util">Sort: Utilisation</SelectItem>
+                        <SelectItem value="name">Sort: Name</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5">
+                      <Label htmlFor="scope" className="text-xs text-muted-foreground">{scope === "upcoming" ? "Upcoming" : "Past"}</Label>
+                      <Switch id="scope" checked={scope === "past"} onCheckedChange={(v) => setScope(v ? "past" : "upcoming")} />
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Event grid */}
+              <section>
+                {visible.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/50 px-6 py-16 text-center">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent text-accent-foreground">
+                      <CalendarIcon className="h-6 w-6" />
+                    </div>
+                    <h3 className="text-lg font-semibold">No events yet</h3>
+                    <p className="mt-1 max-w-sm text-sm text-muted-foreground">Adjust filters above, or request inventory to start populating your portfolio.</p>
+                    <div className="mt-4 flex gap-2">
+                      <Button className="bg-gradient-primary">Create event</Button>
+                      <Button variant="outline">Request inventory</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {visible.map((e) => <EventCard key={e.id} event={e} onClick={openEvent} />)}
+                  </div>
+                )}
+              </section>
+            </div>
+          </main>
+        </div>
+
+        <EventDrawer event={selected} open={drawerOpen} onOpenChange={setDrawerOpen} />
+        <WaitlistDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} />
+      </div>
+    </SidebarProvider>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
