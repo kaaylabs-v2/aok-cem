@@ -90,12 +90,12 @@ export function EventCard({ event, onClick }: Props) {
           </span>
           <div className="flex items-center gap-2">
             {event.waitlist > 0 && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 font-semibold text-primary">
+              <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-1.5 py-0.5 font-semibold text-sky-700">
                 <Clock className="h-3.5 w-3.5" strokeWidth={1.75} /> {event.waitlist} waitlist
               </span>
             )}
             {event.wishlist > 0 && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-accent px-1.5 py-0.5 font-semibold text-accent-foreground">
+              <span className="inline-flex items-center gap-1 rounded-full bg-pink-100 px-1.5 py-0.5 font-semibold text-pink-700">
                 <Heart className="h-3.5 w-3.5" strokeWidth={1.75} /> {event.wishlist}
               </span>
             )}

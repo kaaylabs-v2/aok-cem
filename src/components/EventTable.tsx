@@ -95,12 +95,12 @@ export function EventTable({ events, onRowClick }: Props) {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-1.5 text-[11px]">
                       {e.waitlist > 0 && (
-                        <span className="inline-flex items-center gap-0.5 rounded-full bg-primary/10 px-1.5 py-0.5 font-semibold text-primary">
+                        <span className="inline-flex items-center gap-0.5 rounded-full bg-sky-100 px-1.5 py-0.5 font-semibold text-sky-700">
                           <Clock className="h-3.5 w-3.5" strokeWidth={1.75} /> {e.waitlist}
                         </span>
                       )}
                       {e.wishlist > 0 && (
-                        <span className="inline-flex items-center gap-0.5 rounded-full bg-accent px-1.5 py-0.5 font-semibold text-accent-foreground">
+                        <span className="inline-flex items-center gap-0.5 rounded-full bg-pink-100 px-1.5 py-0.5 font-semibold text-pink-700">
                           <Heart className="h-3.5 w-3.5" strokeWidth={1.75} /> {e.wishlist}
                         </span>
                       )}
