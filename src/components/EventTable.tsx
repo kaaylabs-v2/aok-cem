@@ -62,7 +62,7 @@ export function EventTable({ events, onRowClick }: Props) {
                       {under && (
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <AlertTriangle className="h-4 w-4 text-warning" />
+                            <AlertTriangle className="h-3.5 w-3.5 text-warning" strokeWidth={1.75} />
                           </TooltipTrigger>
                           <TooltipContent>Underperforming — &lt;50%, ≤14 days out</TooltipContent>
                         </Tooltip>
@@ -100,12 +100,12 @@ export function EventTable({ events, onRowClick }: Props) {
                     <div className="flex items-center justify-center gap-1.5 text-[11px]">
                       {e.waitlist > 0 && (
                         <span className="inline-flex items-center gap-0.5 rounded-full bg-primary/10 px-1.5 py-0.5 font-semibold text-primary">
-                          <Clock className="h-3 w-3" /> {e.waitlist}
+                          <Clock className="h-3.5 w-3.5" strokeWidth={1.75} /> {e.waitlist}
                         </span>
                       )}
                       {e.wishlist > 0 && (
                         <span className="inline-flex items-center gap-0.5 rounded-full bg-accent px-1.5 py-0.5 font-semibold text-accent-foreground">
-                          <Heart className="h-3 w-3" /> {e.wishlist}
+                          <Heart className="h-3.5 w-3.5" strokeWidth={1.75} /> {e.wishlist}
                         </span>
                       )}
                       {e.waitlist === 0 && e.wishlist === 0 && <span className="text-muted-foreground">—</span>}

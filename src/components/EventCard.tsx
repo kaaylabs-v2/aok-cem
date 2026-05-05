@@ -38,7 +38,7 @@ export function EventCard({ event, onClick }: Props) {
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-warning/15 text-warning">
-              <AlertTriangle className="h-4 w-4" />
+              <AlertTriangle className="h-4 w-4" strokeWidth={1.75} />
             </div>
           </TooltipTrigger>
           <TooltipContent>Underperforming — &lt;50% utilisation, ≤14 days out</TooltipContent>
@@ -61,11 +61,11 @@ export function EventCard({ event, onClick }: Props) {
 
       <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
         <div className="flex items-center gap-1.5">
-          <MapPin className="h-3.5 w-3.5 shrink-0" />
+          <MapPin className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
           <span className="truncate">{event.venue}</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <Calendar className="h-3.5 w-3.5 shrink-0" />
+          <Calendar className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
           <span>
             {dateObj.toLocaleDateString(undefined, { month: "short", day: "numeric" })} ·{" "}
             {dateObj.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
@@ -88,17 +88,17 @@ export function EventCard({ event, onClick }: Props) {
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
           <span className="inline-flex items-center gap-1">
-            <Users className="h-3 w-3" /> {remaining} seats left
+            <Users className="h-3.5 w-3.5" strokeWidth={1.75} /> {remaining} seats left
           </span>
           <div className="flex items-center gap-2">
             {event.waitlist > 0 && (
               <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 font-semibold text-primary">
-                <Clock className="h-3 w-3" /> {event.waitlist} waitlist
+                <Clock className="h-3.5 w-3.5" strokeWidth={1.75} /> {event.waitlist} waitlist
               </span>
             )}
             {event.wishlist > 0 && (
               <span className="inline-flex items-center gap-1 rounded-full bg-accent px-1.5 py-0.5 font-semibold text-accent-foreground">
-                <Heart className="h-3 w-3" /> {event.wishlist}
+                <Heart className="h-3.5 w-3.5" strokeWidth={1.75} /> {event.wishlist}
               </span>
             )}
           </div>

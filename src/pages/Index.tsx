@@ -159,7 +159,7 @@ const Index = () => {
                         onClick={() => setView("grid")}
                         aria-label="Grid view"
                       >
-                        <LayoutGrid className="h-3.5 w-3.5" />
+                        <LayoutGrid className="h-3.5 w-3.5" strokeWidth={1.75} />
                       </Button>
                       <Button
                         size="icon"
@@ -168,7 +168,7 @@ const Index = () => {
                         onClick={() => setView("table")}
                         aria-label="Table view"
                       >
-                        <List className="h-3.5 w-3.5" />
+                        <List className="h-3.5 w-3.5" strokeWidth={1.75} />
                       </Button>
                     </div>
                   </div>
