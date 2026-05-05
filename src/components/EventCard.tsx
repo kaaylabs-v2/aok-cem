@@ -30,8 +30,8 @@ export function EventCard({ event, onClick }: Props) {
     <button
       onClick={() => onClick?.(event)}
       className={cn(
-        "group relative flex w-full flex-col gap-4 rounded-2xl border bg-card p-5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
-        under ? "border-warning/60 ring-1 ring-warning/20" : "border-border"
+        "group relative flex w-full flex-col gap-4 rounded-3xl border bg-card p-5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
+        under ? "border-warning/60 ring-1 ring-warning/20" : "border-border/60"
       )}
     >
       {under && (
