@@ -62,13 +62,10 @@ const Index = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-gradient-bg">
-        <AppSidebar />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <TopBar onOpenNotification={onNotification} />
+    <div className="min-h-screen w-full bg-gradient-bg">
+      <TopBar onOpenNotification={onNotification} />
 
-          <main className="flex-1 px-4 py-6 md:px-6 md:py-6">
+      <main className="px-4 py-6 md:px-6 md:py-6">
             <div className="mx-auto w-full max-w-7xl space-y-6">
               {/* Hero panel */}
               <section className="relative overflow-hidden rounded-[2rem] border border-border/60 bg-gradient-hero p-6 shadow-panel md:p-8">
