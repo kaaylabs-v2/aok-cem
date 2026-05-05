@@ -168,7 +168,7 @@ const Index = () => {
                         onClick={() => setView("table")}
                         aria-label="Table view"
                       >
-                        <Rows3 className="h-3.5 w-3.5" />
+                        <List className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   </div>
