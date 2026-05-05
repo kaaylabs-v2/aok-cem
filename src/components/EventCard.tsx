@@ -1,7 +1,7 @@
 import { Calendar, MapPin, Users, AlertTriangle, Heart, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { CircularUtilisation } from "./CircularUtilisation";
-import { TickBar } from "./TickBar";
+import { SeatGrid } from "./SeatGrid";
 import { PortfolioEvent, utilisation, utilisationTone, isUnderperforming } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -81,8 +81,8 @@ export function EventCard({ event, onClick }: Props) {
             {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
           </span>
         </div>
-        <div className="mt-2">
-          <TickBar value={pct} tone={tone} ticks={44} />
+        <div className="mt-2.5">
+          <SeatGrid booked={event.booked} capacity={event.capacity} tone={tone} maxSeats={60} />
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
           <span className="inline-flex items-center gap-1">
