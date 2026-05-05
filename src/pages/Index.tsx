@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download } from "lucide-react";
+import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download, LayoutGrid, Rows3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { events as allEvents, venues, eventTypes, utilisation, isUnderperforming, PortfolioEvent, EventStatus, NotificationItem } from "@/data/portfolio";
 import { StatCard } from "@/components/StatCard";
 import { EventCard } from "@/components/EventCard";
+import { EventTable } from "@/components/EventTable";
 import { EventDrawer } from "@/components/EventDrawer";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { TopBar } from "@/components/TopBar";
@@ -24,6 +25,7 @@ const Index = () => {
   const [selected, setSelected] = useState<PortfolioEvent | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [view, setView] = useState<"grid" | "table">("grid");
 
   const visible = useMemo(() => {
     let list = allEvents.filter((e) => (scope === "past" ? e.past : !e.past));
@@ -149,6 +151,26 @@ const Index = () => {
                       <Label htmlFor="scope" className="text-xs text-muted-foreground">{scope === "upcoming" ? "Upcoming" : "Past"}</Label>
                       <Switch id="scope" checked={scope === "past"} onCheckedChange={(v) => setScope(v ? "past" : "upcoming")} />
                     </div>
+                    <div className="flex items-center gap-0.5 rounded-lg border border-border bg-card p-0.5">
+                      <Button
+                        size="icon"
+                        variant={view === "grid" ? "default" : "ghost"}
+                        className="h-7 w-7"
+                        onClick={() => setView("grid")}
+                        aria-label="Grid view"
+                      >
+                        <LayoutGrid className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant={view === "table" ? "default" : "ghost"}
+                        className="h-7 w-7"
+                        onClick={() => setView("table")}
+                        aria-label="Table view"
+                      >
+                        <Rows3 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </section>
@@ -167,10 +189,12 @@ const Index = () => {
                       <Button variant="outline">Request inventory</Button>
                     </div>
                   </div>
-                ) : (
+                ) : view === "grid" ? (
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                     {visible.map((e) => <EventCard key={e.id} event={e} onClick={openEvent} />)}
                   </div>
+                ) : (
+                  <EventTable events={visible} onRowClick={openEvent} />
                 )}
               </section>
             </div>
