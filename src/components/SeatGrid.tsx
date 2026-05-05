@@ -1,3 +1,4 @@
+import { Armchair } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SeatGridProps {
@@ -9,7 +10,6 @@ interface SeatGridProps {
 }
 
 export function SeatGrid({ booked, capacity, tone = "primary", maxSeats = 60, className }: SeatGridProps) {
-  // Scale to a manageable number of seat dots while preserving the booked ratio
   const total = Math.min(capacity, maxSeats);
   const filled = Math.round((Math.min(booked, capacity) / capacity) * total);
   const color = `hsl(var(--${tone}))`;
@@ -23,11 +23,12 @@ export function SeatGrid({ booked, capacity, tone = "primary", maxSeats = 60, cl
       {Array.from({ length: total }).map((_, i) => {
         const active = i < filled;
         return (
-          <span
+          <Armchair
             key={i}
-            className="h-2 w-2 rounded-[2px] transition-colors"
+            className="h-3 w-3"
+            strokeWidth={1.75}
             style={{
-              backgroundColor: active ? color : "hsl(var(--foreground) / 0.08)",
+              color: active ? color : "hsl(var(--foreground) / 0.18)",
             }}
           />
         );
