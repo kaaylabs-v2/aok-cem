@@ -4,59 +4,61 @@
 
 @layer base {
   :root {
-    --background: 320 30% 99%;
-    --foreground: 270 25% 14%;
+    --background: 240 20% 96%;
+    --foreground: 240 18% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 270 25% 14%;
+    --card-foreground: 240 18% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 270 25% 14%;
+    --popover-foreground: 240 18% 12%;
 
-    --primary: 330 85% 56%;
+    --primary: 330 85% 58%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 295 80% 65%;
+    --primary-glow: 295 85% 68%;
 
-    --secondary: 320 25% 96%;
-    --secondary-foreground: 270 25% 18%;
+    --secondary: 240 20% 96%;
+    --secondary-foreground: 240 20% 18%;
 
-    --muted: 320 20% 96%;
-    --muted-foreground: 270 10% 46%;
+    --muted: 240 18% 95%;
+    --muted-foreground: 240 8% 48%;
 
     --accent: 330 85% 96%;
-    --accent-foreground: 330 70% 40%;
+    --accent-foreground: 330 75% 42%;
 
-    --destructive: 0 78% 56%;
+    --destructive: 0 78% 58%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 158 65% 42%;
+    --success: 158 62% 44%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 32 95% 54%;
+    --warning: 32 95% 56%;
     --warning-foreground: 30 50% 12%;
 
-    --info: 200 90% 52%;
+    --info: 220 90% 60%;
     --info-foreground: 0 0% 100%;
 
-    --border: 320 20% 91%;
-    --input: 320 20% 91%;
-    --ring: 330 85% 56%;
+    --border: 240 18% 92%;
+    --input: 240 18% 92%;
+    --ring: 330 85% 58%;
 
-    --radius: 0.85rem;
+    --radius: 1.25rem;
 
-    --gradient-bg: linear-gradient(180deg, hsl(320 40% 99%), hsl(280 30% 97%));
-    --gradient-primary: linear-gradient(135deg, hsl(330 90% 58%) 0%, hsl(280 80% 60%) 50%, hsl(220 85% 60%) 100%);
-    --gradient-brand: linear-gradient(135deg, hsl(340 90% 60%) 0%, hsl(20 95% 60%) 25%, hsl(50 95% 58%) 50%, hsl(160 70% 50%) 75%, hsl(220 85% 62%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(320 30% 99%));
-    --gradient-success: linear-gradient(135deg, hsl(158 65% 42%), hsl(180 65% 45%));
-    --gradient-warning: linear-gradient(135deg, hsl(32 95% 54%), hsl(10 90% 58%));
-    --gradient-danger: linear-gradient(135deg, hsl(0 78% 56%), hsl(330 85% 56%));
+    --gradient-bg: linear-gradient(135deg, hsl(240 30% 97%) 0%, hsl(280 35% 96%) 50%, hsl(210 40% 96%) 100%);
+    --gradient-hero: linear-gradient(120deg, hsl(330 80% 92%) 0%, hsl(280 75% 93%) 35%, hsl(220 80% 94%) 70%, hsl(180 60% 94%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(330 88% 60%) 0%, hsl(290 80% 62%) 100%);
+    --gradient-brand: linear-gradient(135deg, hsl(340 90% 62%) 0%, hsl(20 95% 62%) 25%, hsl(50 95% 60%) 50%, hsl(160 70% 52%) 75%, hsl(220 85% 64%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(240 25% 99%));
+    --gradient-success: linear-gradient(135deg, hsl(158 62% 44%), hsl(180 62% 46%));
+    --gradient-warning: linear-gradient(135deg, hsl(32 95% 56%), hsl(10 90% 60%));
+    --gradient-danger: linear-gradient(135deg, hsl(0 78% 58%), hsl(330 85% 58%));
 
-    --shadow-xs: 0 1px 2px hsl(330 40% 20% / 0.04);
-    --shadow-sm: 0 2px 6px hsl(330 40% 20% / 0.05);
-    --shadow-md: 0 8px 24px -8px hsl(330 40% 20% / 0.10);
-    --shadow-lg: 0 16px 40px -12px hsl(330 85% 56% / 0.25);
-    --shadow-glow: 0 0 0 4px hsl(330 85% 56% / 0.14);
+    --shadow-xs: 0 1px 2px hsl(240 30% 20% / 0.04);
+    --shadow-sm: 0 2px 8px hsl(240 30% 20% / 0.04);
+    --shadow-md: 0 10px 30px -10px hsl(240 30% 20% / 0.08);
+    --shadow-lg: 0 20px 50px -15px hsl(330 85% 58% / 0.20);
+    --shadow-panel: 0 30px 80px -30px hsl(240 40% 30% / 0.18);
+    --shadow-glow: 0 0 0 4px hsl(330 85% 58% / 0.14);
 
     --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -121,6 +123,7 @@
 @layer utilities {
   .bg-gradient-primary { background: var(--gradient-primary); }
   .bg-gradient-brand { background: var(--gradient-brand); }
+  .bg-gradient-hero { background: var(--gradient-hero); }
   .bg-gradient-card { background: var(--gradient-card); }
   .bg-gradient-bg { background: var(--gradient-bg); }
   .bg-gradient-success { background: var(--gradient-success); }
