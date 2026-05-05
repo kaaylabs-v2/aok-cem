@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download } from "lucide-react";
+import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download, LayoutGrid, Rows3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { events as allEvents, venues, eventTypes, utilisation, isUnderperforming, PortfolioEvent, EventStatus, NotificationItem } from "@/data/portfolio";
 import { StatCard } from "@/components/StatCard";
 import { EventCard } from "@/components/EventCard";
+import { EventTable } from "@/components/EventTable";
 import { EventDrawer } from "@/components/EventDrawer";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { TopBar } from "@/components/TopBar";
