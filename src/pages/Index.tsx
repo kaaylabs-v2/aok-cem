@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown } from "lucide-react";
+import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -70,28 +70,41 @@ const Index = () => {
         <div className="flex min-w-0 flex-1 flex-col">
           <TopBar onOpenNotification={onNotification} />
 
-          <main className="flex-1 px-4 py-6 md:px-8 md:py-8">
-            <div className="mx-auto w-full max-w-7xl space-y-8">
-              {/* Header */}
-              <div className="flex flex-wrap items-end justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gradient-brand">Portfolio overview</p>
-                  <h1 className="mt-1 text-3xl font-bold tracking-tight md:text-4xl">Welcome back, Elena</h1>
-                  <p className="mt-1 text-sm text-muted-foreground">Here's what's happening across your event portfolio today.</p>
-                </div>
-                <Button variant="outline" onClick={() => setWaitlistOpen(true)} className="gap-2">
-                  <ClipboardList className="h-4 w-4" />
-                  Manage waitlist
-                  <Badge className="ml-1 h-5 bg-primary text-primary-foreground">4</Badge>
-                </Button>
-              </div>
+          <main className="flex-1 px-4 py-6 md:px-6 md:py-6">
+            <div className="mx-auto w-full max-w-7xl space-y-6">
+              {/* Hero panel */}
+              <section className="relative overflow-hidden rounded-[2rem] border border-border/60 bg-gradient-hero p-6 shadow-panel md:p-8">
+                <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-32 left-1/3 h-72 w-72 rounded-full bg-info/15 blur-3xl" />
 
-              {/* Stats */}
-              <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <StatCard icon={CalendarIcon} label="Total events" value={summary.totalEvents} sub="Upcoming portfolio" trend={12} accent="primary" />
-                <StatCard icon={Users2} label="Total bookings" value={summary.totalBookings.toLocaleString()} sub="Across all venues" trend={8} accent="success" />
-                <StatCard icon={TrendingUp} label="Avg. utilisation" value={`${summary.avgUtil}%`} sub="Weighted by capacity" trend={summary.avgUtil >= 65 ? 4 : -3} accent="primary" />
-                <StatCard icon={ListChecks} label="Need attention" value={summary.underperforming} sub="Underperforming events" trend={-15} accent="warning" />
+                <div className="relative flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-foreground/60">
+                      {new Date().toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                    </p>
+                    <h1 className="mt-1 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+                      Welcome back, Elena
+                    </h1>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" className="rounded-full border-border/70 bg-card/70 backdrop-blur" onClick={() => setWaitlistOpen(true)}>
+                      <ClipboardList className="mr-1.5 h-4 w-4" />
+                      Waitlist
+                      <Badge className="ml-2 h-5 bg-primary text-primary-foreground">4</Badge>
+                    </Button>
+                    <Button className="rounded-full bg-foreground text-background hover:bg-foreground/90">
+                      <Download className="mr-1.5 h-4 w-4" /> Export Data
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="relative mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <StatCard icon={CalendarIcon} label="Total Events" value={summary.totalEvents} sub="vs last month" trend={12} />
+                  <StatCard icon={Users2} label="Total Bookings" value={summary.totalBookings.toLocaleString()} sub="vs last month" trend={8} />
+                  <StatCard icon={TrendingUp} label="Avg. Utilisation" value={`${summary.avgUtil}%`} sub="vs last month" trend={summary.avgUtil >= 65 ? 4 : -3} />
+                  <StatCard icon={ListChecks} label="Need Attention" value={summary.underperforming} sub="vs last month" trend={-15} />
+                </div>
               </section>
 
               {/* Filters */}
