@@ -151,6 +151,26 @@ const Index = () => {
                       <Label htmlFor="scope" className="text-xs text-muted-foreground">{scope === "upcoming" ? "Upcoming" : "Past"}</Label>
                       <Switch id="scope" checked={scope === "past"} onCheckedChange={(v) => setScope(v ? "past" : "upcoming")} />
                     </div>
+                    <div className="flex items-center gap-0.5 rounded-lg border border-border bg-card p-0.5">
+                      <Button
+                        size="icon"
+                        variant={view === "grid" ? "default" : "ghost"}
+                        className="h-7 w-7"
+                        onClick={() => setView("grid")}
+                        aria-label="Grid view"
+                      >
+                        <LayoutGrid className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant={view === "table" ? "default" : "ghost"}
+                        className="h-7 w-7"
+                        onClick={() => setView("table")}
+                        aria-label="Table view"
+                      >
+                        <Rows3 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </section>
@@ -169,10 +189,12 @@ const Index = () => {
                       <Button variant="outline">Request inventory</Button>
                     </div>
                   </div>
-                ) : (
+                ) : view === "grid" ? (
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                     {visible.map((e) => <EventCard key={e.id} event={e} onClick={openEvent} />)}
                   </div>
+                ) : (
+                  <EventTable events={visible} onRowClick={openEvent} />
                 )}
               </section>
             </div>
