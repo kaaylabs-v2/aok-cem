@@ -103,7 +103,7 @@ const Index = () => {
               </section>
 
               {/* Filters */}
-              <section className="sticky top-16 z-20 -mx-4 border-y border-border bg-background/85 px-4 py-3 backdrop-blur-md md:-mx-8 md:px-8">
+              <section className="sticky top-20 z-20 rounded-2xl border border-border/60 bg-card/80 px-3 py-2.5 backdrop-blur-md">
                 <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3">
                   <Tabs value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
                     <TabsList className="bg-secondary/70">
