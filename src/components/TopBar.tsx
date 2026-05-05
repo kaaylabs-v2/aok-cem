@@ -42,7 +42,7 @@ export function TopBar({ onOpenNotification }: Props) {
 
   return (
     <header className="sticky top-0 z-30 px-4 pt-4 md:px-6 md:pt-5">
-      <div className="mx-auto flex max-w-7xl items-center gap-3 rounded-full border border-border/60 bg-card/80 py-2 pl-3 pr-2 shadow-sm backdrop-blur-xl md:gap-4 md:pl-4">
+      <div className="mx-auto flex max-w-[1600px] items-center gap-3 rounded-full border border-border/60 bg-card/80 py-2 pl-3 pr-2 shadow-sm backdrop-blur-xl md:gap-4 md:pl-4">
         {/* Brand + tenant */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
