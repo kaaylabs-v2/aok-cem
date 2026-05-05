@@ -137,4 +137,5 @@
   }
   .shadow-soft { box-shadow: var(--shadow-md); }
   .shadow-elegant { box-shadow: var(--shadow-lg); }
+  .shadow-panel { box-shadow: var(--shadow-panel); }
 }
