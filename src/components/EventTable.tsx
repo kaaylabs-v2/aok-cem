@@ -1,6 +1,7 @@
 import { AlertTriangle, Heart, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { CircularUtilisation } from "./CircularUtilisation";
+import { TickBar } from "./TickBar";
 import { PortfolioEvent, utilisation, utilisationTone, isUnderperforming } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -86,14 +87,9 @@ export function EventTable({ events, onRowClick }: Props) {
                     <p className="text-[11px] text-muted-foreground">{remaining} left</p>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex flex-col items-center gap-1">
-                      <div className="h-1.5 w-24 overflow-hidden rounded-full bg-foreground/5">
-                        <div
-                          className="h-full rounded-full"
-                          style={{ width: `${Math.min(pct, 100)}%`, backgroundColor: `hsl(var(--${tone}))` }}
-                        />
-                      </div>
-                      <span className="text-[11px] font-semibold" style={{ color: `hsl(var(--${tone}))` }}>{pct}%</span>
+                    <div className="flex items-center gap-2">
+                      <TickBar value={pct} tone={tone} ticks={28} showKnob={false} className="h-3 w-28" />
+                      <span className="text-[11px] font-semibold tabular-nums" style={{ color: `hsl(var(--${tone}))` }}>{pct}%</span>
                     </div>
                   </td>
                   <td className="px-4 py-3">
