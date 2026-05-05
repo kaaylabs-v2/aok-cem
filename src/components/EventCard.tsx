@@ -8,7 +8,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 interface Props {
   event: PortfolioEvent;
   onClick?: (e: PortfolioEvent) => void;
-  index?: number;
 }
 
 const statusBadge: Record<PortfolioEvent["status"], { label: string; cls: string }> = {
@@ -19,31 +18,20 @@ const statusBadge: Record<PortfolioEvent["status"], { label: string; cls: string
   cancelled: { label: "Cancelled", cls: "bg-rose-100 text-rose-700 border-rose-200" },
 };
 
-const pastels = [
-  "bg-[hsl(336_70%_96%)] border-[hsl(336_50%_90%)]",      // pink
-  "bg-[hsl(40_85%_94%)] border-[hsl(40_60%_86%)]",        // peach
-  "bg-[hsl(150_45%_93%)] border-[hsl(150_35%_84%)]",      // mint
-  "bg-[hsl(210_70%_94%)] border-[hsl(210_50%_86%)]",      // sky
-  "bg-[hsl(265_55%_95%)] border-[hsl(265_40%_88%)]",      // lavender
-  "bg-[hsl(50_85%_92%)] border-[hsl(50_60%_84%)]",        // butter
-];
-
-export function EventCard({ event, onClick, index = 0 }: Props) {
+export function EventCard({ event, onClick }: Props) {
   const pct = utilisation(event);
   const tone = utilisationTone(pct);
   const remaining = Math.max(event.capacity - event.booked, 0);
   const under = isUnderperforming(event);
   const badge = statusBadge[event.status];
   const dateObj = new Date(event.date);
-  const pastel = pastels[index % pastels.length];
 
   return (
     <button
       onClick={() => onClick?.(event)}
       className={cn(
-        "group relative flex w-full flex-col gap-4 rounded-3xl border p-5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
-        pastel,
-        under && "ring-2 ring-warning/40"
+        "group relative flex w-full flex-col gap-4 rounded-3xl border bg-card p-5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
+        under ? "border-warning/60 ring-1 ring-warning/20" : "border-border/60"
       )}
     >
       {under && (
