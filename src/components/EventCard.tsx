@@ -8,30 +8,42 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 interface Props {
   event: PortfolioEvent;
   onClick?: (e: PortfolioEvent) => void;
+  index?: number;
 }
 
 const statusBadge: Record<PortfolioEvent["status"], { label: string; cls: string }> = {
-  available: { label: "Available", cls: "bg-info/10 text-info border-info/20" },
-  partial: { label: "Partially booked", cls: "bg-warning/10 text-warning border-warning/30" },
-  full: { label: "Full", cls: "bg-success/10 text-success border-success/20" },
-  waitlisted: { label: "Waitlisted", cls: "bg-primary/10 text-primary border-primary/20" },
-  cancelled: { label: "Cancelled", cls: "bg-destructive/10 text-destructive border-destructive/20" },
+  available: { label: "Available", cls: "bg-sky-100 text-sky-700 border-sky-200" },
+  partial: { label: "Partially booked", cls: "bg-amber-100 text-amber-700 border-amber-200" },
+  full: { label: "Full", cls: "bg-emerald-100 text-emerald-700 border-emerald-200" },
+  waitlisted: { label: "Waitlisted", cls: "bg-pink-100 text-pink-700 border-pink-200" },
+  cancelled: { label: "Cancelled", cls: "bg-rose-100 text-rose-700 border-rose-200" },
 };
 
-export function EventCard({ event, onClick }: Props) {
+const pastels = [
+  "bg-[hsl(336_70%_96%)] border-[hsl(336_50%_90%)]",      // pink
+  "bg-[hsl(40_85%_94%)] border-[hsl(40_60%_86%)]",        // peach
+  "bg-[hsl(150_45%_93%)] border-[hsl(150_35%_84%)]",      // mint
+  "bg-[hsl(210_70%_94%)] border-[hsl(210_50%_86%)]",      // sky
+  "bg-[hsl(265_55%_95%)] border-[hsl(265_40%_88%)]",      // lavender
+  "bg-[hsl(50_85%_92%)] border-[hsl(50_60%_84%)]",        // butter
+];
+
+export function EventCard({ event, onClick, index = 0 }: Props) {
   const pct = utilisation(event);
   const tone = utilisationTone(pct);
   const remaining = Math.max(event.capacity - event.booked, 0);
   const under = isUnderperforming(event);
   const badge = statusBadge[event.status];
   const dateObj = new Date(event.date);
+  const pastel = pastels[index % pastels.length];
 
   return (
     <button
       onClick={() => onClick?.(event)}
       className={cn(
-        "group relative flex w-full flex-col gap-4 rounded-3xl border bg-card p-5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
-        under ? "border-warning/60 ring-1 ring-warning/20" : "border-border/60"
+        "group relative flex w-full flex-col gap-4 rounded-3xl border p-5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
+        pastel,
+        under && "ring-2 ring-warning/40"
       )}
     >
       {under && (
@@ -73,14 +85,14 @@ export function EventCard({ event, onClick }: Props) {
         </div>
       </div>
 
-      <div className="rounded-xl bg-secondary/50 p-3">
+      <div className="rounded-2xl bg-white/60 p-3 backdrop-blur-sm">
         <div className="flex items-center justify-between text-xs">
           <span className="font-medium text-foreground/80">Bookings</span>
           <span className="font-semibold tabular-nums">
             {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
           </span>
         </div>
-        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-background">
+        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-foreground/5">
           <div
             className="h-full rounded-full transition-all"
             style={{ width: `${Math.min(pct, 100)}%`, backgroundColor: `hsl(var(--${tone}))` }}
