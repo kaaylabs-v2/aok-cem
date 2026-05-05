@@ -10,35 +10,26 @@ interface StatCardProps {
   accent?: "primary" | "success" | "warning";
 }
 
-export function StatCard({ icon: Icon, label, value, sub, trend, accent = "primary" }: StatCardProps) {
+export function StatCard({ icon: Icon, label, value, sub, trend }: StatCardProps) {
   const up = trend >= 0;
-  const accents = {
-    primary: "bg-gradient-primary",
-    success: "bg-gradient-success",
-    warning: "bg-gradient-warning",
-  };
-
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:shadow-soft">
-      <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-accent/40 blur-2xl transition-opacity group-hover:opacity-70" />
-      <div className="relative flex items-start justify-between">
-        <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl text-primary-foreground shadow-md", accents[accent])}>
-          <Icon className="h-5 w-5" strokeWidth={2.25} />
-        </div>
-        <div
+    <div className="group rounded-3xl border border-border/60 bg-card/80 p-5 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-soft">
+      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-foreground/70">
+        <Icon className="h-5 w-5" strokeWidth={1.75} />
+      </div>
+      <p className="mt-5 text-sm font-medium text-muted-foreground">{label}</p>
+      <div className="mt-1 flex items-baseline gap-2">
+        <p className="text-4xl font-bold tracking-tight">{value}</p>
+        <span
           className={cn(
-            "flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold",
-            up ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
+            "inline-flex items-center gap-0.5 text-xs font-semibold",
+            up ? "text-success" : "text-destructive"
           )}
         >
           {up ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
-          {Math.abs(trend)}%
-        </div>
-      </div>
-      <div className="relative mt-5">
-        <p className="text-3xl font-bold tracking-tight text-foreground">{value}</p>
-        <p className="mt-1 text-sm font-medium text-foreground/80">{label}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p>
+          {up ? "+" : ""}{trend}%
+        </span>
+        <span className="text-xs text-muted-foreground">{sub}</span>
       </div>
     </div>
   );
