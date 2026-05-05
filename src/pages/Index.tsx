@@ -11,8 +11,6 @@ import { EventCard } from "@/components/EventCard";
 import { EventDrawer } from "@/components/EventDrawer";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { TopBar } from "@/components/TopBar";
-import { AppSidebar } from "@/components/AppSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 
 type StatusTab = "all" | EventStatus;
