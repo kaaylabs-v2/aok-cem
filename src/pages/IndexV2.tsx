@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import {
-  Bell, Inbox, Home, BookOpen, Users2, BarChart3, LayoutGrid,
+  Bell, Inbox, LayoutDashboard, Calendar, Boxes, Users2, BarChart3,
   Settings, Headphones, LogOut, Search, Filter, Sparkles,
   Calendar as CalendarIcon, TrendingUp, ListChecks,
-  ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList,
+  ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
