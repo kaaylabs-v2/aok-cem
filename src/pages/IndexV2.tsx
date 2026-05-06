@@ -392,37 +392,30 @@ export default function IndexV2() {
           </div>
 
           {/* Stats + Charts + Attention */}
-          <div className="mt-7 grid grid-cols-1 gap-3 lg:grid-cols-3">
-            {/* Left + middle: 3 stat cards on top, 2 chart cards below */}
-            <div className="lg:col-span-2 flex flex-col gap-3">
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <SoftStat icon={CalendarIcon} tint="bg-[hsl(220_85%_92%)] text-[hsl(220_85%_50%)]" label="Total Events" value={summary.totalEvents} />
-                <SoftStat icon={Users2} tint="bg-[hsl(45_95%_88%)] text-[hsl(35_85%_45%)]" label="Total Bookings" value={summary.bookings.toLocaleString()} />
-                <SoftStat icon={Target} tint="bg-[hsl(140_55%_88%)] text-[hsl(140_55%_35%)]" label="Avg. Utilisation" value={`${summary.avgUtil}%`} />
-                <SoftStat icon={Smile} tint="bg-[hsl(330_75%_92%)] text-[hsl(330_70%_50%)]" label="Need Attention" value={summary.attention} />
+          <div className="mt-7 flex flex-col gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <SoftStat icon={CalendarIcon} tint="bg-[hsl(220_85%_92%)] text-[hsl(220_85%_50%)]" label="Total Events" value={summary.totalEvents} />
+              <SoftStat icon={Users2} tint="bg-[hsl(45_95%_88%)] text-[hsl(35_85%_45%)]" label="Total Bookings" value={summary.bookings.toLocaleString()} />
+              <SoftStat icon={Target} tint="bg-[hsl(140_55%_88%)] text-[hsl(140_55%_35%)]" label="Avg. Utilisation" value={`${summary.avgUtil}%`} />
+              <SoftStat icon={Smile} tint="bg-[hsl(330_75%_92%)] text-[hsl(330_70%_50%)]" label="Need Attention" value={summary.attention} />
+            </div>
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+              <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">Bookings Over Time</h3>
+                  <span className="text-xs text-foreground/50">Upcoming events</span>
+                </div>
+                <div className="mt-3"><BookingsChart events={upcoming} /></div>
               </div>
-              <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-                <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">Bookings Over Time</h3>
-                    <span className="text-xs text-foreground/50">Upcoming events</span>
-                  </div>
-                  <div className="mt-3"><BookingsChart events={upcoming} /></div>
+              <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">Bookings by Type</h3>
+                  <span className="text-xs text-foreground/50">{upcoming.length} events</span>
                 </div>
-                <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">Bookings by Type</h3>
-                    <span className="text-xs text-foreground/50">{upcoming.length} events</span>
-                  </div>
-                  <div className="mt-3"><TypeBars events={upcoming} /></div>
-                </div>
+                <div className="mt-3"><TypeBars events={upcoming} /></div>
               </div>
             </div>
-
-            {/* Right: AttentionCard full height */}
-            <div className="flex flex-col gap-3">
-              <AttentionCard events={upcoming} onOpen={openEvent} />
-            </div>
+            <AttentionCard events={upcoming} onOpen={openEvent} />
           </div>
 
           {/* Table section */}
