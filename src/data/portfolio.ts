@@ -121,6 +121,16 @@ export interface Enquiry {
   timeline: EnquiryTimelineEvent[];
   aokNotes: string;
   activity: { at: string; text: string }[];
+  documents?: EnquiryDocument[];
+}
+
+export interface EnquiryDocument {
+  id: string;
+  name: string;
+  type: "pdf" | "docx" | "xlsx" | "image";
+  size: string;
+  uploadedBy: string;
+  uploadedAt: string;
 }
 
 export const ENQUIRY_STATUS_LABEL: Record<EnquiryStatus, string> = {
@@ -159,6 +169,12 @@ export const enquiries: Enquiry[] = [
       { at: d(-9, 11), text: "Enquiry submitted by Elena Rossi" },
       { at: d(-7, 10), text: "Status changed to In Progress" },
       { at: d(-1, 14), text: "Proposal received from AOK" },
+    ],
+    documents: [
+      { id: "doc1", name: "Proposal_Aurora_Hall.pdf", type: "pdf", size: "1.8 MB", uploadedBy: "AOK London", uploadedAt: d(-1, 14) },
+      { id: "doc2", name: "Venue_Floorplan.pdf", type: "pdf", size: "640 KB", uploadedBy: "AOK London", uploadedAt: d(-1, 14) },
+      { id: "doc3", name: "Catering_Menu.pdf", type: "pdf", size: "420 KB", uploadedBy: "AOK London", uploadedAt: d(-1, 14) },
+      { id: "doc4", name: "Cost_Breakdown.xlsx", type: "xlsx", size: "85 KB", uploadedBy: "AOK London", uploadedAt: d(-1, 14) },
     ],
   },
   {
