@@ -4,8 +4,10 @@ import {
   Settings, Headphones, LogOut, Search, Filter, Sparkles,
   Calendar as CalendarIcon, TrendingUp, ListChecks,
   ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid, ChevronsLeft, ChevronsRight,
-  FileSearch,
+  FileSearch, ChevronDown, Check,
 } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { EnquiriesView } from "@/components/EnquiriesView";
 import { cn } from "@/lib/utils";
 import {
