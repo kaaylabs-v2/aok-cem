@@ -46,7 +46,6 @@ function RailButton({ it, expanded }: { it: RailItem; expanded: boolean }) {
 
 function SideRail({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
   const top: RailItem[] = [
-    { icon: Bell, label: "Notifications" },
     { icon: Inbox, label: "Inbox" },
   ];
   const main: RailItem[] = [
