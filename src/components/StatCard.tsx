@@ -8,10 +8,47 @@ interface StatCardProps {
   sub: string;
   trend: number;
   accent?: "primary" | "success" | "warning";
+  /** Optional bar chart data (relative magnitudes). If omitted, a deterministic series is generated. */
+  bars?: number[];
 }
 
-export function StatCard({ icon: Icon, label, value, sub, trend }: StatCardProps) {
+// Deterministic pseudo-random series so cards stay stable across renders.
+function generateBars(seedSource: string | number, points = 12): number[] {
+  const seedStr = String(seedSource);
+  let seed = 0;
+  for (let i = 0; i < seedStr.length; i++) seed = (seed * 31 + seedStr.charCodeAt(i)) >>> 0;
+  const out: number[] = [];
+  let v = 50;
+  for (let i = 0; i < points; i++) {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    const delta = ((seed % 100) / 100 - 0.45) * 28;
+    v = Math.max(15, Math.min(95, v + delta));
+    out.push(v);
+  }
+  return out;
+}
+
+function MiniBars({ data, up }: { data: number[]; up: boolean }) {
+  const max = Math.max(...data);
+  const color = up ? "bg-success" : "bg-destructive";
+  const colorMuted = up ? "bg-success/25" : "bg-destructive/25";
+  const lastIdx = data.length - 1;
+  return (
+    <div className="flex h-8 items-end gap-[3px]">
+      {data.map((d, i) => (
+        <div
+          key={i}
+          className={cn("flex-1 rounded-sm transition-all", i === lastIdx ? color : colorMuted)}
+          style={{ height: `${Math.max(8, (d / max) * 100)}%` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+export function StatCard({ icon: Icon, label, value, sub, trend, bars }: StatCardProps) {
   const up = trend >= 0;
+  const data = bars ?? generateBars(`${label}-${value}`);
 
   return (
     <div className="group rounded-3xl border border-border/60 bg-card/80 p-5 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-soft">
@@ -25,7 +62,11 @@ export function StatCard({ icon: Icon, label, value, sub, trend }: StatCardProps
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-4">
+        <MiniBars data={data} up={up} />
+      </div>
+
+      <div className="mt-2 flex items-center justify-between">
         <span
           className={cn(
             "inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-semibold",
