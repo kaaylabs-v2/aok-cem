@@ -217,21 +217,31 @@ function TypeBars({ events }: { events: PortfolioEvent[] }) {
   const max = Math.max(...groups.map((g) => g.booked), 1);
   return (
     <div>
-      <div className="flex h-[180px] items-end justify-around gap-3 px-2">
+      <div className="flex h-[180px] items-end justify-around gap-2 px-1">
         {groups.map((g) => {
           const c = TYPE_COLORS[g.type];
           const h = Math.max(18, (g.booked / max) * 100);
+          const isShort = h < 30;
           return (
-            <div key={g.type} className={cn("relative flex w-12 flex-col items-center justify-start rounded-2xl pt-2", c.bar)} style={{ height: `${h}%` }}>
-              <span className={cn("flex h-7 w-7 items-center justify-center rounded-md text-white text-[11px] font-semibold", c.chip)}>
-                {g.count}
-              </span>
+            <div key={g.type} className="flex flex-col items-center justify-end" style={{ height: "100%" }}>
+              {isShort && (
+                <span className={cn("mb-1 inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold text-white shadow-sm", c.chip)}>
+                  {g.count}
+                </span>
+              )}
+              <div className={cn("relative flex w-12 flex-col items-center justify-start rounded-2xl pt-2", c.bar)} style={{ height: `${h}%` }}>
+                {!isShort && (
+                  <span className={cn("flex h-7 w-7 items-center justify-center rounded-full text-white text-[11px] font-semibold", c.chip)}>
+                    {g.count}
+                  </span>
+                )}
+              </div>
             </div>
           );
         })}
       </div>
-      <div className="mt-2 flex justify-around gap-3 px-2 text-[11px] text-foreground/60">
-        {groups.map((g) => <span key={g.type} className="w-12 truncate text-center">{g.type}</span>)}
+      <div className="mt-2 flex justify-around gap-2 px-1 text-[11px] text-foreground/60">
+        {groups.map((g) => <span key={g.type} className="w-14 text-center leading-tight">{g.type}</span>)}
       </div>
     </div>
   );
