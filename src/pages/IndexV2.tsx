@@ -4,7 +4,9 @@ import {
   Settings, Headphones, LogOut, Search, Filter, Sparkles,
   Calendar as CalendarIcon, TrendingUp, ListChecks,
   ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid, ChevronsLeft, ChevronsRight,
+  FileSearch,
 } from "lucide-react";
+import { EnquiriesView } from "@/components/EnquiriesView";
 import { cn } from "@/lib/utils";
 import {
   events as allEvents, eventTypes, venues, utilisation, isUnderperforming, notifications as initialNotifications,
@@ -23,12 +25,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Tag } from "lucide-react";
 
 /* ---------- Sidebar ---------- */
-type RailItem = { icon: any; label: string; active?: boolean };
+type RailItem = { icon: any; label: string; active?: boolean; onClick?: () => void };
 
 function RailButton({ it, expanded }: { it: RailItem; expanded: boolean }) {
   const btn = (
     <button
       aria-label={it.label}
+      onClick={it.onClick}
       className={cn(
         "flex h-10 items-center rounded-xl transition-colors",
         expanded ? "w-full justify-start gap-3 px-3" : "w-10 justify-center",
@@ -48,12 +51,13 @@ function RailButton({ it, expanded }: { it: RailItem; expanded: boolean }) {
   );
 }
 
-function SideRail({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
+function SideRail({ expanded, onToggle, view, setView }: { expanded: boolean; onToggle: () => void; view: "dashboard" | "enquiries"; setView: (v: "dashboard" | "enquiries") => void }) {
   const top: RailItem[] = [
     { icon: Inbox, label: "Inbox" },
   ];
   const main: RailItem[] = [
-    { icon: LayoutDashboard, label: "Dashboard", active: true },
+    { icon: LayoutDashboard, label: "Dashboard", active: view === "dashboard", onClick: () => setView("dashboard") },
+    { icon: FileSearch, label: "Enquiries", active: view === "enquiries", onClick: () => setView("enquiries") },
     { icon: Calendar, label: "Events" },
     { icon: Boxes, label: "Inventory" },
     { icon: Users2, label: "Waitlist" },
@@ -350,6 +354,7 @@ export default function IndexV2() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [view, setView] = useState<"dashboard" | "enquiries">("dashboard");
   const [scope, setScope] = useState<"upcoming" | "past">("upcoming");
   const [notifs, setNotifs] = useState<NotificationItem[]>(initialNotifications);
   const unreadCount = notifs.filter((n) => n.unread).length;
@@ -396,23 +401,25 @@ export default function IndexV2() {
     <div className="min-h-screen w-full bg-[hsl(220_30%_94%)] p-3">
       <div className="flex gap-3">
         <div className="sticky top-3 h-[calc(100vh-1.5rem)] shrink-0">
-          <SideRail expanded={sidebarExpanded} onToggle={() => setSidebarExpanded((v) => !v)} />
+          <SideRail expanded={sidebarExpanded} onToggle={() => setSidebarExpanded((v) => !v)} view={view} setView={setView} />
         </div>
 
         <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
-          {/* Header */}
+          {/* Top action bar (always visible) */}
           <div className="flex items-start justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-2 text-lg font-medium text-foreground/70">
-                Hey Elena <span>👋</span>
+            {view === "dashboard" ? (
+              <div>
+                <div className="flex items-center gap-2 text-lg font-medium text-foreground/70">
+                  Hey Elena <span>👋</span>
+                </div>
+                <h1 className="mt-2 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground/30">
+                  {summary.attention} events <ArrowUpRight className="inline h-8 w-8 text-foreground/40" strokeWidth={1.5} />
+                </h1>
+                <h2 className="font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground">
+                  need your attention
+                </h2>
               </div>
-              <h1 className="mt-2 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground/30">
-                {summary.attention} events <ArrowUpRight className="inline h-8 w-8 text-foreground/40" strokeWidth={1.5} />
-              </h1>
-              <h2 className="font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground">
-                need your attention
-              </h2>
-            </div>
+            ) : <div />}
             <div className="flex items-center gap-2">
               <Button variant="outline" className="rounded-full border-black/10 bg-white" onClick={() => setWaitlistOpen(true)}>
                 <ClipboardList className="mr-1.5 h-4 w-4" /> Waitlist
@@ -465,6 +472,7 @@ export default function IndexV2() {
             </div>
           </div>
 
+          {view === "dashboard" && (<>
           {/* Stats + Charts + Attention */}
           <div className="mt-7 grid grid-cols-1 gap-3 lg:grid-cols-3">
             {/* Left + middle: 3 stat cards on top, 2 chart cards below */}
@@ -619,6 +627,12 @@ export default function IndexV2() {
               })}
             </div>
           </div>
+          </>)}
+          {view === "enquiries" && (
+            <div className="mt-2">
+              <EnquiriesView pushNotification={(n) => setNotifs((ns) => [n, ...ns])} />
+            </div>
+          )}
         </div>
       </div>
 
