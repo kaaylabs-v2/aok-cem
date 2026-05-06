@@ -284,6 +284,45 @@ export function EnquiriesView({ pushNotification }: Props) {
                 </div>
               </div>
 
+              {/* Documents from AOK */}
+              {selected.documents && selected.documents.length > 0 && (
+                <div className="mt-6">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-semibold">Documents from AOK</h4>
+                    <span className="text-[11px] text-foreground/50">{selected.documents.length} files</span>
+                  </div>
+                  <ul className="mt-2 divide-y divide-black/5 rounded-xl border border-black/5 bg-[hsl(220_20%_98%)]">
+                    {selected.documents.map((doc) => {
+                      const Icon = doc.type === "xlsx" ? FileSpreadsheet : doc.type === "image" ? ImageIcon : FileText;
+                      const tone = doc.type === "xlsx" ? "text-[hsl(140_55%_40%)] bg-[hsl(140_55%_92%)]"
+                        : doc.type === "image" ? "text-[hsl(280_60%_45%)] bg-[hsl(280_70%_94%)]"
+                        : "text-[hsl(220_85%_45%)] bg-[hsl(220_85%_94%)]";
+                      return (
+                        <li key={doc.id} className="flex items-center gap-3 px-3 py-2.5">
+                          <div className={cn("flex h-9 w-9 items-center justify-center rounded-lg", tone)}>
+                            <Icon className="h-4 w-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate text-xs font-medium text-foreground">{doc.name}</div>
+                            <div className="truncate text-[11px] text-foreground/50">
+                              {doc.size} · Uploaded by {doc.uploadedBy} · {relTime(doc.uploadedAt)}
+                            </div>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 rounded-lg px-2 text-foreground/70 hover:bg-black/5"
+                            onClick={() => toast.success(`Downloading ${doc.name}`)}
+                          >
+                            <Download className="h-3.5 w-3.5" />
+                          </Button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
               {/* AOK Notes */}
               <div className="mt-6">
                 <Label className="text-xs">AOK Notes</Label>
