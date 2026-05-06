@@ -330,6 +330,7 @@ export default function IndexV2() {
   const [selected, setSelected] = useState<PortfolioEvent | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   const upcoming = allEvents.filter((e) => !e.past);
 
