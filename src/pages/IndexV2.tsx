@@ -4,7 +4,9 @@ import {
   Settings, Headphones, LogOut, Search, Filter, Sparkles,
   Calendar as CalendarIcon, TrendingUp, ListChecks,
   ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid, ChevronsLeft, ChevronsRight,
+  FileSearch,
 } from "lucide-react";
+import { EnquiriesView } from "@/components/EnquiriesView";
 import { cn } from "@/lib/utils";
 import {
   events as allEvents, eventTypes, venues, utilisation, isUnderperforming, notifications as initialNotifications,
