@@ -25,7 +25,7 @@ function SideRail() {
   const bottom = [{ icon: Settings }, { icon: Headphones }, { icon: LogOut }];
 
   return (
-    <aside className="flex w-16 shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-[hsl(150_15%_15%)] py-5 text-white/80">
+    <aside className="flex h-full w-16 shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-[hsl(150_15%_15%)] py-5 text-white/80">
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[hsl(150_15%_15%)]">
         <Sparkles className="h-5 w-5" />
       </div>
