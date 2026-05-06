@@ -472,6 +472,7 @@ export default function IndexV2() {
             </div>
           </div>
 
+          {view === "dashboard" && (<>
           {/* Stats + Charts + Attention */}
           <div className="mt-7 grid grid-cols-1 gap-3 lg:grid-cols-3">
             {/* Left + middle: 3 stat cards on top, 2 chart cards below */}
@@ -626,6 +627,12 @@ export default function IndexV2() {
               })}
             </div>
           </div>
+          </>)}
+          {view === "enquiries" && (
+            <div className="mt-2">
+              <EnquiriesView pushNotification={(n) => setNotifs((ns) => [n, ...ns])} />
+            </div>
+          )}
         </div>
       </div>
 
