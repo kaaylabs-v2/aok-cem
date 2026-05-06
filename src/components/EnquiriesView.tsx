@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   Search, Plus, FileSearch, MapPin, Tag, Users, DollarSign, CalendarDays,
-  CheckCircle2, XCircle, Sparkles, Clock,
+  CheckCircle2, XCircle, Sparkles, Clock, FileText, Download, FileSpreadsheet, Image as ImageIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
