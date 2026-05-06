@@ -407,40 +407,45 @@ export default function IndexV2() {
         </div>
 
         <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
-          {/* Top action bar (always visible) */}
-          <div className="flex items-start justify-between gap-6">
-            {view === "dashboard" ? (
-              <div>
-                <div className="flex items-center gap-2 text-lg font-medium text-foreground/70">
-                  Hey Elena <span>👋</span>
-                </div>
-                <h1 className="mt-2 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground/30">
-                  {summary.attention} events <ArrowUpRight className="inline h-8 w-8 text-foreground/40" strokeWidth={1.5} />
-                </h1>
-                <h2 className="font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground">
-                  need your attention
-                </h2>
-              </div>
-            ) : (
-              <div>
-                <h1 className="font-display text-4xl font-semibold leading-[1.1] tracking-tight text-foreground">
-                  Enquiries
-                </h1>
-                <p className="mt-2 text-sm text-foreground/60">Track and manage all incoming event enquiries</p>
-              </div>
-            )}
-            <div className="flex items-center gap-2">
-              {view === "dashboard" && (
-                <Button variant="outline" className="rounded-full border-black/10 bg-white" onClick={() => setWaitlistOpen(true)}>
-                  <ClipboardList className="mr-1.5 h-4 w-4" /> Waitlist
-                </Button>
-              )}
+          {/* Top bar */}
+          <div className="mb-6 flex items-center gap-3 rounded-full border border-black/5 bg-[hsl(220_20%_98%)] py-1.5 pl-2 pr-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex shrink-0 items-center gap-2 rounded-full px-2 py-1 transition-colors hover:bg-white">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[hsl(150_15%_15%)] text-white">
+                    <Sparkles className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="text-sm font-semibold text-foreground">AOK Events</span>
+                  <ChevronDown className="h-3.5 w-3.5 text-foreground/50" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56 rounded-2xl border-black/5 shadow-lg">
+                <DropdownMenuLabel>Switch organisation</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="justify-between">AOK Events <Check className="h-4 w-4 text-[hsl(140_55%_45%)]" /></DropdownMenuItem>
+                <DropdownMenuItem>Northwind Live</DropdownMenuItem>
+                <DropdownMenuItem>Helix Conferences</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <div className="relative mx-2 hidden flex-1 md:block">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/40" />
+              <Input
+                placeholder="Search events, enquiries, venues…"
+                className="h-9 rounded-full border-transparent bg-white pl-9 text-sm shadow-none focus-visible:ring-1 focus-visible:ring-black/10"
+              />
+            </div>
+
+            <div className="ml-auto flex items-center gap-1.5">
+              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-white">
+                <Settings className="h-4 w-4" />
+              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="relative rounded-full border-black/10 bg-white">
+                  <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full hover:bg-white">
                     <Bell className="h-4 w-4" />
                     {unreadCount > 0 && (
-                      <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[hsl(0_75%_55%)] px-1 text-[10px] font-semibold text-white">
+                      <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[hsl(0_75%_55%)] px-1 text-[10px] font-semibold text-white">
                         {unreadCount}
                       </span>
                     )}
@@ -480,7 +485,63 @@ export default function IndexV2() {
                   </div>
                 </DropdownMenuContent>
               </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="ml-1 flex items-center gap-2 rounded-full bg-white py-1 pl-1 pr-3 transition-colors hover:bg-[hsl(220_20%_96%)]">
+                    <Avatar className="h-7 w-7">
+                      <AvatarFallback className="bg-[hsl(140_55%_55%)] text-[11px] font-semibold text-white">EM</AvatarFallback>
+                    </Avatar>
+                    <div className="hidden text-left leading-tight sm:block">
+                      <p className="text-xs font-semibold">Elena Martins</p>
+                      <p className="text-[10px] text-foreground/50">Ev Manager</p>
+                    </div>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 rounded-2xl border-black/5 shadow-lg">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold">Elena Martins</span>
+                      <span className="text-xs font-normal text-foreground/60">elena@aok.events</span>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Profile settings</DropdownMenuItem>
+                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <DropdownMenuItem>Audit trail</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-[hsl(0_75%_50%)]">Sign out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
+          </div>
+
+          {/* Heading + actions */}
+          <div className="flex items-start justify-between gap-6">
+            {view === "dashboard" ? (
+              <div>
+                <div className="flex items-center gap-2 text-lg font-medium text-foreground/70">
+                  Hey Elena <span>👋</span>
+                </div>
+                <h1 className="mt-2 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground/30">
+                  {summary.attention} events <ArrowUpRight className="inline h-8 w-8 text-foreground/40" strokeWidth={1.5} />
+                </h1>
+                <h2 className="font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground">
+                  need your attention
+                </h2>
+              </div>
+            ) : (
+              <div>
+                <h1 className="font-display text-4xl font-semibold leading-[1.1] tracking-tight text-foreground">
+                  Enquiries
+                </h1>
+                <p className="mt-2 text-sm text-foreground/60">Track and manage all incoming event enquiries</p>
+              </div>
+            )}
+            {view === "dashboard" && (
+              <Button variant="outline" className="rounded-full border-black/10 bg-white" onClick={() => setWaitlistOpen(true)}>
+                <ClipboardList className="mr-1.5 h-4 w-4" /> Waitlist
+              </Button>
+            )}
           </div>
 
           {view === "dashboard" && (<>
