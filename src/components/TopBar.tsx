@@ -20,6 +20,7 @@ import logo from "@/assets/aok-logo.png";
 const tenants = ["AOK Events", "Northwind Live", "Helix Conferences"];
 const navItems = [
   { label: "Dashboard", to: "/" },
+  { label: "Enquiries", to: "/enquiries" },
   { label: "Events", to: "/events" },
   { label: "Inventory", to: "/inventory" },
   { label: "Waitlist", to: "/waitlist" },
