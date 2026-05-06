@@ -7,9 +7,13 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
-  events as allEvents, eventTypes, venues, utilisation, isUnderperforming, notifications,
-  PortfolioEvent, EventStatus,
+  events as allEvents, eventTypes, venues, utilisation, isUnderperforming, notifications as initialNotifications,
+  PortfolioEvent, EventStatus, NotificationItem,
 } from "@/data/portfolio";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EventDrawer } from "@/components/EventDrawer";
