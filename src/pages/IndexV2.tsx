@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import { EventDrawer } from "@/components/EventDrawer";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MapPin, Tag } from "lucide-react";
 
 /* ---------- Sidebar ---------- */
 type RailItem = { icon: any; label: string; active?: boolean };
