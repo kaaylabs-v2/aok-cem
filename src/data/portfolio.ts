@@ -170,6 +170,12 @@ export const enquiries: Enquiry[] = [
       { at: d(-7, 10), text: "Status changed to In Progress" },
       { at: d(-1, 14), text: "Proposal received from AOK" },
     ],
+    documents: [
+      { id: "doc1", name: "Proposal_Aurora_Hall.pdf", type: "pdf", size: "1.8 MB", uploadedBy: "AOK London", uploadedAt: d(-1, 14) },
+      { id: "doc2", name: "Venue_Floorplan.pdf", type: "pdf", size: "640 KB", uploadedBy: "AOK London", uploadedAt: d(-1, 14) },
+      { id: "doc3", name: "Catering_Menu.pdf", type: "pdf", size: "420 KB", uploadedBy: "AOK London", uploadedAt: d(-1, 14) },
+      { id: "doc4", name: "Cost_Breakdown.xlsx", type: "xlsx", size: "85 KB", uploadedBy: "AOK London", uploadedAt: d(-1, 14) },
+    ],
   },
   {
     id: "q2",
