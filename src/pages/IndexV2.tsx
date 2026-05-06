@@ -3,7 +3,7 @@ import {
   Bell, Inbox, LayoutDashboard, Calendar, Boxes, Users2, BarChart3,
   Settings, Headphones, LogOut, Search, Filter, Sparkles,
   Calendar as CalendarIcon, TrendingUp, ListChecks,
-  ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid,
+  ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid, ChevronsLeft, ChevronsRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
