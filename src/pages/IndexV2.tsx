@@ -320,16 +320,22 @@ function StatusPill({ status }: { status: EventStatus }) {
 
 /* ---------- Utilisation bar (real %) ---------- */
 function UtilBar({ pct }: { pct: number }) {
-  const tone = pct >= 70 ? "hsl(140_55%_50%)" : pct >= 40 ? "hsl(220_85%_60%)" : "hsl(0_75%_60%)";
-  const label = pct >= 70 ? "High" : pct >= 40 ? "Medium" : "Low";
+  const tone =
+    pct >= 70 ? { bar: "hsl(140 55% 50%)", bg: "hsl(140 55% 94%)", text: "hsl(140 55% 30%)", label: "High" } :
+    pct >= 40 ? { bar: "hsl(220 85% 60%)", bg: "hsl(220 85% 95%)", text: "hsl(220 85% 45%)", label: "Medium" } :
+                { bar: "hsl(0 75% 60%)",   bg: "hsl(0 75% 95%)",   text: "hsl(0 75% 45%)",   label: "Low" };
   return (
     <div className="flex items-center gap-2">
-      <div className="flex gap-0.5">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <span key={i} className="h-1.5 w-2 rounded-sm" style={{ background: i < Math.round(pct / 10) ? tone : "hsl(220 10% 90%)" }} />
-        ))}
+      <div className="relative h-1.5 w-20 overflow-hidden rounded-full bg-black/5">
+        <div className="h-full rounded-full" style={{ width: `${pct}%`, background: tone.bar }} />
       </div>
-      <span className="text-xs font-medium" style={{ color: tone }}>{label}</span>
+      <span className="text-xs font-semibold tabular-nums" style={{ color: tone.text }}>{pct}%</span>
+      <span
+        className="rounded-md px-1.5 py-0.5 text-[10px] font-medium"
+        style={{ background: tone.bg, color: tone.text }}
+      >
+        {tone.label}
+      </span>
     </div>
   );
 }
