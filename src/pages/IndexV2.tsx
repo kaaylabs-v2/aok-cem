@@ -356,6 +356,7 @@ export default function IndexV2() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [view, setView] = useState<"dashboard" | "enquiries">("dashboard");
   const [scope, setScope] = useState<"upcoming" | "past">("upcoming");
   const [notifs, setNotifs] = useState<NotificationItem[]>(initialNotifications);
