@@ -243,12 +243,12 @@ function AttentionCard({ events, onOpen }: { events: PortfolioEvent[]; onOpen: (
   const fallback = events.slice(0, 2);
   const list = items.length ? items : fallback;
   return (
-    <div className="overflow-x-auto rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
+    <div className="flex h-full flex-col rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold">Needs attention</h3>
         <span className="rounded-full bg-[hsl(0_75%_95%)] px-2 py-0.5 text-xs font-medium text-[hsl(0_75%_45%)]">{items.length}</span>
       </div>
-      <div className="mt-3 space-y-3">
+      <div className="mt-3 -mx-1 flex flex-1 gap-3 overflow-x-auto px-1 pb-1 snap-x snap-mandatory">
         {list.map((e) => {
           const u = utilisation(e);
           const days = Math.ceil((+new Date(e.date) - Date.now()) / 86400000);
