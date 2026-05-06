@@ -36,12 +36,6 @@ export function EventCard({ event, onClick }: Props) {
       )}
     >
       {under && (
-        <span
-          className="pointer-events-none absolute inset-y-0 left-0 w-1 rounded-l-3xl bg-warning"
-          aria-hidden
-        />
-      )}
-      {under && (
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-warning/15 text-warning">
