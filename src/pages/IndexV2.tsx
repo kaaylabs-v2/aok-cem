@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
-  events as allEvents, eventTypes, venues, utilisation, isUnderperforming,
+  events as allEvents, eventTypes, venues, utilisation, isUnderperforming, notifications,
   PortfolioEvent, EventStatus,
 } from "@/data/portfolio";
 import { Button } from "@/components/ui/button";
