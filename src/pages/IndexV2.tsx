@@ -419,7 +419,54 @@ export default function IndexV2() {
                   need your attention
                 </h2>
               </div>
-            ) : <div />}
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="relative rounded-full border-black/10 bg-white">
+                    <Bell className="h-4 w-4" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[hsl(0_75%_55%)] px-1 text-[10px] font-semibold text-white">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-80 rounded-2xl border-black/5 p-0 shadow-lg">
+                  <div className="flex items-center justify-between border-b border-black/5 px-3 py-2.5">
+                    <p className="text-sm font-semibold">Notifications</p>
+                    <button onClick={markAllRead} className="text-xs font-medium text-[hsl(220_85%_55%)] hover:underline">
+                      Mark all read
+                    </button>
+                  </div>
+                  <div className="max-h-96 overflow-y-auto">
+                    {notifs.length === 0 && (
+                      <div className="px-3 py-8 text-center text-sm text-foreground/50">No notifications</div>
+                    )}
+                    {notifs.map((n) => (
+                      <button
+                        key={n.id}
+                        onClick={() => handleNotifClick(n)}
+                        className={cn(
+                          "flex w-full gap-3 border-b border-black/5 px-3 py-3 text-left transition-colors hover:bg-[hsl(220_20%_98%)]",
+                          n.unread && "bg-[hsl(220_85%_97%)]"
+                        )}
+                      >
+                        <span className={cn("mt-1 h-2 w-2 shrink-0 rounded-full", n.unread ? "bg-[hsl(220_85%_55%)]" : "bg-transparent")} />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium">{n.title}</p>
+                          <p className="mt-0.5 line-clamp-2 text-xs text-foreground/60">{n.body}</p>
+                          <p className="mt-1 text-[11px] text-foreground/40">{n.time}</p>
+                        </div>
+                        <Badge variant="outline" className="h-5 shrink-0 text-[10px] capitalize">
+                          {n.type === "underperform" ? "alert" : n.type}
+                        </Badge>
+                      </button>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            {view === "dashboard" && (
             <div className="flex items-center gap-2">
               <Button variant="outline" className="rounded-full border-black/10 bg-white" onClick={() => setWaitlistOpen(true)}>
                 <ClipboardList className="mr-1.5 h-4 w-4" /> Waitlist
@@ -470,6 +517,7 @@ export default function IndexV2() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+            )}
           </div>
 
           {view === "dashboard" && (<>
