@@ -354,6 +354,7 @@ export default function IndexV2() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [view, setView] = useState<"dashboard" | "enquiries">("dashboard");
   const [scope, setScope] = useState<"upcoming" | "past">("upcoming");
   const [notifs, setNotifs] = useState<NotificationItem[]>(initialNotifications);
   const unreadCount = notifs.filter((n) => n.unread).length;
@@ -400,7 +401,7 @@ export default function IndexV2() {
     <div className="min-h-screen w-full bg-[hsl(220_30%_94%)] p-3">
       <div className="flex gap-3">
         <div className="sticky top-3 h-[calc(100vh-1.5rem)] shrink-0">
-          <SideRail expanded={sidebarExpanded} onToggle={() => setSidebarExpanded((v) => !v)} />
+          <SideRail expanded={sidebarExpanded} onToggle={() => setSidebarExpanded((v) => !v)} view={view} setView={setView} />
         </div>
 
         <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
