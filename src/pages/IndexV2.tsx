@@ -405,6 +405,21 @@ export default function IndexV2() {
         </div>
 
         <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
+          {view === "enquiries" ? (
+            <div className="relative">
+              <div className="absolute right-0 top-0 z-10">
+                <ActionBar
+                  unreadCount={unreadCount}
+                  notifs={notifs}
+                  markAllRead={markAllRead}
+                  handleNotifClick={handleNotifClick}
+                  onWaitlist={() => setWaitlistOpen(true)}
+                />
+              </div>
+              <EnquiriesView pushNotification={(n) => setNotifs((ns) => [n, ...ns])} />
+            </div>
+          ) : (<></>)}
+          {view === "dashboard" && (<></>)}
           {/* Header */}
           <div className="flex items-start justify-between gap-6">
             <div>
