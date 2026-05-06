@@ -36,7 +36,10 @@ export function EventCard({ event, onClick }: Props) {
       )}
     >
       {under && (
-        <span className="absolute left-0 top-4 bottom-4 w-1 rounded-r-full bg-warning" aria-hidden />
+        <span
+          className="pointer-events-none absolute left-0 top-3 bottom-3 w-1.5 rounded-r-full bg-gradient-to-b from-warning/0 via-warning to-warning/0 shadow-[0_0_12px_hsl(var(--warning)/0.5)]"
+          aria-hidden
+        />
       )}
       {under && (
         <Tooltip>
