@@ -14,51 +14,73 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EventDrawer } from "@/components/EventDrawer";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 /* ---------- Sidebar ---------- */
-function SideRail() {
-  const main = [
-    { icon: Home, active: true }, { icon: BookOpen }, { icon: Users2 },
-    { icon: BarChart3 }, { icon: LayoutGrid },
-  ];
-  const top = [{ icon: Bell }, { icon: Inbox }];
-  const bottom = [{ icon: Settings }, { icon: Headphones }, { icon: LogOut }];
+type RailItem = { icon: any; label: string; active?: boolean };
 
+function RailButton({ it }: { it: RailItem }) {
   return (
-    <aside className="flex h-full w-16 shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-[hsl(150_15%_15%)] py-5 text-white/80">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[hsl(150_15%_15%)]">
-        <Sparkles className="h-5 w-5" />
-      </div>
-      <div className="flex flex-col gap-3">
-        {top.map((it, i) => (
-          <button key={i} className="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-white/10">
-            <it.icon className="h-4 w-4" strokeWidth={1.75} />
-          </button>
-        ))}
-      </div>
-      <div className="mt-4 flex flex-1 flex-col gap-2">
-        {main.map((it, i) => (
-          <button
-            key={i}
-            className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-xl transition-colors",
-              it.active ? "bg-[hsl(140_55%_55%)] text-white" : "hover:bg-white/10"
-            )}
-          >
-            <it.icon className="h-4 w-4" strokeWidth={1.75} />
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col gap-2">
-        {bottom.map((it, i) => (
-          <button key={i} className="flex h-10 w-10 items-center justify-center rounded-xl hover:bg-white/10">
-            <it.icon className="h-4 w-4" strokeWidth={1.75} />
-          </button>
-        ))}
-      </div>
-    </aside>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          aria-label={it.label}
+          className={cn(
+            "flex h-10 w-10 items-center justify-center rounded-xl transition-colors",
+            it.active ? "bg-[hsl(140_55%_55%)] text-white" : "hover:bg-white/10"
+          )}
+        >
+          <it.icon className="h-4 w-4" strokeWidth={1.75} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="right" sideOffset={8}>{it.label}</TooltipContent>
+    </Tooltip>
   );
 }
+
+function SideRail() {
+  const top: RailItem[] = [
+    { icon: Bell, label: "Notifications" },
+    { icon: Inbox, label: "Inbox" },
+  ];
+  const main: RailItem[] = [
+    { icon: Home, label: "Dashboard", active: true },
+    { icon: BookOpen, label: "Knowledge Base" },
+    { icon: Users2, label: "Audience" },
+    { icon: BarChart3, label: "Analytics" },
+    { icon: LayoutGrid, label: "Apps" },
+  ];
+  const bottom: RailItem[] = [
+    { icon: Settings, label: "Settings" },
+    { icon: Headphones, label: "Support" },
+    { icon: LogOut, label: "Log out" },
+  ];
+
+  return (
+    <TooltipProvider delayDuration={150}>
+      <aside className="flex h-full w-16 shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-[hsl(150_15%_15%)] py-5 text-white/80">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[hsl(150_15%_15%)]">
+              <Sparkles className="h-5 w-5" />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="right" sideOffset={8}>Portfolio</TooltipContent>
+        </Tooltip>
+        <div className="flex flex-col gap-3">
+          {top.map((it, i) => <RailButton key={i} it={it} />)}
+        </div>
+        <div className="mt-4 flex flex-1 flex-col gap-2">
+          {main.map((it, i) => <RailButton key={i} it={it} />)}
+        </div>
+        <div className="flex flex-col gap-2">
+          {bottom.map((it, i) => <RailButton key={i} it={it} />)}
+        </div>
+      </aside>
+    </TooltipProvider>
+  );
+}
+
 
 /* ---------- Stat ---------- */
 function SoftStat({ icon: Icon, tint, label, value }: { icon: any; tint: string; label: string; value: string | number }) {
