@@ -517,6 +517,7 @@ export default function IndexV2() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+            )}
           </div>
 
           {view === "dashboard" && (<>
