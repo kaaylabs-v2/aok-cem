@@ -421,7 +421,7 @@ export default function IndexV2() {
                 </div>
                 <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold">Bookings by Type</h3>
+                    <h3 className="font-semibold">Events by Type</h3>
                     <span className="text-xs text-foreground/50">{upcoming.length} events</span>
                   </div>
                   <div className="mt-3"><TypeBars events={upcoming} /></div>
