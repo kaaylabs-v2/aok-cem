@@ -398,6 +398,14 @@ export default function IndexV2() {
               <Button variant="outline" className="rounded-full border-black/10 bg-white" onClick={() => setWaitlistOpen(true)}>
                 <ClipboardList className="mr-1.5 h-4 w-4" /> Waitlist
               </Button>
+              <Button variant="outline" size="icon" className="relative rounded-full border-black/10 bg-white">
+                <Bell className="h-4 w-4" />
+                {notifications.some((n) => n.unread) && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[hsl(0_75%_55%)] px-1 text-[10px] font-semibold text-white">
+                    {notifications.filter((n) => n.unread).length}
+                  </span>
+                )}
+              </Button>
             </div>
           </div>
 
