@@ -331,11 +331,14 @@ export default function IndexV2() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [scope, setScope] = useState<"upcoming" | "past">("upcoming");
 
   const upcoming = allEvents.filter((e) => !e.past);
+  const past = allEvents.filter((e) => e.past);
+  const scoped = scope === "upcoming" ? upcoming : past;
 
   const filtered = useMemo(() => {
-    let list = upcoming;
+    let list = scoped;
     if (tab !== "all") list = list.filter((e) => e.status === tab);
     if (venue !== "all") list = list.filter((e) => e.venue === venue);
     if (type !== "all") list = list.filter((e) => e.type === type);
@@ -344,7 +347,7 @@ export default function IndexV2() {
       list = list.filter((e) => e.name.toLowerCase().includes(q) || e.venue.toLowerCase().includes(q));
     }
     return [...list].sort((a, b) => +new Date(a.date) - +new Date(b.date));
-  }, [upcoming, tab, venue, type, query]);
+  }, [scoped, tab, venue, type, query]);
 
   const summary = useMemo(() => {
     const totalBookings = upcoming.reduce((s, e) => s + e.booked, 0);
@@ -434,6 +437,20 @@ export default function IndexV2() {
                 ))}
               </div>
               <div className="flex items-center gap-2">
+                <div className="flex items-center gap-0.5 rounded-xl border border-black/10 bg-[hsl(220_20%_97%)] p-0.5">
+                  {(["upcoming", "past"] as const).map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setScope(s)}
+                      className={cn(
+                        "rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors",
+                        scope === s ? "bg-white text-foreground shadow-sm" : "text-foreground/50"
+                      )}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-foreground/40" />
                   <Input
