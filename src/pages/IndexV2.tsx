@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import {
-  Bell, Inbox, Home, BookOpen, Users2, BarChart3, LayoutGrid,
+  Bell, Inbox, LayoutDashboard, Calendar, Boxes, Users2, BarChart3,
   Settings, Headphones, LogOut, Search, Filter, Sparkles,
   Calendar as CalendarIcon, TrendingUp, ListChecks,
-  ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList,
+  ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -46,11 +46,11 @@ function SideRail() {
     { icon: Inbox, label: "Inbox" },
   ];
   const main: RailItem[] = [
-    { icon: Home, label: "Dashboard", active: true },
-    { icon: BookOpen, label: "Knowledge Base" },
-    { icon: Users2, label: "Audience" },
+    { icon: LayoutDashboard, label: "Dashboard", active: true },
+    { icon: Calendar, label: "Events" },
+    { icon: Boxes, label: "Inventory" },
+    { icon: Users2, label: "Waitlist" },
     { icon: BarChart3, label: "Analytics" },
-    { icon: LayoutGrid, label: "Apps" },
   ];
   const bottom: RailItem[] = [
     { icon: Settings, label: "Settings" },
