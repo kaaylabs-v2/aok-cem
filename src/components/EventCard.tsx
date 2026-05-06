@@ -37,7 +37,7 @@ export function EventCard({ event, onClick }: Props) {
     >
       {under && (
         <span
-          className="pointer-events-none absolute left-0 top-3 bottom-3 w-1.5 rounded-r-full bg-gradient-to-b from-warning/0 via-warning to-warning/0 shadow-[0_0_12px_hsl(var(--warning)/0.5)]"
+          className="pointer-events-none absolute inset-y-0 left-0 w-1 rounded-l-3xl bg-warning"
           aria-hidden
         />
       )}
