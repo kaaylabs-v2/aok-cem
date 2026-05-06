@@ -345,6 +345,16 @@ export default function IndexV2() {
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [scope, setScope] = useState<"upcoming" | "past">("upcoming");
+  const [notifs, setNotifs] = useState<NotificationItem[]>(initialNotifications);
+  const unreadCount = notifs.filter((n) => n.unread).length;
+  const markAllRead = () => setNotifs((ns) => ns.map((n) => ({ ...n, unread: false })));
+  const handleNotifClick = (n: NotificationItem) => {
+    setNotifs((ns) => ns.map((x) => (x.id === n.id ? { ...x, unread: false } : x)));
+    if (n.eventId) {
+      const ev = allEvents.find((e) => e.id === n.eventId);
+      if (ev) { setSelected(ev); setDrawerOpen(true); }
+    }
+  };
 
   const upcoming = allEvents.filter((e) => !e.past);
   const past = allEvents.filter((e) => e.past);
