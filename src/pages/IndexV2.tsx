@@ -243,7 +243,7 @@ function AttentionCard({ events, onOpen }: { events: PortfolioEvent[]; onOpen: (
   const fallback = events.slice(0, 2);
   const list = items.length ? items : fallback;
   return (
-    <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
+    <div className="overflow-x-auto rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold">Needs attention</h3>
         <span className="rounded-full bg-[hsl(0_75%_95%)] px-2 py-0.5 text-xs font-medium text-[hsl(0_75%_45%)]">{items.length}</span>
