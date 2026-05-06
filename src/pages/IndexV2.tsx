@@ -405,19 +405,21 @@ export default function IndexV2() {
         </div>
 
         <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
-          {/* Header */}
+          {/* Top action bar (always visible) */}
           <div className="flex items-start justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-2 text-lg font-medium text-foreground/70">
-                Hey Elena <span>👋</span>
+            {view === "dashboard" ? (
+              <div>
+                <div className="flex items-center gap-2 text-lg font-medium text-foreground/70">
+                  Hey Elena <span>👋</span>
+                </div>
+                <h1 className="mt-2 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground/30">
+                  {summary.attention} events <ArrowUpRight className="inline h-8 w-8 text-foreground/40" strokeWidth={1.5} />
+                </h1>
+                <h2 className="font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground">
+                  need your attention
+                </h2>
               </div>
-              <h1 className="mt-2 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground/30">
-                {summary.attention} events <ArrowUpRight className="inline h-8 w-8 text-foreground/40" strokeWidth={1.5} />
-              </h1>
-              <h2 className="font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground">
-                need your attention
-              </h2>
-            </div>
+            ) : <div />}
             <div className="flex items-center gap-2">
               <Button variant="outline" className="rounded-full border-black/10 bg-white" onClick={() => setWaitlistOpen(true)}>
                 <ClipboardList className="mr-1.5 h-4 w-4" /> Waitlist
