@@ -3,7 +3,7 @@ import {
   Bell, Inbox, LayoutDashboard, Calendar, Boxes, Users2, BarChart3,
   Settings, Headphones, LogOut, Search, Filter, Sparkles,
   Calendar as CalendarIcon, TrendingUp, ListChecks,
-  ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid,
+  ArrowUpRight, Target, Smile, AlertTriangle, ClipboardList, LayoutGrid, ChevronsLeft, ChevronsRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -21,26 +21,30 @@ import { MapPin, Tag } from "lucide-react";
 /* ---------- Sidebar ---------- */
 type RailItem = { icon: any; label: string; active?: boolean };
 
-function RailButton({ it }: { it: RailItem }) {
+function RailButton({ it, expanded }: { it: RailItem; expanded: boolean }) {
+  const btn = (
+    <button
+      aria-label={it.label}
+      className={cn(
+        "flex h-10 items-center rounded-xl transition-colors",
+        expanded ? "w-full justify-start gap-3 px-3" : "w-10 justify-center",
+        it.active ? "bg-[hsl(140_55%_55%)] text-white" : "hover:bg-white/10"
+      )}
+    >
+      <it.icon className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+      {expanded && <span className="truncate text-sm font-medium">{it.label}</span>}
+    </button>
+  );
+  if (expanded) return btn;
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <button
-          aria-label={it.label}
-          className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-xl transition-colors",
-            it.active ? "bg-[hsl(140_55%_55%)] text-white" : "hover:bg-white/10"
-          )}
-        >
-          <it.icon className="h-4 w-4" strokeWidth={1.75} />
-        </button>
-      </TooltipTrigger>
+      <TooltipTrigger asChild>{btn}</TooltipTrigger>
       <TooltipContent side="right" sideOffset={8}>{it.label}</TooltipContent>
     </Tooltip>
   );
 }
 
-function SideRail() {
+function SideRail({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
   const top: RailItem[] = [
     { icon: Bell, label: "Notifications" },
     { icon: Inbox, label: "Inbox" },
@@ -60,28 +64,59 @@ function SideRail() {
 
   return (
     <TooltipProvider delayDuration={150}>
-      <aside className="flex h-full w-16 shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-[hsl(150_15%_15%)] py-5 text-white/80">
-        <Tooltip>
-          <TooltipTrigger asChild>
+      <aside
+        className={cn(
+          "flex h-full shrink-0 flex-col gap-6 rounded-[2rem] bg-[hsl(150_15%_15%)] py-5 text-white/80 transition-[width] duration-300",
+          expanded ? "w-56 px-3" : "w-16 items-center"
+        )}
+      >
+        <div className={cn("flex items-center", expanded ? "justify-between" : "justify-center")}>
+          <div className={cn("flex items-center gap-2", expanded ? "" : "")}>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[hsl(150_15%_15%)]">
               <Sparkles className="h-5 w-5" />
             </div>
-          </TooltipTrigger>
-          <TooltipContent side="right" sideOffset={8}>Portfolio</TooltipContent>
-        </Tooltip>
-        <div className="flex flex-col gap-3">
-          {top.map((it, i) => <RailButton key={i} it={it} />)}
+            {expanded && <span className="text-sm font-semibold text-white">Portfolio</span>}
+          </div>
+          {expanded && (
+            <button
+              onClick={onToggle}
+              aria-label="Collapse sidebar"
+              className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-white/10"
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </button>
+          )}
         </div>
-        <div className="mt-4 flex flex-1 flex-col gap-2">
-          {main.map((it, i) => <RailButton key={i} it={it} />)}
+
+        {!expanded && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={onToggle}
+                aria-label="Expand sidebar"
+                className="flex h-8 w-10 items-center justify-center rounded-lg hover:bg-white/10"
+              >
+                <ChevronsRight className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" sideOffset={8}>Expand</TooltipContent>
+          </Tooltip>
+        )}
+
+        <div className={cn("flex flex-col gap-2", expanded ? "" : "items-center")}>
+          {top.map((it, i) => <RailButton key={i} it={it} expanded={expanded} />)}
         </div>
-        <div className="flex flex-col gap-2">
-          {bottom.map((it, i) => <RailButton key={i} it={it} />)}
+        <div className={cn("mt-2 flex flex-1 flex-col gap-1.5", expanded ? "" : "items-center")}>
+          {main.map((it, i) => <RailButton key={i} it={it} expanded={expanded} />)}
+        </div>
+        <div className={cn("flex flex-col gap-1.5", expanded ? "" : "items-center")}>
+          {bottom.map((it, i) => <RailButton key={i} it={it} expanded={expanded} />)}
         </div>
       </aside>
     </TooltipProvider>
   );
 }
+
 
 
 /* ---------- Stat ---------- */
@@ -295,6 +330,7 @@ export default function IndexV2() {
   const [selected, setSelected] = useState<PortfolioEvent | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   const upcoming = allEvents.filter((e) => !e.past);
 
@@ -328,7 +364,7 @@ export default function IndexV2() {
     <div className="min-h-screen w-full bg-[hsl(220_30%_94%)] p-3">
       <div className="flex gap-3">
         <div className="sticky top-3 h-[calc(100vh-1.5rem)] shrink-0">
-          <SideRail />
+          <SideRail expanded={sidebarExpanded} onToggle={() => setSidebarExpanded((v) => !v)} />
         </div>
 
         <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
