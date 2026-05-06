@@ -256,7 +256,7 @@ function AttentionCard({ events, onOpen }: { events: PortfolioEvent[]; onOpen: (
             <button
               key={e.id}
               onClick={() => onOpen(e)}
-              className="block w-full rounded-2xl border border-black/5 bg-[hsl(220_20%_98%)] p-4 text-left transition hover:border-[hsl(18_85%_70%)]"
+              className="block w-[300px] shrink-0 snap-start rounded-2xl border border-black/5 bg-[hsl(220_20%_98%)] p-4 text-left transition hover:border-[hsl(18_85%_70%)]"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2">
