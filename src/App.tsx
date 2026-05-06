@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import IndexV2 from "./pages/IndexV2.tsx";
+import Enquiries from "./pages/Enquiries.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { DesignToggle } from "./components/DesignToggle";
 
