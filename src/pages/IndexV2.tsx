@@ -428,15 +428,22 @@ export default function IndexV2() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <div className="relative mx-2 hidden flex-1 md:block">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/40" />
-              <Input
-                placeholder="Search events, enquiries, venues…"
-                className="h-9 rounded-full border-transparent bg-white pl-9 text-sm shadow-none focus-visible:ring-1 focus-visible:ring-black/10"
-              />
-            </div>
-
             <div className="ml-auto flex items-center gap-1.5">
+              {searchOpen ? (
+                <div className="relative animate-fade-in">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/40" />
+                  <Input
+                    autoFocus
+                    onBlur={() => setSearchOpen(false)}
+                    placeholder="Search events, enquiries, venues…"
+                    className="h-9 w-56 rounded-full border-transparent bg-white pl-9 text-sm shadow-none focus-visible:ring-1 focus-visible:ring-black/10 md:w-72"
+                  />
+                </div>
+              ) : (
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-white" onClick={() => setSearchOpen(true)}>
+                  <Search className="h-4 w-4" />
+                </Button>
+              )}
               <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-white">
                 <Settings className="h-4 w-4" />
               </Button>
