@@ -25,7 +25,7 @@ function SideRail() {
   const bottom = [{ icon: Settings }, { icon: Headphones }, { icon: LogOut }];
 
   return (
-    <aside className="flex w-16 shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-[hsl(150_15%_15%)] py-5 text-white/80">
+    <aside className="flex h-full w-16 shrink-0 flex-col items-center gap-6 rounded-[2rem] bg-[hsl(150_15%_15%)] py-5 text-white/80">
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[hsl(150_15%_15%)]">
         <Sparkles className="h-5 w-5" />
       </div>
@@ -303,7 +303,9 @@ export default function IndexV2() {
   return (
     <div className="min-h-screen w-full bg-[hsl(220_30%_94%)] p-3">
       <div className="flex gap-3">
-        <SideRail />
+        <div className="sticky top-3 h-[calc(100vh-1.5rem)] shrink-0">
+          <SideRail />
+        </div>
 
         <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
           {/* Header */}
