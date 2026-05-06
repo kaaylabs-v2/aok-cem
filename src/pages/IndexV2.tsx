@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import { EventDrawer } from "@/components/EventDrawer";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MapPin, Tag } from "lucide-react";
 
 /* ---------- Sidebar ---------- */
 type RailItem = { icon: any; label: string; active?: boolean };
@@ -405,22 +407,38 @@ export default function IndexV2() {
                     placeholder="Search events"
                   />
                 </div>
-                <select
-                  value={venue}
-                  onChange={(e) => setVenue(e.target.value)}
-                  className="h-9 rounded-xl border border-black/10 bg-white px-2 text-xs"
-                >
-                  <option value="all">All venues</option>
-                  {venues.map((v) => <option key={v} value={v}>{v}</option>)}
-                </select>
-                <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className="h-9 rounded-xl border border-black/10 bg-white px-2 text-xs"
-                >
-                  <option value="all">All types</option>
-                  {eventTypes.map((t) => <option key={t} value={t}>{t}</option>)}
-                </select>
+                <Select value={venue} onValueChange={setVenue}>
+                  <SelectTrigger className="h-9 w-[170px] rounded-xl border-black/10 bg-[hsl(220_20%_97%)] px-3 text-xs font-medium text-foreground shadow-none hover:bg-[hsl(220_20%_95%)] focus:ring-0 focus:ring-offset-0 [&>svg]:text-foreground/40">
+                    <MapPin className="mr-1.5 h-3.5 w-3.5 text-foreground/50" />
+                    <SelectValue placeholder="Venue" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-black/5 bg-white shadow-lg">
+                    <SelectItem value="all" className="rounded-lg text-xs">All venues</SelectItem>
+                    {venues.map((v) => (
+                      <SelectItem key={v} value={v} className="rounded-lg text-xs">{v}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={type} onValueChange={setType}>
+                  <SelectTrigger className="h-9 w-[150px] rounded-xl border-black/10 bg-[hsl(220_20%_97%)] px-3 text-xs font-medium text-foreground shadow-none hover:bg-[hsl(220_20%_95%)] focus:ring-0 focus:ring-offset-0 [&>svg]:text-foreground/40">
+                    <Tag className="mr-1.5 h-3.5 w-3.5 text-foreground/50" />
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-black/5 bg-white shadow-lg">
+                    <SelectItem value="all" className="rounded-lg text-xs">All types</SelectItem>
+                    {eventTypes.map((t) => {
+                      const c = TYPE_COLORS[t];
+                      return (
+                        <SelectItem key={t} value={t} className="rounded-lg text-xs">
+                          <span className="flex items-center gap-2">
+                            <span className={cn("h-2.5 w-2.5 rounded-sm", c?.chip)} />
+                            {t}
+                          </span>
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
