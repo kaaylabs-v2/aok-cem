@@ -46,11 +46,11 @@ function SideRail() {
     { icon: Inbox, label: "Inbox" },
   ];
   const main: RailItem[] = [
-    { icon: Home, label: "Dashboard", active: true },
-    { icon: BookOpen, label: "Knowledge Base" },
-    { icon: Users2, label: "Audience" },
+    { icon: LayoutDashboard, label: "Dashboard", active: true },
+    { icon: Calendar, label: "Events" },
+    { icon: Boxes, label: "Inventory" },
+    { icon: Users2, label: "Waitlist" },
     { icon: BarChart3, label: "Analytics" },
-    { icon: LayoutGrid, label: "Apps" },
   ];
   const bottom: RailItem[] = [
     { icon: Settings, label: "Settings" },
