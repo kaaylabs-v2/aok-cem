@@ -86,3 +86,171 @@ export const waitlist: WaitlistRequest[] = [
   { id: "w3", eventId: "e2", name: "Priya Raman", requested: "1 day ago", justification: "Regional VP — mandatory leadership presence.", status: "pending" },
   { id: "w4", eventId: "e8", name: "Tom Beckett", requested: "3 days ago", justification: "ESG team representative.", status: "pending" },
 ];
+
+/* ---------- Enquiries ---------- */
+export type EnquiryStatus =
+  | "submitted"
+  | "in_progress"
+  | "proposal_received"
+  | "accepted"
+  | "declined"
+  | "cancelled"
+  | "pending_approval";
+
+export interface EnquiryTimelineEvent {
+  status: EnquiryStatus;
+  at: string;
+  note?: string;
+}
+
+export interface Enquiry {
+  id: string;
+  ref: string; // ENQ-1023
+  eventType: PortfolioEvent["type"];
+  preferredDates: string[]; // ISO
+  guests: number;
+  budget: number; // USD
+  location: string;
+  notes: string;
+  audience: "business" | "personal";
+  status: EnquiryStatus;
+  submittedBy: string;
+  submittedAt: string; // ISO
+  updatedAt: string; // ISO
+  lastSyncedAt?: string; // ISO
+  timeline: EnquiryTimelineEvent[];
+  aokNotes: string;
+  activity: { at: string; text: string }[];
+}
+
+export const ENQUIRY_STATUS_LABEL: Record<EnquiryStatus, string> = {
+  submitted: "Submitted",
+  in_progress: "In Progress",
+  proposal_received: "Proposal Received",
+  accepted: "Accepted",
+  declined: "Declined",
+  cancelled: "Cancelled",
+  pending_approval: "Pending Approval",
+};
+
+export const enquiries: Enquiry[] = [
+  {
+    id: "q1",
+    ref: "ENQ-1023",
+    eventType: "Conference",
+    preferredDates: [d(35, 9), d(42, 9)],
+    guests: 180,
+    budget: 45000,
+    location: "London",
+    notes: "Annual partner summit; hybrid streaming required.",
+    audience: "business",
+    status: "proposal_received",
+    submittedBy: "Elena Rossi",
+    submittedAt: d(-9, 11),
+    updatedAt: d(-1, 14),
+    lastSyncedAt: d(0, 8),
+    timeline: [
+      { status: "submitted", at: d(-9, 11) },
+      { status: "in_progress", at: d(-7, 10), note: "Assigned to AOK London team." },
+      { status: "proposal_received", at: d(-1, 14), note: "Two venue options proposed." },
+    ],
+    aokNotes: "Aurora Hall available on both dates. Awaiting catering quote.",
+    activity: [
+      { at: d(-9, 11), text: "Enquiry submitted by Elena Rossi" },
+      { at: d(-7, 10), text: "Status changed to In Progress" },
+      { at: d(-1, 14), text: "Proposal received from AOK" },
+    ],
+  },
+  {
+    id: "q2",
+    ref: "ENQ-1024",
+    eventType: "Workshop",
+    preferredDates: [d(20, 14)],
+    guests: 35,
+    budget: 8000,
+    location: "Berlin",
+    notes: "Design thinking workshop, full-day.",
+    audience: "business",
+    status: "in_progress",
+    submittedBy: "Marcus Chen",
+    submittedAt: d(-4, 9),
+    updatedAt: d(-2, 16),
+    lastSyncedAt: d(0, 8),
+    timeline: [
+      { status: "submitted", at: d(-4, 9) },
+      { status: "in_progress", at: d(-2, 16) },
+    ],
+    aokNotes: "",
+    activity: [
+      { at: d(-4, 9), text: "Enquiry submitted by Marcus Chen" },
+      { at: d(-2, 16), text: "Status changed to In Progress" },
+    ],
+  },
+  {
+    id: "q3",
+    ref: "ENQ-1025",
+    eventType: "Gala",
+    preferredDates: [d(60, 19)],
+    guests: 220,
+    budget: 120000,
+    location: "New York",
+    notes: "Investor gala, black-tie.",
+    audience: "business",
+    status: "submitted",
+    submittedBy: "Priya Raman",
+    submittedAt: d(0, 10),
+    updatedAt: d(0, 10),
+    timeline: [{ status: "submitted", at: d(0, 10) }],
+    aokNotes: "",
+    activity: [{ at: d(0, 10), text: "Enquiry submitted by Priya Raman" }],
+  },
+  {
+    id: "q4",
+    ref: "ENQ-1026",
+    eventType: "Networking",
+    preferredDates: [d(15, 19)],
+    guests: 80,
+    budget: 12000,
+    location: "Lisbon",
+    notes: "Founders mixer, rooftop preferred.",
+    audience: "business",
+    status: "accepted",
+    submittedBy: "Tom Beckett",
+    submittedAt: d(-20, 12),
+    updatedAt: d(-3, 11),
+    timeline: [
+      { status: "submitted", at: d(-20, 12) },
+      { status: "in_progress", at: d(-18, 9) },
+      { status: "proposal_received", at: d(-10, 15) },
+      { status: "accepted", at: d(-3, 11) },
+    ],
+    aokNotes: "Rooftop 22 confirmed.",
+    activity: [
+      { at: d(-20, 12), text: "Enquiry submitted by Tom Beckett" },
+      { at: d(-3, 11), text: "Proposal accepted" },
+    ],
+  },
+  {
+    id: "q5",
+    ref: "ENQ-1027",
+    eventType: "Webinar",
+    preferredDates: [d(8, 16)],
+    guests: 500,
+    budget: 4000,
+    location: "Online",
+    notes: "Product launch webinar.",
+    audience: "business",
+    status: "declined",
+    submittedBy: "Amelia Hart",
+    submittedAt: d(-30, 9),
+    updatedAt: d(-25, 10),
+    timeline: [
+      { status: "submitted", at: d(-30, 9) },
+      { status: "in_progress", at: d(-28, 10) },
+      { status: "proposal_received", at: d(-26, 9) },
+      { status: "declined", at: d(-25, 10), note: "Pricing out of budget." },
+    ],
+    aokNotes: "Client declined on cost grounds.",
+    activity: [{ at: d(-25, 10), text: "Proposal declined" }],
+  },
+];
