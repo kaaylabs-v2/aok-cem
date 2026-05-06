@@ -303,7 +303,9 @@ export default function IndexV2() {
   return (
     <div className="min-h-screen w-full bg-[hsl(220_30%_94%)] p-3">
       <div className="flex gap-3">
-        <SideRail />
+        <div className="sticky top-3 h-[calc(100vh-1.5rem)] shrink-0">
+          <SideRail />
+        </div>
 
         <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
           {/* Header */}
