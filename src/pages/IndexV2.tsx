@@ -478,6 +478,20 @@ export default function IndexV2() {
                     })}
                   </SelectContent>
                 </Select>
+                <div className="flex items-center gap-0.5 rounded-xl border border-black/10 bg-[hsl(220_20%_97%)] p-0.5">
+                  {(["upcoming", "past"] as const).map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setScope(s)}
+                      className={cn(
+                        "rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors",
+                        scope === s ? "bg-white text-foreground shadow-sm" : "text-foreground/50"
+                      )}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
