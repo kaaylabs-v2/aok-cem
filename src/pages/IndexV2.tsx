@@ -25,12 +25,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Tag } from "lucide-react";
 
 /* ---------- Sidebar ---------- */
-type RailItem = { icon: any; label: string; active?: boolean };
+type RailItem = { icon: any; label: string; active?: boolean; onClick?: () => void };
 
 function RailButton({ it, expanded }: { it: RailItem; expanded: boolean }) {
   const btn = (
     <button
       aria-label={it.label}
+      onClick={it.onClick}
       className={cn(
         "flex h-10 items-center rounded-xl transition-colors",
         expanded ? "w-full justify-start gap-3 px-3" : "w-10 justify-center",
@@ -50,12 +51,13 @@ function RailButton({ it, expanded }: { it: RailItem; expanded: boolean }) {
   );
 }
 
-function SideRail({ expanded, onToggle }: { expanded: boolean; onToggle: () => void }) {
+function SideRail({ expanded, onToggle, view, setView }: { expanded: boolean; onToggle: () => void; view: "dashboard" | "enquiries"; setView: (v: "dashboard" | "enquiries") => void }) {
   const top: RailItem[] = [
     { icon: Inbox, label: "Inbox" },
   ];
   const main: RailItem[] = [
-    { icon: LayoutDashboard, label: "Dashboard", active: true },
+    { icon: LayoutDashboard, label: "Dashboard", active: view === "dashboard", onClick: () => setView("dashboard") },
+    { icon: FileSearch, label: "Enquiries", active: view === "enquiries", onClick: () => setView("enquiries") },
     { icon: Calendar, label: "Events" },
     { icon: Boxes, label: "Inventory" },
     { icon: Users2, label: "Waitlist" },
