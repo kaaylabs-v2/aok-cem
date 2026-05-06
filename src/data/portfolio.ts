@@ -121,6 +121,16 @@ export interface Enquiry {
   timeline: EnquiryTimelineEvent[];
   aokNotes: string;
   activity: { at: string; text: string }[];
+  documents?: EnquiryDocument[];
+}
+
+export interface EnquiryDocument {
+  id: string;
+  name: string;
+  type: "pdf" | "docx" | "xlsx" | "image";
+  size: string;
+  uploadedBy: string;
+  uploadedAt: string;
 }
 
 export const ENQUIRY_STATUS_LABEL: Record<EnquiryStatus, string> = {
