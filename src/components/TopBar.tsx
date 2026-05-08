@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, ChevronDown, Search, Check, Settings as SettingsIcon } from "lucide-react";
+import { Bell, ChevronDown, Search, Check, Settings as SettingsIcon, Plus, HelpCircle, Sun, Moon, CalendarPlus, Inbox, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
