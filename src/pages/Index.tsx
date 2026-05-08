@@ -191,14 +191,10 @@ const Index = () => {
                   <EventTable events={visible} onRowClick={openEvent} />
                 )}
               </section>
-              </div>
-            </main>
-          </div>
-        </div>
-      </div>
+      </AppShell>
       <EventDrawer event={selected} open={drawerOpen} onOpenChange={setDrawerOpen} />
       <WaitlistDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} />
-    </SidebarProvider>
+    </>
   );
 };
 
