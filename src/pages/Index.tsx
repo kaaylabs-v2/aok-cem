@@ -202,8 +202,9 @@ const Index = () => {
                   <EventTable events={visible} onRowClick={openEvent} />
                 )}
               </section>
-            </div>
-          </main>
+              </div>
+            </main>
+          </div>
         </div>
       </div>
       <EventDrawer event={selected} open={drawerOpen} onOpenChange={setDrawerOpen} />
