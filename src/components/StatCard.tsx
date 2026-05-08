@@ -53,13 +53,6 @@ function MiniArea({ current, previous, up }: { current: number[]; previous: numb
   const gradId = `mini-area-${up ? "u" : "d"}`;
   return (
     <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-8 w-full overflow-visible">
-      <defs>
-        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.25" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <polygon points={area} fill={`url(#${gradId})`} />
       <polyline
         fill="none"
         stroke="hsl(var(--muted-foreground))"
