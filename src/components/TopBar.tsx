@@ -20,9 +20,10 @@ const tenants = ["AOK Events", "Northwind Live", "Helix Conferences"];
 
 interface Props {
   onOpenNotification: (n: NotificationItem) => void;
+  showSidebarTrigger?: boolean;
 }
 
-export function TopBar({ onOpenNotification }: Props) {
+export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props) {
   const [tenant, setTenant] = useState(tenants[0]);
   const [notifs, setNotifs] = useState(initial);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -33,7 +34,7 @@ export function TopBar({ onOpenNotification }: Props) {
   return (
     <header className="sticky top-0 z-30 border-b border-border/50 bg-card/70 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-3 px-4 md:px-6">
-        <SidebarTrigger className="h-8 w-8" />
+        {showSidebarTrigger && <SidebarTrigger className="h-8 w-8" />}
 
         {/* Tenant switcher */}
         <DropdownMenu>

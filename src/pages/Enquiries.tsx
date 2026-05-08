@@ -25,7 +25,7 @@ const Enquiries = () => {
       <div className="flex min-h-screen w-full bg-gradient-bg">
         <AppSidebar />
         <div className="flex-1">
-          <TopBar onOpenNotification={onNotification} />
+          <TopBar onOpenNotification={onNotification} showSidebarTrigger />
           <main className="px-4 py-6 md:px-6 md:py-6">
             <div className="mx-auto w-full max-w-[1600px]">
               <section className="rounded-[2rem] border border-border/60 bg-card/80 p-6 shadow-panel md:p-8">
