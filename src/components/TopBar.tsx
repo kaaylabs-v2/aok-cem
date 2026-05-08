@@ -99,26 +99,6 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full" aria-label="Help">
-                <HelpCircle className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuLabel>Help & resources</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Documentation</DropdownMenuItem>
-              <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
-              <DropdownMenuItem>Contact support</DropdownMenuItem>
-              <DropdownMenuItem>What's new</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
-            <SettingsIcon className="h-4 w-4" />
-          </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full">
                 <Bell className="h-4 w-4" />
                 {unread > 0 && (
