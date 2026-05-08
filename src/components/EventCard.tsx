@@ -46,17 +46,17 @@ export function EventCard({ event, onClick }: Props) {
         </Tooltip>
       )}
 
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3">
         <CircularUtilisation value={pct} tone={tone} />
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
             <Badge variant="outline" className={cn("text-[10px] font-semibold uppercase tracking-wide", badge.cls)}>
               {badge.label}
             </Badge>
             <span className="text-[11px] text-muted-foreground">{event.type}</span>
           </div>
-          <h3 className="mt-1.5 truncate text-base font-semibold leading-tight">{event.name}</h3>
-          <p className="mt-0.5 text-xs text-muted-foreground">{event.asset}</p>
+          <h3 className="mt-1 truncate text-sm font-semibold leading-tight">{event.name}</h3>
+          <p className="text-[11px] text-muted-foreground">{event.asset}</p>
         </div>
       </div>
 
