@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { Bell, ChevronDown, Search, Building2, Check, Settings as SettingsIcon } from "lucide-react";
+import { Bell, ChevronDown, Search, Check, Settings as SettingsIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,19 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { notifications as initial, NotificationItem } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/aok-logo.png";
 
 const tenants = ["AOK Events", "Northwind Live", "Helix Conferences"];
-const navItems = [
-  { label: "Dashboard", to: "/" },
-  { label: "Enquiries", to: "/enquiries" },
-  { label: "Events", to: "/events" },
-  { label: "Inventory", to: "/inventory" },
-  { label: "Waitlist", to: "/waitlist" },
-  { label: "Analytics", to: "/analytics" },
-];
 
 interface Props {
   onOpenNotification: (n: NotificationItem) => void;
@@ -36,8 +27,6 @@ export function TopBar({ onOpenNotification }: Props) {
   const [notifs, setNotifs] = useState(initial);
   const [searchOpen, setSearchOpen] = useState(false);
   const unread = notifs.filter((n) => n.unread).length;
-  const { pathname } = useLocation();
-  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
 
   const markAll = () => setNotifs((ns) => ns.map((n) => ({ ...n, unread: false })));
 
