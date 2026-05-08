@@ -38,7 +38,7 @@ export function EventCard({ event, onClick }: Props) {
       {under && (
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center rounded-full bg-warning/15 text-warning">
+            <div className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-warning/15 text-warning">
               <AlertTriangle className="h-4 w-4" strokeWidth={1.75} />
             </div>
           </TooltipTrigger>
