@@ -13,6 +13,8 @@ import { EventDrawer } from "@/components/EventDrawer";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { TopBar } from "@/components/TopBar";
 import { Badge } from "@/components/ui/badge";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 
 type StatusTab = "all" | EventStatus;
 
