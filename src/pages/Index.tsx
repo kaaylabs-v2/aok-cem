@@ -125,10 +125,6 @@ const Index = () => {
                   </Select>
 
                   <div className="ml-auto flex flex-wrap items-center gap-2">
-                    <div className="hidden items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-xs md:flex">
-                      <Filter className="h-3.5 w-3.5 text-muted-foreground" />
-                      <span className="text-muted-foreground">Filters:</span>
-                    </div>
                     <Select value={venue} onValueChange={setVenue}>
                       <SelectTrigger className="h-9 w-[170px]"><SelectValue placeholder="Venue" /></SelectTrigger>
                       <SelectContent>
