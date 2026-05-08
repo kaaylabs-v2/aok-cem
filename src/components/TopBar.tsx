@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, ChevronDown, Search, Check, Settings as SettingsIcon } from "lucide-react";
+import { Bell, ChevronDown, Search, Check, Settings as SettingsIcon, Plus, HelpCircle, Sun, Moon, CalendarPlus, Inbox, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -27,9 +27,15 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
   const [tenant, setTenant] = useState(tenants[0]);
   const [notifs, setNotifs] = useState(initial);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [dark, setDark] = useState(false);
   const unread = notifs.filter((n) => n.unread).length;
 
   const markAll = () => setNotifs((ns) => ns.map((n) => ({ ...n, unread: false })));
+  const toggleTheme = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+  };
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/50 bg-card/70 backdrop-blur-xl">
@@ -73,6 +79,42 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
               <Search className="h-4 w-4" />
             </Button>
           )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" className="hidden h-9 gap-1.5 rounded-full px-3 sm:inline-flex">
+                <Plus className="h-4 w-4" />
+                <span className="text-xs font-semibold">Create</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuLabel>Quick create</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem><CalendarPlus className="mr-2 h-4 w-4" />New event</DropdownMenuItem>
+              <DropdownMenuItem><Inbox className="mr-2 h-4 w-4" />New enquiry</DropdownMenuItem>
+              <DropdownMenuItem><Package className="mr-2 h-4 w-4" />New inventory item</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full" onClick={toggleTheme} aria-label="Toggle theme">
+            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full" aria-label="Help">
+                <HelpCircle className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuLabel>Help & resources</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Documentation</DropdownMenuItem>
+              <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
+              <DropdownMenuItem>Contact support</DropdownMenuItem>
+              <DropdownMenuItem>What's new</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
             <SettingsIcon className="h-4 w-4" />
