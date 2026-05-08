@@ -84,7 +84,7 @@ export function EventCard({ event, onClick }: Props) {
         <div className="mt-1.5">
           <TickBar value={pct} tone={tone} ticks={44} />
         </div>
-        <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
+        <div className="mt-1.5 flex items-center justify-between text-[11px] text-muted-foreground">
           <span className="inline-flex items-center gap-1">
             <Users className="h-3.5 w-3.5" strokeWidth={1.75} /> {remaining} seats left of {event.capacity}
           </span>
