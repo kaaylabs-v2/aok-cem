@@ -28,21 +28,32 @@ function generateBars(seedSource: string | number, points = 12): number[] {
   return out;
 }
 
-function MiniBars({ data, up }: { data: number[]; up: boolean }) {
+function MiniSparkline({ data, up }: { data: number[]; up: boolean }) {
   const max = Math.max(...data);
-  const color = up ? "bg-success" : "bg-destructive";
-  const colorMuted = up ? "bg-success/25" : "bg-destructive/25";
-  const lastIdx = data.length - 1;
+  const min = Math.min(...data);
+  const range = Math.max(1, max - min);
+  const w = 100;
+  const h = 32;
+  const stepX = w / (data.length - 1);
+  const points = data.map((d, i) => {
+    const x = i * stepX;
+    const y = h - ((d - min) / range) * (h - 4) - 2;
+    return `${x},${y}`;
+  });
+  const last = points[points.length - 1].split(",").map(Number);
+  const color = up ? "hsl(var(--success))" : "hsl(var(--destructive))";
   return (
-    <div className="flex h-8 items-end gap-[3px]">
-      {data.map((d, i) => (
-        <div
-          key={i}
-          className={cn("flex-1 rounded-sm transition-all", i === lastIdx ? color : colorMuted)}
-          style={{ height: `${Math.max(8, (d / max) * 100)}%` }}
-        />
-      ))}
-    </div>
+    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-8 w-full overflow-visible">
+      <polyline
+        fill="none"
+        stroke={color}
+        strokeWidth={1.75}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        points={points.join(" ")}
+      />
+      <circle cx={last[0]} cy={last[1]} r={2.5} fill={color} />
+    </svg>
   );
 }
 
@@ -63,7 +74,7 @@ export function StatCard({ icon: Icon, label, value, sub, trend, bars }: StatCar
       </div>
 
       <div className="mt-4">
-        <MiniBars data={data} up={up} />
+        <MiniSparkline data={data} up={up} />
       </div>
 
       <div className="mt-2 flex items-center justify-between">
