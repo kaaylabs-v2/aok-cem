@@ -22,7 +22,12 @@ const items = [
   { title: "Inventory", url: "/inventory", icon: Boxes },
   { title: "Waitlist", url: "/waitlist", icon: Users2 },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
+];
+
+const bottomItems = [
   { title: "Settings", url: "/settings", icon: Settings },
+  { title: "Support", url: "/support", icon: Headphones },
+  { title: "Log out", url: "/logout", icon: LogOut },
 ];
 
 export function AppSidebar() {
