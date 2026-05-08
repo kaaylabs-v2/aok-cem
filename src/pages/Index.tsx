@@ -112,16 +112,17 @@ const Index = () => {
               {/* Filters */}
               <section className="sticky top-20 z-20 rounded-2xl border border-border/60 bg-card/80 px-3 py-2.5 backdrop-blur-md">
                 <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-3">
-                  <Tabs value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
-                    <TabsList className="bg-secondary/70">
-                      <TabsTrigger value="all">All</TabsTrigger>
-                      <TabsTrigger value="available">Available</TabsTrigger>
-                      <TabsTrigger value="partial">Partial</TabsTrigger>
-                      <TabsTrigger value="full">Full</TabsTrigger>
-                      <TabsTrigger value="waitlisted">Waitlisted</TabsTrigger>
-                      <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
+                  <Select value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
+                    <SelectTrigger className="h-9 w-[160px]"><SelectValue placeholder="Status" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      <SelectItem value="available">Available</SelectItem>
+                      <SelectItem value="partial">Partial</SelectItem>
+                      <SelectItem value="full">Full</SelectItem>
+                      <SelectItem value="waitlisted">Waitlisted</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
 
                   <div className="ml-auto flex flex-wrap items-center gap-2">
                     <div className="hidden items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5 text-xs md:flex">
