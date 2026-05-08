@@ -96,9 +96,6 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full" onClick={toggleTheme} aria-label="Toggle theme">
-            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
