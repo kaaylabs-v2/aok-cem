@@ -106,7 +106,7 @@ const Index = () => {
                 <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-3">
                   <div className="ml-auto flex flex-wrap items-center gap-2">
                     <Select value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
-                      <SelectTrigger className="h-9 w-[140px] px-2.5"><SelectValue placeholder="Status" /></SelectTrigger>
+                      <SelectTrigger className="h-9 w-[140px] px-2"><SelectValue placeholder="Status" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All</SelectItem>
                         <SelectItem value="available">Available</SelectItem>
@@ -117,21 +117,21 @@ const Index = () => {
                       </SelectContent>
                     </Select>
                     <Select value={venue} onValueChange={setVenue}>
-                      <SelectTrigger className="h-9 w-[170px] px-2.5"><SelectValue placeholder="Venue" /></SelectTrigger>
+                      <SelectTrigger className="h-9 w-[170px] px-2"><SelectValue placeholder="Venue" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All venues</SelectItem>
                         {venues.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}
                       </SelectContent>
                     </Select>
                     <Select value={type} onValueChange={setType}>
-                      <SelectTrigger className="h-9 w-[150px] px-2.5"><SelectValue placeholder="Type" /></SelectTrigger>
+                      <SelectTrigger className="h-9 w-[150px] px-2"><SelectValue placeholder="Type" /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All types</SelectItem>
                         {eventTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                       </SelectContent>
                     </Select>
                     <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
-                      <SelectTrigger className="h-9 w-[150px] px-2.5">
+                      <SelectTrigger className="h-9 w-[150px] px-2">
                         <ArrowUpDown className="mr-1 h-3.5 w-3.5" /> <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
