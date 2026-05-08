@@ -69,10 +69,11 @@ const Index = () => {
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gradient-bg">
         <AppSidebar />
-        <div className="flex-1">
-          <TopBar onOpenNotification={onNotification} showSidebarTrigger />
-          <main className="px-4 py-6 md:px-6 md:py-6">
-            <div className="mx-auto w-full max-w-[1600px] space-y-6">
+        <div className="flex-1 p-2 md:p-3">
+          <div className="mx-auto flex max-w-[1600px] flex-col overflow-hidden rounded-[2rem] border border-border/60 bg-card/70 shadow-panel backdrop-blur-xl">
+            <TopBar onOpenNotification={onNotification} showSidebarTrigger />
+            <main className="px-4 py-6 md:px-6 md:py-6">
+              <div className="w-full space-y-6">
               {/* Hero panel */}
               <section className="relative overflow-hidden rounded-[2rem] border border-border/60 bg-gradient-hero p-6 shadow-panel md:p-8">
                 <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
@@ -201,8 +202,9 @@ const Index = () => {
                   <EventTable events={visible} onRowClick={openEvent} />
                 )}
               </section>
-            </div>
-          </main>
+              </div>
+            </main>
+          </div>
         </div>
       </div>
       <EventDrawer event={selected} open={drawerOpen} onOpenChange={setDrawerOpen} />
