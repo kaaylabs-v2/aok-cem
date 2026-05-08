@@ -45,16 +45,10 @@ export function AppSidebar() {
             <img src={logo} alt="AOK Events" className="h-full w-full object-cover" />
           </div>
           {!collapsed && (
-            <div className="flex flex-1 items-center justify-between gap-2">
-              <div className="flex flex-col leading-tight">
-                <span className="text-sm font-semibold text-sidebar-foreground">AOK Events</span>
-                <span className="text-[11px] text-sidebar-foreground/75">Portfolio Console</span>
-              </div>
-              <SidebarTrigger className="h-7 w-7 text-sidebar-foreground hover:bg-sidebar-foreground/15 hover:text-sidebar-foreground" />
+            <div className="flex flex-col leading-tight">
+              <span className="text-sm font-semibold text-sidebar-foreground">AOK Events</span>
+              <span className="text-[11px] text-sidebar-foreground/75">Portfolio Console</span>
             </div>
-          )}
-          {collapsed && (
-            <SidebarTrigger className="h-7 w-7 text-sidebar-foreground hover:bg-sidebar-foreground/15 hover:text-sidebar-foreground" />
           )}
         </div>
       </SidebarHeader>
