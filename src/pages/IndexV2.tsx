@@ -714,10 +714,10 @@ export default function IndexV2() {
             </div>
           )}
         </div>
-      </div>
 
       <EventDrawer event={selected} open={drawerOpen} onOpenChange={setDrawerOpen} />
       <WaitlistDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} />
     </div>
+    </SidebarProvider>
   );
 }
