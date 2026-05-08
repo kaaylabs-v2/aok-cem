@@ -41,7 +41,7 @@ export function AppSidebar() {
           {!collapsed && (
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-semibold text-sidebar-foreground">AOK Events</span>
-              <span className="text-[11px] text-muted-foreground">Portfolio Console</span>
+              <span className="text-[11px] text-sidebar-foreground/75">Portfolio Console</span>
             </div>
           )}
         </div>
@@ -70,9 +70,9 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-3">
         {!collapsed && (
-          <div className="rounded-xl border border-sidebar-border bg-sidebar-accent/40 p-3">
-            <p className="text-xs font-semibold text-sidebar-accent-foreground">Plan: Enterprise</p>
-            <p className="mt-1 text-[11px] text-muted-foreground">Unlimited events & seats</p>
+          <div className="rounded-xl border border-sidebar-foreground/20 bg-sidebar-foreground/10 p-3">
+            <p className="text-xs font-semibold text-sidebar-foreground">Plan: Enterprise</p>
+            <p className="mt-1 text-[11px] text-sidebar-foreground/75">Unlimited events & seats</p>
           </div>
         )}
       </SidebarFooter>
