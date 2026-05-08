@@ -92,13 +92,14 @@ const Index = () => {
                   </div>
                 </div>
 
-                {/* Stats */}
-                <div className="relative mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                  <StatCard icon={CalendarIcon} label="Total Events" value={summary.totalEvents} sub="vs last month" trend={12} />
-                  <StatCard icon={Users2} label="Total Bookings" value={summary.totalBookings.toLocaleString()} sub="vs last month" trend={8} />
-                  <StatCard icon={TrendingUp} label="Avg. Utilisation" value={`${summary.avgUtil}%`} sub="vs last month" trend={summary.avgUtil >= 65 ? 4 : -3} />
-                  <StatCard icon={ListChecks} label="Need Attention" value={summary.underperforming} sub="vs last month" trend={-15} />
-                </div>
+              </section>
+
+              {/* Stats */}
+              <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <StatCard icon={CalendarIcon} label="Total Events" value={summary.totalEvents} sub="vs last month" trend={12} />
+                <StatCard icon={Users2} label="Total Bookings" value={summary.totalBookings.toLocaleString()} sub="vs last month" trend={8} />
+                <StatCard icon={TrendingUp} label="Avg. Utilisation" value={`${summary.avgUtil}%`} sub="vs last month" trend={summary.avgUtil >= 65 ? 4 : -3} />
+                <StatCard icon={ListChecks} label="Need Attention" value={summary.underperforming} sub="vs last month" trend={-15} />
               </section>
 
               {/* Filters */}
