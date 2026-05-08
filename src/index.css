@@ -66,8 +66,8 @@
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 333 86% 35%;
-    --sidebar-accent: 0 0% 100%;
-    --sidebar-accent-foreground: 333 86% 35%;
+    --sidebar-accent: 333 80% 44%;
+    --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 333 70% 46%;
     --sidebar-ring: 0 0% 100%;
   }
@@ -138,16 +138,4 @@
   .shadow-soft { box-shadow: var(--shadow-md); }
   .shadow-elegant { box-shadow: var(--shadow-lg); }
   .shadow-panel { box-shadow: var(--shadow-panel); }
-}
-
-@layer components {
-  [data-variant="floating"] [data-sidebar="sidebar"] {
-    border-radius: 2rem;
-  }
-  [data-sidebar="menu-button"][data-active="true"] {
-    border-radius: 9999px;
-  }
-  [data-sidebar="menu-button"] {
-    border-radius: 9999px;
-  }
 }

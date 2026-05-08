@@ -9,8 +9,6 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { EnquiriesView } from "@/components/EnquiriesView";
-import { AppSidebar } from "@/components/AppSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import {
   events as allEvents, eventTypes, venues, utilisation, isUnderperforming, notifications as initialNotifications,
@@ -403,11 +401,13 @@ export default function IndexV2() {
   const openEvent = (e: PortfolioEvent) => { setSelected(e); setDrawerOpen(true); };
 
   return (
-    <SidebarProvider>
-    <div className="flex min-h-screen w-full bg-[hsl(220_30%_94%)] p-3">
-      <AppSidebar />
+    <div className="min-h-screen w-full bg-[hsl(220_30%_94%)] p-3">
+      <div className="flex gap-3">
+        <div className="sticky top-3 h-[calc(100vh-1.5rem)] shrink-0">
+          <SideRail expanded={sidebarExpanded} onToggle={() => setSidebarExpanded((v) => !v)} view={view} setView={setView} />
+        </div>
 
-      <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
+        <div className="flex-1 rounded-[2rem] bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] md:p-8">
           {/* Top bar */}
           <div className="mb-6 flex items-center gap-3 rounded-full border border-black/5 bg-[hsl(220_20%_98%)] py-1.5 pl-2 pr-2">
             <DropdownMenu>
@@ -714,10 +714,10 @@ export default function IndexV2() {
             </div>
           )}
         </div>
+      </div>
 
       <EventDrawer event={selected} open={drawerOpen} onOpenChange={setDrawerOpen} />
       <WaitlistDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} />
     </div>
-    </SidebarProvider>
   );
 }
