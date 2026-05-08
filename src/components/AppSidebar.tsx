@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, Boxes, Users2, BarChart3, Settings } from "lucide-react";
+import { LayoutDashboard, Calendar, Boxes, Users2, BarChart3, Settings, Inbox } from "lucide-react";
 import logo from "@/assets/aok-logo.png";
 import {
   Sidebar,
@@ -17,6 +17,7 @@ import {
 
 const items = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Enquiries", url: "/enquiries", icon: Inbox },
   { title: "Events", url: "/events", icon: Calendar },
   { title: "Inventory", url: "/inventory", icon: Boxes },
   { title: "Waitlist", url: "/waitlist", icon: Users2 },
