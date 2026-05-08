@@ -40,7 +40,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="floating">
       <SidebarHeader className="px-3 py-4">
-        <div className="flex items-center gap-2.5">
+        <div className={`flex items-center gap-2.5 ${collapsed ? "justify-center" : ""}`}>
           <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full shadow-elegant">
             <img src={logo} alt="AOK Events" className="h-full w-full object-cover" />
           </div>
