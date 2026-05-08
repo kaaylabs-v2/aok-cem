@@ -139,3 +139,18 @@
   .shadow-elegant { box-shadow: var(--shadow-lg); }
   .shadow-panel { box-shadow: var(--shadow-panel); }
 }
+
+@layer components {
+  [data-sidebar="sidebar"] {
+    background: linear-gradient(160deg, #ff2e8a 0%, #c34de0 18%, #2aa6ff 38%, #4cd1a4 58%, #ffe23a 80%, #ff9a3a 100%) !important;
+    color: hsl(0 0% 100%);
+  }
+  [data-sidebar="sidebar"] [data-sidebar="group-label"] {
+    color: hsl(0 0% 100% / 0.85);
+  }
+  [data-sidebar="sidebar"] [data-sidebar="menu-button"]:hover,
+  [data-sidebar="sidebar"] [data-sidebar="menu-button"][data-active="true"] {
+    background: hsl(0 0% 100% / 0.22) !important;
+    color: hsl(0 0% 100%) !important;
+  }
+}
