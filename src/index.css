@@ -62,14 +62,14 @@
 
     --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 333 86% 52%;
+    --sidebar-background: 150 15% 15%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 333 86% 35%;
-    --sidebar-accent: 333 80% 44%;
+    --sidebar-primary: 140 55% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 140 55% 55%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 333 70% 46%;
-    --sidebar-ring: 0 0% 100%;
+    --sidebar-border: 150 15% 22%;
+    --sidebar-ring: 140 55% 55%;
   }
 
   .dark {
