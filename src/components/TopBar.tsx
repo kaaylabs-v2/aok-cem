@@ -27,9 +27,15 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
   const [tenant, setTenant] = useState(tenants[0]);
   const [notifs, setNotifs] = useState(initial);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [dark, setDark] = useState(false);
   const unread = notifs.filter((n) => n.unread).length;
 
   const markAll = () => setNotifs((ns) => ns.map((n) => ({ ...n, unread: false })));
+  const toggleTheme = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+  };
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/50 bg-card/70 backdrop-blur-xl">
