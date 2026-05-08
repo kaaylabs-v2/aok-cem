@@ -32,7 +32,7 @@ export function AppSidebar() {
   const isActive = (path: string) => (path === "/" ? pathname === "/" : pathname.startsWith(path));
 
   return (
-    <Sidebar collapsible="icon" variant="floating" className="border-r border-sidebar-border">
+    <Sidebar collapsible="icon" variant="floating">
       <SidebarHeader className="px-3 py-4">
         <div className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full shadow-elegant">
