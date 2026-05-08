@@ -9,6 +9,8 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { EnquiriesView } from "@/components/EnquiriesView";
+import { AppSidebar } from "@/components/AppSidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import {
   events as allEvents, eventTypes, venues, utilisation, isUnderperforming, notifications as initialNotifications,
