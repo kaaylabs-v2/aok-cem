@@ -139,3 +139,15 @@
   .shadow-elegant { box-shadow: var(--shadow-lg); }
   .shadow-panel { box-shadow: var(--shadow-panel); }
 }
+
+@layer components {
+  [data-variant="floating"] [data-sidebar="sidebar"] {
+    border-radius: 2rem;
+  }
+  [data-sidebar="menu-button"][data-active="true"] {
+    border-radius: 9999px;
+  }
+  [data-sidebar="menu-button"] {
+    border-radius: 9999px;
+  }
+}
