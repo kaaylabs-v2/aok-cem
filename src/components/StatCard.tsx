@@ -28,39 +28,55 @@ function generateBars(seedSource: string | number, points = 12): number[] {
   return out;
 }
 
-function MiniArea({ data, up }: { data: number[]; up: boolean }) {
-  const max = Math.max(...data);
-  const min = Math.min(...data);
+function MiniArea({ current, previous, up }: { current: number[]; previous: number[]; up: boolean }) {
+  const all = [...current, ...previous];
+  const max = Math.max(...all);
+  const min = Math.min(...all);
   const range = Math.max(1, max - min);
   const w = 100;
   const h = 32;
-  const stepX = w / (data.length - 1);
-  const pts = data.map((d, i) => {
-    const x = i * stepX;
-    const y = h - ((d - min) / range) * (h - 4) - 2;
-    return [x, y] as const;
-  });
-  const line = pts.map(([x, y]) => `${x},${y}`).join(" ");
-  const area = `0,${h} ${line} ${w},${h}`;
-  const last = pts[pts.length - 1];
+  const toPts = (data: number[]) => {
+    const stepX = w / (data.length - 1);
+    return data.map((d, i) => {
+      const x = i * stepX;
+      const y = h - ((d - min) / range) * (h - 4) - 2;
+      return [x, y] as const;
+    });
+  };
+  const curPts = toPts(current);
+  const prevPts = toPts(previous);
+  const curLine = curPts.map(([x, y]) => `${x},${y}`).join(" ");
+  const prevLine = prevPts.map(([x, y]) => `${x},${y}`).join(" ");
+  const area = `0,${h} ${curLine} ${w},${h}`;
+  const last = curPts[curPts.length - 1];
   const color = up ? "hsl(var(--success))" : "hsl(var(--destructive))";
   const gradId = `mini-area-${up ? "u" : "d"}`;
   return (
     <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-8 w-full overflow-visible">
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.35" />
+          <stop offset="0%" stopColor={color} stopOpacity="0.25" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>
       </defs>
       <polygon points={area} fill={`url(#${gradId})`} />
       <polyline
         fill="none"
+        stroke="hsl(var(--muted-foreground))"
+        strokeOpacity={0.45}
+        strokeWidth={1.25}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeDasharray="2 2"
+        points={prevLine}
+      />
+      <polyline
+        fill="none"
         stroke={color}
         strokeWidth={1.75}
         strokeLinecap="round"
         strokeLinejoin="round"
-        points={line}
+        points={curLine}
       />
       <circle cx={last[0]} cy={last[1]} r={2.5} fill={color} />
     </svg>
@@ -69,7 +85,8 @@ function MiniArea({ data, up }: { data: number[]; up: boolean }) {
 
 export function StatCard({ icon: Icon, label, value, sub, trend, bars }: StatCardProps) {
   const up = trend >= 0;
-  const data = bars ?? generateBars(`${label}-${value}`);
+  const current = bars ?? generateBars(`${label}-${value}`);
+  const previous = generateBars(`${label}-${value}-prev`);
 
   return (
     <div className="group rounded-3xl border border-border/60 bg-card/80 p-5 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-soft">
@@ -84,7 +101,18 @@ export function StatCard({ icon: Icon, label, value, sub, trend, bars }: StatCar
       </div>
 
       <div className="mt-4">
-        <MiniArea data={data} up={up} />
+        <MiniArea current={current} previous={previous} up={up} />
+      </div>
+
+      <div className="mt-2 flex items-center gap-3 text-[10px] text-muted-foreground">
+        <span className="inline-flex items-center gap-1">
+          <span className={cn("h-0.5 w-3 rounded-full", up ? "bg-success" : "bg-destructive")} />
+          This month
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <span className="h-0.5 w-3 rounded-full border-t border-dashed border-muted-foreground/60" />
+          Last month
+        </span>
       </div>
 
       <div className="mt-2 flex items-center justify-between">
