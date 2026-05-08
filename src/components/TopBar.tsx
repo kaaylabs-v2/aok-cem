@@ -31,17 +31,16 @@ export function TopBar({ onOpenNotification }: Props) {
   const markAll = () => setNotifs((ns) => ns.map((n) => ({ ...n, unread: false })));
 
   return (
-    <header className="sticky top-0 z-30 px-4 pt-4 md:px-6 md:pt-5">
-      <div className="mx-auto flex max-w-[1600px] items-center gap-3 rounded-full border border-border/60 bg-card/80 py-2 pl-3 pr-2 shadow-sm backdrop-blur-xl md:gap-4 md:pl-4">
-        {/* Brand + tenant */}
+    <header className="sticky top-0 z-30 border-b border-border/50 bg-card/70 backdrop-blur-xl">
+      <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-3 px-4 md:px-6">
+        <SidebarTrigger className="h-8 w-8" />
+
+        {/* Tenant switcher */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex shrink-0 items-center gap-2 rounded-full pr-2 transition-colors hover:bg-secondary/60">
-              <div className="h-8 w-8 overflow-hidden rounded-full">
-                <img src={logo} alt="AOK Events" className="h-full w-full object-cover" />
-              </div>
+            <button className="flex shrink-0 items-center gap-1.5 rounded-md px-2 py-1 transition-colors hover:bg-secondary/60">
               <span className="hidden font-display text-sm font-semibold sm:inline">{tenant}</span>
-              <ChevronDown className="hidden h-3.5 w-3.5 text-muted-foreground sm:block" />
+              <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-60">
@@ -55,27 +54,6 @@ export function TopBar({ onOpenNotification }: Props) {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-
-        {/* Pill nav */}
-        <nav className="hidden flex-1 items-center justify-center gap-1 md:flex">
-          {navItems.map((item) => {
-            const active = isActive(item.to);
-            return (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={cn(
-                  "rounded-full px-4 py-1.5 text-sm font-medium transition-all",
-                  active
-                    ? "bg-gradient-primary text-primary-foreground shadow-sm"
-                    : "text-foreground/70 hover:bg-secondary hover:text-foreground"
-                )}
-              >
-                {item.label}
-              </NavLink>
-            );
-          })}
-        </nav>
 
         {/* Right cluster */}
         <div className="ml-auto flex items-center gap-1.5 md:ml-0">
