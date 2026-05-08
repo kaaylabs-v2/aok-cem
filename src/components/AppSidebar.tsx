@@ -81,7 +81,7 @@ export function AppSidebar() {
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
-                  <NavLink to={item.url} className="flex items-center gap-3 rounded-lg">
+                  <NavLink to={item.url} className={`flex items-center gap-3 rounded-lg ${collapsed ? "justify-center" : ""}`}>
                     <item.icon className="h-4 w-4" />
                     {!collapsed && <span className="text-sm font-medium">{item.title}</span>}
                   </NavLink>
