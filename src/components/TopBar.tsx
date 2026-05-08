@@ -20,9 +20,10 @@ const tenants = ["AOK Events", "Northwind Live", "Helix Conferences"];
 
 interface Props {
   onOpenNotification: (n: NotificationItem) => void;
+  showSidebarTrigger?: boolean;
 }
 
-export function TopBar({ onOpenNotification }: Props) {
+export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props) {
   const [tenant, setTenant] = useState(tenants[0]);
   const [notifs, setNotifs] = useState(initial);
   const [searchOpen, setSearchOpen] = useState(false);
