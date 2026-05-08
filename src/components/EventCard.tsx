@@ -74,14 +74,14 @@ export function EventCard({ event, onClick }: Props) {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-white/60 p-3 backdrop-blur-sm">
+      <div className="rounded-xl bg-white/60 p-2.5 backdrop-blur-sm">
         <div className="flex items-center justify-between text-xs">
           <span className="font-medium text-foreground/80">Bookings</span>
           <span className="font-semibold tabular-nums">
             {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
           </span>
         </div>
-        <div className="mt-2">
+        <div className="mt-1.5">
           <TickBar value={pct} tone={tone} ticks={44} />
         </div>
         <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
