@@ -28,29 +28,39 @@ function generateBars(seedSource: string | number, points = 12): number[] {
   return out;
 }
 
-function MiniSparkline({ data, up }: { data: number[]; up: boolean }) {
+function MiniArea({ data, up }: { data: number[]; up: boolean }) {
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = Math.max(1, max - min);
   const w = 100;
   const h = 32;
   const stepX = w / (data.length - 1);
-  const points = data.map((d, i) => {
+  const pts = data.map((d, i) => {
     const x = i * stepX;
     const y = h - ((d - min) / range) * (h - 4) - 2;
-    return `${x},${y}`;
+    return [x, y] as const;
   });
-  const last = points[points.length - 1].split(",").map(Number);
+  const line = pts.map(([x, y]) => `${x},${y}`).join(" ");
+  const area = `0,${h} ${line} ${w},${h}`;
+  const last = pts[pts.length - 1];
   const color = up ? "hsl(var(--success))" : "hsl(var(--destructive))";
+  const gradId = `mini-area-${up ? "u" : "d"}`;
   return (
     <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-8 w-full overflow-visible">
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.35" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <polygon points={area} fill={`url(#${gradId})`} />
       <polyline
         fill="none"
         stroke={color}
         strokeWidth={1.75}
         strokeLinecap="round"
         strokeLinejoin="round"
-        points={points.join(" ")}
+        points={line}
       />
       <circle cx={last[0]} cy={last[1]} r={2.5} fill={color} />
     </svg>
@@ -74,7 +84,7 @@ export function StatCard({ icon: Icon, label, value, sub, trend, bars }: StatCar
       </div>
 
       <div className="mt-4">
-        <MiniSparkline data={data} up={up} />
+        <MiniArea data={data} up={up} />
       </div>
 
       <div className="mt-2 flex items-center justify-between">
