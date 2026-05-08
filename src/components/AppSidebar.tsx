@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, Boxes, Users2, BarChart3, Settings, Inbox } from "lucide-react";
+import { LayoutDashboard, Calendar, Boxes, Users2, BarChart3, Settings, Inbox, Headphones, LogOut } from "lucide-react";
 import logo from "@/assets/aok-logo.png";
 import {
   Sidebar,
@@ -22,7 +22,12 @@ const items = [
   { title: "Inventory", url: "/inventory", icon: Boxes },
   { title: "Waitlist", url: "/waitlist", icon: Users2 },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
+];
+
+const bottomItems = [
   { title: "Settings", url: "/settings", icon: Settings },
+  { title: "Support", url: "/support", icon: Headphones },
+  { title: "Log out", url: "/logout", icon: LogOut },
 ];
 
 export function AppSidebar() {
@@ -68,13 +73,22 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="p-3">
-        {!collapsed && (
-          <div className="rounded-xl border border-sidebar-foreground/20 bg-sidebar-foreground/10 p-3">
-            <p className="text-xs font-semibold text-sidebar-foreground">Plan: Enterprise</p>
-            <p className="mt-1 text-[11px] text-sidebar-foreground/75">Unlimited events & seats</p>
-          </div>
-        )}
+      <SidebarFooter className="p-2">
+        <SidebarMenu>
+          {bottomItems.map((item) => {
+            const active = isActive(item.url);
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
+                  <NavLink to={item.url} className="flex items-center gap-3 rounded-lg">
+                    <item.icon className="h-4 w-4" />
+                    {!collapsed && <span className="text-sm font-medium">{item.title}</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );
