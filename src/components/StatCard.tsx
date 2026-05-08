@@ -74,7 +74,7 @@ export function StatCard({ icon: Icon, label, value, sub, trend, bars }: StatCar
       </div>
 
       <div className="mt-4">
-        <MiniBars data={data} up={up} />
+        <MiniSparkline data={data} up={up} />
       </div>
 
       <div className="mt-2 flex items-center justify-between">
