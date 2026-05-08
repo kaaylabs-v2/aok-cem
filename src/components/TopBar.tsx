@@ -40,7 +40,7 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
   return (
     <header className="sticky top-0 z-30 px-2 pt-2 md:px-3 md:pt-3">
       <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-3 rounded-2xl border border-border/50 bg-card/80 px-4 shadow-panel backdrop-blur-xl md:px-5">
-        {showSidebarTrigger && <SidebarTrigger className="h-8 w-8" />}
+        
 
         {/* Tenant switcher */}
         <DropdownMenu>
