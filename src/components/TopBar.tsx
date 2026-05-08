@@ -159,7 +159,7 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile settings</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
+              
               <DropdownMenuItem>Audit trail</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-destructive">Sign out</DropdownMenuItem>
