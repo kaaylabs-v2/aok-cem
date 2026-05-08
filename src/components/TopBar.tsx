@@ -80,10 +80,6 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
             </Button>
           )}
 
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
-            <SettingsIcon className="h-4 w-4" />
-          </Button>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm" className="hidden h-9 gap-1.5 rounded-full px-3 sm:inline-flex">
