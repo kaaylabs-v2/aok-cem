@@ -202,6 +202,9 @@ const Index = () => {
                         <List className="h-3.5 w-3.5" strokeWidth={1.75} />
                       </Button>
                     </div>
+                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full" aria-label="Download">
+                      <Download className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </section>
