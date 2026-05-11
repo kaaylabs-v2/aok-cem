@@ -112,8 +112,11 @@ export function EventCard({ event, onClick }: Props) {
               {pct}%
             </span>
           </div>
-          <div className="mt-1.5">
-            <TickBar value={pct} tone={tone} ticks={22} />
+          <div className="mt-1.5 h-0.5 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${pct}%`, backgroundColor: `hsl(var(--${tone}))` }}
+            />
           </div>
           <div className="mt-1.5 text-[11px] text-muted-foreground">
             {pct >= 70 ? "Healthy" : pct >= 40 ? "Needs attention" : "Underperforming"}
