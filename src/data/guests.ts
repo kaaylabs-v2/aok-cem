@@ -34,20 +34,78 @@ export interface AuditEntry {
 const uid = () => Math.random().toString(36).slice(2, 10);
 const ACTOR = "Alex Morgan"; // current CEM user
 
-const seed: Record<string, Guest[]> = {
-  e1: [
-    { id: uid(), eventId: "e1", firstName: "Priya", lastName: "Shah", email: "priya.shah@northwind.io", company: "Northwind", dietary: "Vegetarian", access: "—", rsvp: "accepted", invite: "sent" },
-    { id: uid(), eventId: "e1", firstName: "Marco", lastName: "Bianchi", email: "marco@helio.co", company: "Helio", dietary: "—", access: "Step-free access", rsvp: "pending", invite: "sent" },
-    { id: uid(), eventId: "e1", firstName: "Yuki", lastName: "Tanaka", email: "yuki.t@orbital.jp", company: "Orbital", dietary: "Gluten-free", access: "—", rsvp: "declined", invite: "sent" },
-    { id: uid(), eventId: "e1", firstName: "Sara", lastName: "Klein", email: "sara@bounced.example", company: "Lumen", rsvp: "pending", invite: "failed", bounced: true },
-  ],
+// Pool of realistic guest profiles to seed every event with a meaningful list.
+const POOL: Omit<Guest, "id" | "eventId">[] = [
+  { firstName: "Priya", lastName: "Shah", email: "priya.shah@northwind.io", company: "Northwind", dietary: "Vegetarian", access: "—", rsvp: "accepted", invite: "sent" },
+  { firstName: "Marco", lastName: "Bianchi", email: "marco@helio.co", company: "Helio", dietary: "—", access: "Step-free access", rsvp: "pending", invite: "sent" },
+  { firstName: "Yuki", lastName: "Tanaka", email: "yuki.t@orbital.jp", company: "Orbital", dietary: "Gluten-free", access: "—", rsvp: "declined", invite: "sent" },
+  { firstName: "Sara", lastName: "Klein", email: "sara@bounced.example", company: "Lumen", dietary: "—", access: "—", rsvp: "pending", invite: "failed", bounced: true },
+  { firstName: "Liam", lastName: "Carter", email: "liam.carter@vellum.com", company: "Vellum", dietary: "—", access: "—", rsvp: "accepted", invite: "sent" },
+  { firstName: "Aisha", lastName: "Rahman", email: "aisha@brightstack.io", company: "Brightstack", dietary: "Halal", access: "—", rsvp: "accepted", invite: "sent" },
+  { firstName: "Diego", lastName: "Alvarez", email: "diego@cobaltgroup.es", company: "Cobalt Group", dietary: "—", access: "—", rsvp: "pending", invite: "sent" },
+  { firstName: "Hannah", lastName: "Müller", email: "hannah.m@nordwerk.de", company: "Nordwerk", dietary: "Vegan", access: "—", rsvp: "accepted", invite: "sent" },
+  { firstName: "Owen", lastName: "Walsh", email: "owen.walsh@redline.ie", company: "Redline", dietary: "—", access: "—", rsvp: "pending", invite: "not_sent" },
+  { firstName: "Noor", lastName: "El-Sayed", email: "noor@mosaic.co", company: "Mosaic", dietary: "Nut allergy", access: "—", rsvp: "accepted", invite: "sent" },
+  { firstName: "Felix", lastName: "Brandt", email: "felix.b@axiompartners.com", company: "Axiom Partners", dietary: "—", access: "—", rsvp: "declined", invite: "sent" },
+  { firstName: "Mia", lastName: "Laurent", email: "mia.laurent@parallax.fr", company: "Parallax", dietary: "Pescatarian", access: "—", rsvp: "accepted", invite: "sent" },
+  { firstName: "Ravi", lastName: "Iyer", email: "ravi.iyer@trinetra.in", company: "Trinetra", dietary: "Vegetarian", access: "—", rsvp: "pending", invite: "sent" },
+  { firstName: "Eva", lastName: "Novak", email: "eva.novak@kestrel.cz", company: "Kestrel", dietary: "—", access: "Wheelchair access", rsvp: "accepted", invite: "sent" },
+  { firstName: "James", lastName: "O'Connor", email: "james.oc@blueharbor.com", company: "Blue Harbor", dietary: "—", access: "—", rsvp: "pending", invite: "sent" },
+  { firstName: "Lena", lastName: "Petrova", email: "lena.p@quanta.io", company: "Quanta", dietary: "—", access: "—", rsvp: "accepted", invite: "sent" },
+  { firstName: "Thabo", lastName: "Mokoena", email: "thabo@savanna.za", company: "Savanna", dietary: "—", access: "—", rsvp: "pending", invite: "not_sent" },
+  { firstName: "Ingrid", lastName: "Sørensen", email: "ingrid@fjordlabs.no", company: "Fjord Labs", dietary: "Gluten-free", access: "—", rsvp: "accepted", invite: "sent" },
+];
+
+const EVENT_IDS = ["e1","e2","e3","e4","e5","e6","e7","e8","e9","e10","e11"];
+
+// Per-event sizing so utilisation feels realistic without dominating the table.
+const SIZE_BY_EVENT: Record<string, number> = {
+  e1: 8, e2: 14, e3: 6, e4: 7, e5: 12, e6: 10, e7: 5, e8: 9, e9: 3, e10: 11, e11: 8,
 };
 
-let store: Record<string, Guest[]> = { ...seed };
-let audits: AuditEntry[] = [
-  { id: uid(), eventId: "e1", actor: ACTOR, action: "Guest added", target: "Priya Shah", timestamp: new Date(Date.now() - 86400000 * 3).toISOString() },
-  { id: uid(), eventId: "e1", actor: ACTOR, action: "Invites sent", target: "4 guests", timestamp: new Date(Date.now() - 86400000 * 2).toISOString() },
-];
+function buildSeed(): Record<string, Guest[]> {
+  const out: Record<string, Guest[]> = {};
+  for (const eid of EVENT_IDS) {
+    const size = SIZE_BY_EVENT[eid] ?? 6;
+    // Rotate the pool so each event gets a different slice of guests.
+    const offset = (parseInt(eid.slice(1), 10) * 3) % POOL.length;
+    const list: Guest[] = [];
+    for (let i = 0; i < size; i++) {
+      const base = POOL[(offset + i) % POOL.length];
+      list.push({
+        ...base,
+        id: uid(),
+        eventId: eid,
+        // Make emails unique per event to avoid duplicate-email collisions.
+        email: base.email.replace("@", `+${eid}@`),
+      });
+    }
+    out[eid] = list;
+  }
+  return out;
+}
+
+let store: Record<string, Guest[]> = buildSeed();
+
+function buildAudits(): AuditEntry[] {
+  const out: AuditEntry[] = [];
+  const now = Date.now();
+  for (const eid of EVENT_IDS) {
+    const guests = store[eid] ?? [];
+    if (guests.length === 0) continue;
+    out.push({ id: uid(), eventId: eid, actor: ACTOR, action: "Guest list created", target: `${guests.length} guests imported`, timestamp: new Date(now - 86400000 * 5).toISOString() });
+    out.push({ id: uid(), eventId: eid, actor: ACTOR, action: "Invites sent", target: `${guests.filter(g => g.invite === "sent").length} guests`, timestamp: new Date(now - 86400000 * 4).toISOString() });
+    const accepted = guests.find((g) => g.rsvp === "accepted");
+    if (accepted) out.push({ id: uid(), eventId: eid, actor: accepted.email, action: "RSVP accepted", target: `${accepted.firstName} ${accepted.lastName}`, timestamp: new Date(now - 86400000 * 2).toISOString(), previous: "pending" });
+    const declined = guests.find((g) => g.rsvp === "declined");
+    if (declined) out.push({ id: uid(), eventId: eid, actor: declined.email, action: "RSVP declined", target: `${declined.firstName} ${declined.lastName}`, timestamp: new Date(now - 86400000 * 1).toISOString(), previous: "pending" });
+    const failed = guests.find((g) => g.invite === "failed");
+    if (failed) out.push({ id: uid(), eventId: eid, actor: "system", action: "Invite bounced", target: failed.email, timestamp: new Date(now - 3600000 * 6).toISOString() });
+  }
+  return out;
+}
+
+let audits: AuditEntry[] = buildAudits();
 
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((l) => l());
