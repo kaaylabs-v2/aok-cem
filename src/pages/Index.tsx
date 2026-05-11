@@ -158,8 +158,7 @@ const Index = () => {
                       const activeCount =
                         (statusTab !== "all" ? 1 : 0) +
                         (venue !== "all" ? 1 : 0) +
-                        (type !== "all" ? 1 : 0) +
-                        (sort !== "date" ? 1 : 0);
+                        (type !== "all" ? 1 : 0);
                       return (
                         <Popover>
                           <PopoverTrigger asChild>
@@ -179,7 +178,7 @@ const Index = () => {
                               {activeCount > 0 && (
                                 <button
                                   type="button"
-                                  onClick={() => { setStatusTab("all"); setVenue("all"); setType("all"); setSort("date"); }}
+                                  onClick={() => { setStatusTab("all"); setVenue("all"); setType("all"); }}
                                   className="text-[11px] text-primary hover:underline"
                                 >
                                   Clear all
@@ -220,23 +219,20 @@ const Index = () => {
                                 </SelectContent>
                               </Select>
                             </div>
-                            <div className="space-y-1.5">
-                              <Label className="text-[11px] text-muted-foreground">Sort by</Label>
-                              <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
-                                <SelectTrigger className="h-9 w-full">
-                                  <ArrowUpDown className="mr-1 h-3.5 w-3.5" /> <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="date">Date</SelectItem>
-                                  <SelectItem value="util">Utilisation</SelectItem>
-                                  <SelectItem value="name">Name</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
                           </PopoverContent>
                         </Popover>
                       );
                     })()}
+                    <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
+                      <SelectTrigger className="h-9 w-[150px] px-2">
+                        <ArrowUpDown className="mr-1 h-3.5 w-3.5" /> <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="date">Sort: Date</SelectItem>
+                        <SelectItem value="util">Sort: Utilisation</SelectItem>
+                        <SelectItem value="name">Sort: Name</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5">
                       <Label htmlFor="scope" className="text-xs text-muted-foreground">{scope === "upcoming" ? "Upcoming" : "Past"}</Label>
                       <Switch id="scope" checked={scope === "past"} onCheckedChange={(v) => setScope(v ? "past" : "upcoming")} />
