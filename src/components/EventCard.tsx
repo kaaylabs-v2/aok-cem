@@ -80,7 +80,7 @@ export function EventCard({ event, onClick }: Props) {
               {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
             </span>
           </div>
-          <div className="mt-1.5 h-0.5 w-full overflow-hidden rounded-full bg-muted">
+          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-muted">
             <div
               className="h-full rounded-full bg-foreground/70 transition-all"
               style={{ width: `${pct}%` }}
@@ -112,7 +112,7 @@ export function EventCard({ event, onClick }: Props) {
               {pct}%
             </span>
           </div>
-          <div className="mt-1.5 h-0.5 w-full overflow-hidden rounded-full bg-muted">
+          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-muted">
             <div
               className="h-full rounded-full transition-all"
               style={{ width: `${pct}%`, backgroundColor: `hsl(var(--${tone}))` }}
