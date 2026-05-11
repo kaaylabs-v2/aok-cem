@@ -141,6 +141,6 @@ export function EventCard({ event, onClick, selected, onToggleSelect }: Props) {
           </div>
         </div>
       </div>
-    </button>
+    </div>
   );
 }
