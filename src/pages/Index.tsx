@@ -135,7 +135,7 @@ const Index = () => {
                         onChange={(e) => setQuery(e.target.value)}
                         onBlur={() => { if (!query) setSearchOpen(false); }}
                         placeholder="Search events…"
-                        className="h-9 rounded-full border-border/60 bg-card pl-9 pr-9 text-xs"
+                        className="h-9 rounded-full border border-border/60 bg-card pl-9 pr-9 text-xs"
                       />
                       {query && (
                         <button
@@ -162,7 +162,7 @@ const Index = () => {
                       return (
                         <Popover>
                           <PopoverTrigger asChild>
-                            <Button variant="outline" size="sm" className="h-9 gap-1.5 rounded-full border-border/60 bg-card px-3 text-xs">
+                            <Button variant="outline" size="sm" className="h-9 gap-1.5 rounded-full border border-border/60 bg-card px-3 text-xs">
                               <Filter className="h-3.5 w-3.5" strokeWidth={1.75} />
                               Filters
                               {activeCount > 0 && (
@@ -224,7 +224,7 @@ const Index = () => {
                       );
                     })()}
                     <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
-                      <SelectTrigger className="h-9 w-[150px] rounded-full border-border/60 bg-card px-3 text-xs">
+                      <SelectTrigger className="h-9 w-[150px] rounded-full border border-border/60 bg-card px-3 text-xs">
                         <ArrowUpDown className="mr-1 h-3.5 w-3.5" /> <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
