@@ -224,7 +224,7 @@ const Index = () => {
                       );
                     })()}
                     <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
-                      <SelectTrigger className="h-9 w-[150px] px-2">
+                      <SelectTrigger className="h-9 w-[150px] rounded-full border-border/60 bg-card px-3 text-xs">
                         <ArrowUpDown className="mr-1 h-3.5 w-3.5" /> <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -233,15 +233,15 @@ const Index = () => {
                         <SelectItem value="name">Sort: Name</SelectItem>
                       </SelectContent>
                     </Select>
-                    <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5">
+                    <div className="flex h-9 items-center gap-2 rounded-full border border-border/60 bg-card px-3">
                       <Label htmlFor="scope" className="text-xs text-muted-foreground">{scope === "upcoming" ? "Upcoming" : "Past"}</Label>
                       <Switch id="scope" checked={scope === "past"} onCheckedChange={(v) => setScope(v ? "past" : "upcoming")} />
                     </div>
-                    <div className="flex items-center gap-0.5 rounded-lg border border-border bg-card p-0.5">
+                    <div className="flex h-9 items-center gap-0.5 rounded-full border border-border/60 bg-card px-1">
                       <Button
                         size="icon"
                         variant={view === "grid" ? "default" : "ghost"}
-                        className="h-7 w-7"
+                        className="h-7 w-7 rounded-full"
                         onClick={() => setView("grid")}
                         aria-label="Grid view"
                       >
@@ -250,7 +250,7 @@ const Index = () => {
                       <Button
                         size="icon"
                         variant={view === "table" ? "default" : "ghost"}
-                        className="h-7 w-7"
+                        className="h-7 w-7 rounded-full"
                         onClick={() => setView("table")}
                         aria-label="Table view"
                       >
