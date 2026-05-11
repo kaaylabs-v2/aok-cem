@@ -80,10 +80,16 @@ export function EventCard({ event, onClick }: Props) {
               {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
             </span>
           </div>
-          <div className="mt-1.5 flex items-center gap-1 text-[11px] text-muted-foreground">
-            <Users className="h-3.5 w-3.5" strokeWidth={1.75} /> {remaining} seats left
+          <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-foreground/70 transition-all"
+              style={{ width: `${pct}%` }}
+            />
           </div>
           <div className="mt-1.5 flex items-center gap-1.5">
+            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Users className="h-3 w-3" strokeWidth={1.75} /> {remaining} left
+            </span>
             {event.waitlist > 0 && (
               <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-1.5 py-0.5 text-[11px] font-semibold text-sky-700">
                 <Clock className="h-3 w-3" strokeWidth={1.75} /> {event.waitlist}
