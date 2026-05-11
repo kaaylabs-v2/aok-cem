@@ -1,6 +1,5 @@
 import { Calendar, MapPin, Users, AlertTriangle, Heart, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { CircularUtilisation } from "./CircularUtilisation";
 import { TickBar } from "./TickBar";
 import { PortfolioEvent, utilisation, utilisationTone, isUnderperforming } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
@@ -47,7 +46,21 @@ export function EventCard({ event, onClick }: Props) {
       )}
 
       <div className="flex items-start gap-3">
-        <CircularUtilisation value={pct} tone={tone} />
+        <div className="flex w-14 shrink-0 flex-col items-start">
+          <span
+            className="text-2xl font-bold leading-none tabular-nums"
+            style={{ color: `hsl(var(--${tone}))` }}
+          >
+            {pct}
+            <span className="text-sm font-semibold">%</span>
+          </span>
+          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${pct}%`, backgroundColor: `hsl(var(--${tone}))` }}
+            />
+          </div>
+        </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5">
             <Badge variant="outline" className={cn("text-[10px] font-semibold uppercase tracking-wide", badge.cls)}>
