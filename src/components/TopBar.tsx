@@ -40,7 +40,7 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
   return (
     <header className="sticky top-2 z-30 px-3 pt-3 md:px-4 md:pt-4">
       <div className="flex h-14 items-center gap-3 rounded-2xl border border-border/50 bg-secondary/80 px-4 shadow-panel backdrop-blur-xl md:px-5">
-        {showSidebarTrigger && <SidebarTrigger className="h-8 w-8" />}
+        {showSidebarTrigger && <SidebarTrigger className="h-8 w-8 md:hidden" />}
 
         {/* Tenant switcher */}
         <DropdownMenu>
@@ -71,7 +71,7 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
                 autoFocus
                 onBlur={() => setSearchOpen(false)}
                 placeholder="Search events…"
-                className="h-9 w-44 rounded-full border-border/60 bg-secondary/60 pl-9 md:w-56"
+                className="h-9 w-36 rounded-full border-border/60 bg-secondary/60 pl-9 sm:w-44 md:w-56"
               />
             </div>
           ) : (
