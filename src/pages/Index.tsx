@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { events as allEvents, venues, eventTypes, utilisation, isUnderperforming, PortfolioEvent, EventStatus, NotificationItem } from "@/data/portfolio";
@@ -153,41 +154,89 @@ const Index = () => {
                     </Button>
                   )}
                   <div className="ml-auto flex flex-wrap items-center gap-2">
-                    <Select value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
-                      <SelectTrigger className="h-9 w-[140px] px-2"><SelectValue placeholder="Status" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                        <SelectItem value="available">Available</SelectItem>
-                        <SelectItem value="partial">Partial</SelectItem>
-                        <SelectItem value="full">Full</SelectItem>
-                        <SelectItem value="waitlisted">Waitlisted</SelectItem>
-                        <SelectItem value="cancelled">Cancelled</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Select value={venue} onValueChange={setVenue}>
-                      <SelectTrigger className="h-9 w-[170px] px-2"><SelectValue placeholder="Venue" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All venues</SelectItem>
-                        {venues.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <Select value={type} onValueChange={setType}>
-                      <SelectTrigger className="h-9 w-[150px] px-2"><SelectValue placeholder="Type" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All types</SelectItem>
-                        {eventTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
-                      <SelectTrigger className="h-9 w-[150px] px-2">
-                        <ArrowUpDown className="mr-1 h-3.5 w-3.5" /> <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="date">Sort: Date</SelectItem>
-                        <SelectItem value="util">Sort: Utilisation</SelectItem>
-                        <SelectItem value="name">Sort: Name</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    {(() => {
+                      const activeCount =
+                        (statusTab !== "all" ? 1 : 0) +
+                        (venue !== "all" ? 1 : 0) +
+                        (type !== "all" ? 1 : 0) +
+                        (sort !== "date" ? 1 : 0);
+                      return (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button variant="outline" size="sm" className="h-9 gap-1.5 rounded-full border-border/60 bg-card px-3 text-xs">
+                              <Filter className="h-3.5 w-3.5" strokeWidth={1.75} />
+                              Filters
+                              {activeCount > 0 && (
+                                <Badge className="ml-0.5 h-4 min-w-4 rounded-full bg-primary px-1 text-[10px] text-primary-foreground">
+                                  {activeCount}
+                                </Badge>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent align="end" className="w-72 space-y-3 p-3">
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Filters</p>
+                              {activeCount > 0 && (
+                                <button
+                                  type="button"
+                                  onClick={() => { setStatusTab("all"); setVenue("all"); setType("all"); setSort("date"); }}
+                                  className="text-[11px] text-primary hover:underline"
+                                >
+                                  Clear all
+                                </button>
+                              )}
+                            </div>
+                            <div className="space-y-1.5">
+                              <Label className="text-[11px] text-muted-foreground">Status</Label>
+                              <Select value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
+                                <SelectTrigger className="h-9 w-full"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All</SelectItem>
+                                  <SelectItem value="available">Available</SelectItem>
+                                  <SelectItem value="partial">Partial</SelectItem>
+                                  <SelectItem value="full">Full</SelectItem>
+                                  <SelectItem value="waitlisted">Waitlisted</SelectItem>
+                                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-1.5">
+                              <Label className="text-[11px] text-muted-foreground">Venue</Label>
+                              <Select value={venue} onValueChange={setVenue}>
+                                <SelectTrigger className="h-9 w-full"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All venues</SelectItem>
+                                  {venues.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-1.5">
+                              <Label className="text-[11px] text-muted-foreground">Type</Label>
+                              <Select value={type} onValueChange={setType}>
+                                <SelectTrigger className="h-9 w-full"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All types</SelectItem>
+                                  {eventTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-1.5">
+                              <Label className="text-[11px] text-muted-foreground">Sort by</Label>
+                              <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
+                                <SelectTrigger className="h-9 w-full">
+                                  <ArrowUpDown className="mr-1 h-3.5 w-3.5" /> <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="date">Date</SelectItem>
+                                  <SelectItem value="util">Utilisation</SelectItem>
+                                  <SelectItem value="name">Name</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      );
+                    })()}
                     <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1.5">
                       <Label htmlFor="scope" className="text-xs text-muted-foreground">{scope === "upcoming" ? "Upcoming" : "Past"}</Label>
                       <Switch id="scope" checked={scope === "past"} onCheckedChange={(v) => setScope(v ? "past" : "upcoming")} />
