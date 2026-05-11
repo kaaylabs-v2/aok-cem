@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, Boxes, Users2, BarChart3, Settings, Inbox, Headphones, LogOut } from "lucide-react";
+import { LayoutDashboard, Calendar, Boxes, Users2, BarChart3, Settings, Inbox, Headphones, LogOut, ChevronsLeft, ChevronsRight } from "lucide-react";
 import logo from "@/assets/aok-logo.png";
 import {
   Sidebar,
@@ -12,9 +12,9 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const items = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
@@ -32,7 +32,7 @@ const bottomItems = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
   const collapsed = state === "collapsed";
   const { pathname } = useLocation();
   const isActive = (path: string) => (path === "/" ? pathname === "/" : pathname.startsWith(path));
@@ -40,17 +40,42 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="floating">
       <SidebarHeader className="px-3 py-4">
-        <div className={`flex items-center gap-2.5 ${collapsed ? "justify-center" : ""}`}>
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full shadow-elegant">
-            <img src={logo} alt="AOK Events" className="h-full w-full object-cover" />
+        <div className={`flex items-center ${collapsed ? "justify-center" : "justify-between gap-2.5"}`}>
+          <div className={`flex items-center gap-2.5 ${collapsed ? "justify-center" : ""}`}>
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full shadow-elegant">
+              <img src={logo} alt="AOK Events" className="h-full w-full object-cover" />
+            </div>
+            {!collapsed && (
+              <div className="flex flex-col leading-tight">
+                <span className="text-sm font-semibold text-sidebar-foreground">AOK Events</span>
+                <span className="text-[11px] text-sidebar-foreground/75">Portfolio Console</span>
+              </div>
+            )}
           </div>
           {!collapsed && (
-            <div className="flex flex-col leading-tight">
-              <span className="text-sm font-semibold text-sidebar-foreground">AOK Events</span>
-              <span className="text-[11px] text-sidebar-foreground/75">Portfolio Console</span>
-            </div>
+            <button
+              onClick={toggleSidebar}
+              aria-label="Collapse sidebar"
+              className="flex h-7 w-7 items-center justify-center rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </button>
           )}
         </div>
+        {collapsed && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={toggleSidebar}
+                aria-label="Expand sidebar"
+                className="mt-2 flex h-7 w-full items-center justify-center rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+              >
+                <ChevronsRight className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" sideOffset={8}>Expand</TooltipContent>
+          </Tooltip>
+        )}
       </SidebarHeader>
       <SidebarContent className="px-2">
         <SidebarGroup>
