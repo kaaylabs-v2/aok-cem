@@ -1,6 +1,5 @@
 import { Calendar, MapPin, Users, AlertTriangle, Heart, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { CircularUtilisation } from "./CircularUtilisation";
 import { TickBar } from "./TickBar";
 import { PortfolioEvent, utilisation, utilisationTone, isUnderperforming } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
