@@ -29,6 +29,16 @@ const Index = () => {
   const [view, setView] = useState<"grid" | "table">("grid");
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const visible = useMemo(() => {
     let list = allEvents.filter((e) => (scope === "past" ? e.past : !e.past));
