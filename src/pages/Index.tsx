@@ -89,27 +89,27 @@ const Index = () => {
     <>
       <AppShell onOpenNotification={onNotification}>
               {/* Hero panel */}
-              <section className="relative overflow-hidden rounded-[2rem] border border-border/60 bg-gradient-hero p-6 shadow-panel md:p-8">
+              <section className="relative overflow-hidden rounded-[1.5rem] border border-border/60 bg-gradient-hero p-5 shadow-panel sm:rounded-[2rem] sm:p-6 md:p-8">
                 <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
                 <div className="pointer-events-none absolute -bottom-32 left-1/3 h-72 w-72 rounded-full bg-info/15 blur-3xl" />
 
                 <div className="relative flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <p className="text-sm text-foreground/60">
+                  <div className="min-w-0">
+                    <p className="text-xs text-foreground/60 sm:text-sm">
                       {new Date().toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
                     </p>
-                    <h1 className="mt-1 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+                    <h1 className="mt-1 font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
                       Welcome back, Elena
                     </h1>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" className="rounded-full border-border/70 bg-card/70 backdrop-blur" onClick={() => setWaitlistOpen(true)}>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" size="sm" className="rounded-full border-border/70 bg-card/70 backdrop-blur sm:size-default" onClick={() => setWaitlistOpen(true)}>
                       <ClipboardList className="mr-1.5 h-4 w-4" />
                       Waitlist
                       <Badge className="ml-2 h-5 bg-primary text-primary-foreground">4</Badge>
                     </Button>
-                    <Button className="rounded-full bg-foreground text-background hover:bg-foreground/90">
-                      <Download className="mr-1.5 h-4 w-4" /> Export Data
+                    <Button size="sm" className="rounded-full bg-foreground text-background hover:bg-foreground/90 sm:size-default">
+                      <Download className="mr-1.5 h-4 w-4" /> <span className="hidden sm:inline">Export Data</span><span className="sm:hidden">Export</span>
                     </Button>
                   </div>
                 </div>
@@ -124,8 +124,8 @@ const Index = () => {
               </section>
 
               {/* Filters */}
-              <section className="sticky top-20 z-20 rounded-2xl border border-border/60 bg-card/80 px-3 py-2.5 backdrop-blur-md">
-                <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-3">
+              <section className="sticky top-16 z-20 rounded-2xl border border-border/60 bg-card/80 px-2.5 py-2.5 backdrop-blur-md sm:top-20 sm:px-3">
+                <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-2 sm:gap-3">
                   {searchOpen ? (
                     <div className="relative w-full animate-fade-in sm:w-64">
                       <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
