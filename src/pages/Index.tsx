@@ -27,17 +27,26 @@ const Index = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [view, setView] = useState<"grid" | "table">("grid");
+  const [query, setQuery] = useState("");
 
   const visible = useMemo(() => {
     let list = allEvents.filter((e) => (scope === "past" ? e.past : !e.past));
     if (statusTab !== "all") list = list.filter((e) => e.status === statusTab);
     if (venue !== "all") list = list.filter((e) => e.venue === venue);
     if (type !== "all") list = list.filter((e) => e.type === type);
+    if (query.trim()) {
+      const q = query.trim().toLowerCase();
+      list = list.filter((e) =>
+        e.name.toLowerCase().includes(q) ||
+        e.venue.toLowerCase().includes(q) ||
+        e.type.toLowerCase().includes(q)
+      );
+    }
     if (sort === "date") list = [...list].sort((a, b) => +new Date(a.date) - +new Date(b.date));
     if (sort === "util") list = [...list].sort((a, b) => utilisation(b) - utilisation(a));
     if (sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
     return list;
-  }, [scope, statusTab, venue, type, sort]);
+  }, [scope, statusTab, venue, type, sort, query]);
 
   const summary = useMemo(() => {
     const upcoming = allEvents.filter((e) => !e.past);
