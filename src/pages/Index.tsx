@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download, LayoutGrid, List, Table2 } from "lucide-react";
+import { Calendar as CalendarIcon, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download, LayoutGrid, List, Table2, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
@@ -26,17 +27,26 @@ const Index = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
   const [view, setView] = useState<"grid" | "table">("grid");
+  const [query, setQuery] = useState("");
 
   const visible = useMemo(() => {
     let list = allEvents.filter((e) => (scope === "past" ? e.past : !e.past));
     if (statusTab !== "all") list = list.filter((e) => e.status === statusTab);
     if (venue !== "all") list = list.filter((e) => e.venue === venue);
     if (type !== "all") list = list.filter((e) => e.type === type);
+    if (query.trim()) {
+      const q = query.trim().toLowerCase();
+      list = list.filter((e) =>
+        e.name.toLowerCase().includes(q) ||
+        e.venue.toLowerCase().includes(q) ||
+        e.type.toLowerCase().includes(q)
+      );
+    }
     if (sort === "date") list = [...list].sort((a, b) => +new Date(a.date) - +new Date(b.date));
     if (sort === "util") list = [...list].sort((a, b) => utilisation(b) - utilisation(a));
     if (sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
     return list;
-  }, [scope, statusTab, venue, type, sort]);
+  }, [scope, statusTab, venue, type, sort, query]);
 
   const summary = useMemo(() => {
     const upcoming = allEvents.filter((e) => !e.past);
@@ -104,6 +114,25 @@ const Index = () => {
               {/* Filters */}
               <section className="sticky top-20 z-20 rounded-2xl border border-border/60 bg-card/80 px-3 py-2.5 backdrop-blur-md">
                 <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-3">
+                  <div className="relative w-full sm:w-64">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search events…"
+                      className="h-9 rounded-full border-border/60 bg-card pl-9 pr-9 text-xs"
+                    />
+                    {query && (
+                      <button
+                        type="button"
+                        onClick={() => setQuery("")}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                        aria-label="Clear search"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
                   <div className="ml-auto flex flex-wrap items-center gap-2">
                     <Select value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
                       <SelectTrigger className="h-9 w-[140px] px-2"><SelectValue placeholder="Status" /></SelectTrigger>
