@@ -29,6 +29,16 @@ const Index = () => {
   const [view, setView] = useState<"grid" | "table">("grid");
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const visible = useMemo(() => {
     let list = allEvents.filter((e) => (scope === "past" ? e.past : !e.past));
@@ -225,10 +235,19 @@ const Index = () => {
                   </div>
                 ) : view === "grid" ? (
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {visible.map((e) => <EventCard key={e.id} event={e} onClick={openEvent} />)}
+                    {visible.map((e) => <EventCard key={e.id} event={e} onClick={openEvent} selected={selectedIds.has(e.id)} onToggleSelect={toggleSelect} />)}
                   </div>
                 ) : (
-                  <EventTable events={visible} onRowClick={openEvent} />
+                  <EventTable
+                    events={visible}
+                    onRowClick={openEvent}
+                    selectedIds={selectedIds}
+                    onToggleSelect={toggleSelect}
+                    onToggleSelectAll={() => {
+                      const allSelected = visible.length > 0 && visible.every((e) => selectedIds.has(e.id));
+                      setSelectedIds(allSelected ? new Set() : new Set(visible.map((e) => e.id)));
+                    }}
+                  />
                 )}
               </section>
       </AppShell>

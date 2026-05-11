@@ -1,5 +1,6 @@
 import { AlertTriangle, Heart, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { CircularUtilisation } from "./CircularUtilisation";
 import { SegmentedBar } from "./SegmentedBar";
 import { PortfolioEvent, utilisation, utilisationTone, isUnderperforming } from "@/data/portfolio";
@@ -9,6 +10,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 interface Props {
   events: PortfolioEvent[];
   onRowClick?: (e: PortfolioEvent) => void;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (id: string) => void;
+  onToggleSelectAll?: () => void;
 }
 
 const statusBadge: Record<PortfolioEvent["status"], { label: string; cls: string }> = {
@@ -19,13 +23,22 @@ const statusBadge: Record<PortfolioEvent["status"], { label: string; cls: string
   cancelled: { label: "Cancelled", cls: "bg-rose-100 text-rose-700 border-rose-200" },
 };
 
-export function EventTable({ events, onRowClick }: Props) {
+export function EventTable({ events, onRowClick, selectedIds, onToggleSelect, onToggleSelectAll }: Props) {
+  const allSelected = events.length > 0 && events.every((e) => selectedIds?.has(e.id));
+  const someSelected = !allSelected && events.some((e) => selectedIds?.has(e.id));
   return (
     <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-xs">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border/60 bg-secondary/40 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <th className="px-4 py-3 w-8">
+                <Checkbox
+                  checked={allSelected ? true : someSelected ? "indeterminate" : false}
+                  onCheckedChange={() => onToggleSelectAll?.()}
+                  aria-label="Select all"
+                />
+              </th>
               <th className="px-4 py-3">Event</th>
               <th className="px-4 py-3">Venue</th>
               <th className="px-4 py-3">Date & time</th>
@@ -44,6 +57,7 @@ export function EventTable({ events, onRowClick }: Props) {
               const under = isUnderperforming(e);
               const badge = statusBadge[e.status];
               const date = new Date(e.date);
+              const isSelected = !!selectedIds?.has(e.id);
 
               return (
                 <tr
@@ -51,9 +65,17 @@ export function EventTable({ events, onRowClick }: Props) {
                   onClick={() => onRowClick?.(e)}
                   className={cn(
                     "cursor-pointer border-b border-border/50 transition-colors hover:bg-secondary/40",
-                    under && "bg-warning/5"
+                    under && "bg-warning/5",
+                    isSelected && "bg-primary/5"
                   )}
                 >
+                  <td className="px-4 py-3" onClick={(ev) => { ev.stopPropagation(); onToggleSelect?.(e.id); }}>
+                    <Checkbox
+                      checked={isSelected}
+                      onCheckedChange={() => onToggleSelect?.(e.id)}
+                      aria-label={`Select ${e.name}`}
+                    />
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <div>

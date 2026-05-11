@@ -1,5 +1,6 @@
 import { Calendar, MapPin, Users, AlertTriangle, Heart, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { TickBar } from "./TickBar";
 import { PortfolioEvent, utilisation, utilisationTone, isUnderperforming } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
@@ -8,6 +9,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 interface Props {
   event: PortfolioEvent;
   onClick?: (e: PortfolioEvent) => void;
+  selected?: boolean;
+  onToggleSelect?: (id: string) => void;
 }
 
 const statusBadge: Record<PortfolioEvent["status"], { label: string; cls: string }> = {
@@ -18,7 +21,7 @@ const statusBadge: Record<PortfolioEvent["status"], { label: string; cls: string
   cancelled: { label: "Cancelled", cls: "bg-rose-100 text-rose-700 border-rose-200" },
 };
 
-export function EventCard({ event, onClick }: Props) {
+export function EventCard({ event, onClick, selected, onToggleSelect }: Props) {
   const pct = utilisation(event);
   const tone = utilisationTone(pct);
   const remaining = Math.max(event.capacity - event.booked, 0);
@@ -31,9 +34,21 @@ export function EventCard({ event, onClick }: Props) {
       onClick={() => onClick?.(event)}
       className={cn(
         "group relative flex w-full flex-col gap-2.5 rounded-2xl border bg-card p-3.5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
-        under ? "border-warning/60 ring-1 ring-warning/20" : "border-border/60"
+        under ? "border-warning/60 ring-1 ring-warning/20" : "border-border/60",
+        selected && "ring-2 ring-primary"
       )}
     >
+      <div
+        className="absolute left-3 top-3 z-10"
+        onClick={(e) => { e.stopPropagation(); onToggleSelect?.(event.id); }}
+      >
+        <Checkbox
+          checked={!!selected}
+          onCheckedChange={() => onToggleSelect?.(event.id)}
+          aria-label={`Select ${event.name}`}
+          className="h-4 w-4 bg-card"
+        />
+      </div>
       {under && (
         <Tooltip>
           <TooltipTrigger asChild>
@@ -45,7 +60,7 @@ export function EventCard({ event, onClick }: Props) {
         </Tooltip>
       )}
 
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3 pl-6">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5">
             <Badge variant="outline" className={cn("text-[10px] font-semibold uppercase tracking-wide", badge.cls)}>
