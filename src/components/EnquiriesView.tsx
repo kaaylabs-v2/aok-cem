@@ -118,39 +118,39 @@ export function EnquiriesView({ pushNotification }: Props) {
   return (
     <>
       {/* Header */}
-      <div className="flex items-start justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-2 text-lg font-medium text-foreground/70">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 text-base font-medium text-foreground/70 sm:text-lg">
             Enquiries <FileSearch className="h-4 w-4" />
           </div>
-          <h1 className="mt-2 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-foreground">
+          <h1 className="mt-2 font-display text-3xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-4xl md:text-5xl">
             {list.length} enquiries
           </h1>
           <p className="mt-1 text-sm text-foreground/60">Track requests and proposals across your portfolio.</p>
         </div>
         <Button
           onClick={() => setNewOpen(true)}
-          className="rounded-full bg-[hsl(140_55%_45%)] px-5 text-white shadow-sm hover:bg-[hsl(140_55%_40%)]"
+          className="rounded-full bg-[hsl(140_55%_45%)] px-4 text-white shadow-sm hover:bg-[hsl(140_55%_40%)] sm:px-5"
         >
-          <Plus className="mr-1.5 h-4 w-4" /> New Enquiry
+          <Plus className="mr-1.5 h-4 w-4" /> <span className="hidden sm:inline">New Enquiry</span><span className="sm:hidden">New</span>
         </Button>
       </div>
 
       {/* Table card */}
-      <div className="mt-7 rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="relative">
+      <div className="mt-6 rounded-2xl border border-black/5 bg-white p-3 shadow-sm sm:mt-7 sm:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+          <div className="relative w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-foreground/40" />
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search enquiries"
-              className="h-9 w-[240px] rounded-xl border-black/10 bg-[hsl(220_20%_97%)] pl-9 text-xs"
+              className="h-9 w-full rounded-xl border-black/10 bg-[hsl(220_20%_97%)] pl-9 text-xs sm:w-[240px]"
             />
           </div>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
             <Select value={statusF} onValueChange={setStatusF}>
-              <SelectTrigger className="h-9 w-[160px] rounded-xl border-black/10 bg-[hsl(220_20%_97%)] text-xs">
+              <SelectTrigger className="h-9 flex-1 rounded-xl border-black/10 bg-[hsl(220_20%_97%)] text-xs sm:w-[160px] sm:flex-none">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -161,7 +161,7 @@ export function EnquiriesView({ pushNotification }: Props) {
               </SelectContent>
             </Select>
             <Select value={typeF} onValueChange={setTypeF}>
-              <SelectTrigger className="h-9 w-[140px] rounded-xl border-black/10 bg-[hsl(220_20%_97%)] text-xs">
+              <SelectTrigger className="h-9 flex-1 rounded-xl border-black/10 bg-[hsl(220_20%_97%)] text-xs sm:w-[140px] sm:flex-none">
                 <Tag className="mr-1.5 h-3.5 w-3.5 text-foreground/50" />
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
@@ -171,7 +171,7 @@ export function EnquiriesView({ pushNotification }: Props) {
               </SelectContent>
             </Select>
             <Select value={submitterF} onValueChange={setSubmitterF}>
-              <SelectTrigger className="h-9 w-[160px] rounded-xl border-black/10 bg-[hsl(220_20%_97%)] text-xs">
+              <SelectTrigger className="h-9 flex-1 rounded-xl border-black/10 bg-[hsl(220_20%_97%)] text-xs sm:w-[160px] sm:flex-none">
                 <Users className="mr-1.5 h-3.5 w-3.5 text-foreground/50" />
                 <SelectValue placeholder="Submitter" />
               </SelectTrigger>
@@ -183,7 +183,8 @@ export function EnquiriesView({ pushNotification }: Props) {
           </div>
         </div>
 
-        <div className="mt-4 overflow-hidden">
+        <div className="-mx-3 mt-4 overflow-x-auto sm:mx-0">
+          <div className="min-w-[900px] px-3 sm:min-w-0 sm:px-0">
           <div className="grid grid-cols-[110px_1fr_1.2fr_70px_100px_140px_120px_100px] items-center gap-3 border-b border-black/5 px-3 py-3 text-xs font-medium text-foreground/50">
             <span>Ref</span>
             <span>Event Type</span>
@@ -218,6 +219,7 @@ export function EnquiriesView({ pushNotification }: Props) {
               <span className="text-xs text-foreground/50">{relTime(e.updatedAt)}</span>
             </button>
           ))}
+          </div>
         </div>
       </div>
 
