@@ -60,7 +60,7 @@ export function EventCard({ event, onClick, selected, onToggleSelect }: Props) {
         </Tooltip>
       )}
 
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3 pl-6">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5">
             <Badge variant="outline" className={cn("text-[10px] font-semibold uppercase tracking-wide", badge.cls)}>
