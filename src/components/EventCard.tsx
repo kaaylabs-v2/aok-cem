@@ -30,17 +30,20 @@ export function EventCard({ event, onClick, selected, onToggleSelect }: Props) {
   const dateObj = new Date(event.date);
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={() => onClick?.(event)}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick?.(event); } }}
       className={cn(
-        "group relative flex w-full flex-col gap-2.5 rounded-2xl border bg-card p-3.5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
+        "group relative flex w-full cursor-pointer flex-col gap-2.5 rounded-2xl border bg-card p-3.5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-soft animate-fade-in",
         under ? "border-warning/60 ring-1 ring-warning/20" : "border-border/60",
         selected && "ring-2 ring-primary"
       )}
     >
       <div
         className="absolute left-3 top-3 z-10"
-        onClick={(e) => { e.stopPropagation(); onToggleSelect?.(event.id); }}
+        onClick={(e) => e.stopPropagation()}
       >
         <Checkbox
           checked={!!selected}
@@ -138,6 +141,6 @@ export function EventCard({ event, onClick, selected, onToggleSelect }: Props) {
           </div>
         </div>
       </div>
-    </button>
+    </div>
   );
 }
