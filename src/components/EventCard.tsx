@@ -46,21 +46,6 @@ export function EventCard({ event, onClick }: Props) {
       )}
 
       <div className="flex items-start gap-3">
-        <div className="flex w-14 shrink-0 flex-col items-start">
-          <span
-            className="text-2xl font-bold leading-none tabular-nums"
-            style={{ color: `hsl(var(--${tone}))` }}
-          >
-            {pct}
-            <span className="text-sm font-semibold">%</span>
-          </span>
-          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full transition-all"
-              style={{ width: `${pct}%`, backgroundColor: `hsl(var(--${tone}))` }}
-            />
-          </div>
-        </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5">
             <Badge variant="outline" className={cn("text-[10px] font-semibold uppercase tracking-wide", badge.cls)}>
@@ -87,31 +72,45 @@ export function EventCard({ event, onClick }: Props) {
         </div>
       </div>
 
-      <div className="rounded-xl bg-white/60 p-2.5 backdrop-blur-sm">
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-medium text-foreground/80">Bookings</span>
-          <span className="font-semibold tabular-nums">
-            {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
-          </span>
-        </div>
-        <div className="mt-1.5">
-          <TickBar value={pct} tone={tone} ticks={44} />
-        </div>
-        <div className="mt-1.5 flex items-center justify-between text-[11px] text-muted-foreground">
-          <span className="inline-flex items-center gap-1">
-            <Users className="h-3.5 w-3.5" strokeWidth={1.75} /> {remaining} seats left of {event.capacity}
-          </span>
-          <div className="flex items-center gap-2">
+      <div className="grid grid-cols-2 divide-x divide-border/60 rounded-xl bg-white/60 backdrop-blur-sm">
+        <div className="p-2.5">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-medium text-foreground/80">Bookings</span>
+            <span className="font-semibold tabular-nums">
+              {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
+            </span>
+          </div>
+          <div className="mt-1.5 flex items-center gap-1 text-[11px] text-muted-foreground">
+            <Users className="h-3.5 w-3.5" strokeWidth={1.75} /> {remaining} seats left
+          </div>
+          <div className="mt-1.5 flex items-center gap-1.5">
             {event.waitlist > 0 && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-1.5 py-0.5 font-semibold text-sky-700">
-                <Clock className="h-3.5 w-3.5" strokeWidth={1.75} /> {event.waitlist} waitlist
+              <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-1.5 py-0.5 text-[11px] font-semibold text-sky-700">
+                <Clock className="h-3 w-3" strokeWidth={1.75} /> {event.waitlist}
               </span>
             )}
             {event.wishlist > 0 && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-pink-100 px-1.5 py-0.5 font-semibold text-pink-700">
-                <Heart className="h-3.5 w-3.5" strokeWidth={1.75} /> {event.wishlist}
+              <span className="inline-flex items-center gap-1 rounded-full bg-pink-100 px-1.5 py-0.5 text-[11px] font-semibold text-pink-700">
+                <Heart className="h-3 w-3" strokeWidth={1.75} /> {event.wishlist}
               </span>
             )}
+          </div>
+        </div>
+        <div className="p-2.5">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-medium text-foreground/80">Utilisation</span>
+            <span
+              className="font-bold tabular-nums"
+              style={{ color: `hsl(var(--${tone}))` }}
+            >
+              {pct}%
+            </span>
+          </div>
+          <div className="mt-1.5">
+            <TickBar value={pct} tone={tone} ticks={22} />
+          </div>
+          <div className="mt-1.5 text-[11px] text-muted-foreground">
+            {pct >= 70 ? "Healthy" : pct >= 40 ? "Needs attention" : "Underperforming"}
           </div>
         </div>
       </div>
