@@ -16,7 +16,7 @@ export function AppShell({ children, onOpenNotification }: AppShellProps) {
         <AppSidebar />
         <div className="flex-1 p-2 md:p-3">
           <div className="mx-auto flex max-w-[1600px] flex-col rounded-[2rem] border border-border/60 bg-card/70 shadow-panel backdrop-blur-xl">
-            <TopBar onOpenNotification={onOpenNotification} showSidebarTrigger />
+            <TopBar onOpenNotification={onOpenNotification} />
             <main className="px-4 py-6 md:px-6 md:py-6">
               <div className="w-full space-y-6">{children}</div>
             </main>
