@@ -92,7 +92,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               </TabsList>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+            <div className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-6 py-5">
               <TabsContent value="overview" className="m-0 space-y-5">
                 {/* Hero utilisation card */}
                 <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-card p-5">
