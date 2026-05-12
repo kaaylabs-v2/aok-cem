@@ -291,8 +291,8 @@ function InviteChip({ status }: { status: InviteStatus }) {
   };
   const Icon = status === "sent" ? Mail : status === "failed" ? MailX : null;
   return (
-    <span className={cn("inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium", map[status])}>
-      {Icon && <Icon className="h-3 w-3" />}
+    <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium", map[status])}>
+      {Icon && <Icon className="h-3 w-3 shrink-0" />}
       {inviteLabel[status]}
     </span>
   );
