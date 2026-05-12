@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import IndexV2 from "./pages/IndexV2.tsx";
 import Enquiries from "./pages/Enquiries.tsx";
+import Approvals from "./pages/Approvals.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { DesignToggle } from "./components/DesignToggle";
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/v2" element={<IndexV2 />} />
           <Route path="/enquiries" element={<Enquiries />} />
+          <Route path="/approvals" element={<Approvals />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

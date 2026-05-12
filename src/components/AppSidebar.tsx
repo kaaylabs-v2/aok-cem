@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, Boxes, Users2, BarChart3, Settings, Inbox, Headphones, LogOut, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { LayoutDashboard, Calendar, Boxes, Users2, BarChart3, Settings, Inbox, Headphones, LogOut, ChevronsLeft, ChevronsRight, ShieldCheck } from "lucide-react";
 import logo from "@/assets/aok-logo.png";
 import {
   Sidebar,
@@ -19,6 +19,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 const items = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Enquiries", url: "/enquiries", icon: Inbox },
+  { title: "Approvals", url: "/approvals", icon: ShieldCheck },
   { title: "Events", url: "/events", icon: Calendar },
   { title: "Inventory", url: "/inventory", icon: Boxes },
   { title: "Waitlist", url: "/waitlist", icon: Users2 },
