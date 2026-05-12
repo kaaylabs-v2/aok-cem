@@ -207,6 +207,6 @@ export const rsvpLabel: Record<RsvpStatus, string> = {
 
 export const inviteLabel: Record<InviteStatus, string> = {
   not_sent: "Not sent",
-  sent: "Invitation sent",
-  failed: "Email failed",
+  sent: "Sent",
+  failed: "Failed",
 };
