@@ -265,63 +265,133 @@ export function ReportsView() {
         </Button>
       </div>
 
-      {/* Filter bar */}
-      <div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="relative min-w-[220px] flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search host, guest, company, event…" value={f.query}
-              onChange={(e) => setF({ ...f, query: e.target.value })} className="pl-9" />
+      {/* Filter bar — Tokenized Utility */}
+      <div className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm">
+        {/* Top utility row: search + actions */}
+        <div className="flex items-center gap-3 border-b border-border/60 px-4 py-2.5">
+          <div className="relative flex flex-1 items-center">
+            <Search className="pointer-events-none absolute left-0 h-4 w-4 text-muted-foreground" />
+            <input
+              placeholder="Search host, guest, company, event…"
+              value={f.query}
+              onChange={(e) => setF({ ...f, query: e.target.value })}
+              className="w-full bg-transparent pl-7 pr-2 py-1 text-sm outline-none placeholder:text-muted-foreground"
+            />
           </div>
-          <Select value={f.hostName} onValueChange={(v) => setF({ ...f, hostName: v })}>
-            <SelectTrigger className="w-[170px]"><SelectValue placeholder="Host" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All hosts</SelectItem>
-              {hosts.map((h) => <SelectItem key={h} value={h}>{h}</SelectItem>)}</SelectContent>
-          </Select>
-          <Select value={f.guestCompany} onValueChange={(v) => setF({ ...f, guestCompany: v })}>
-            <SelectTrigger className="w-[170px]"><SelectValue placeholder="Company" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All companies</SelectItem>
-              {companies.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
-          </Select>
-          <Select value={f.eventType} onValueChange={(v) => setF({ ...f, eventType: v })}>
-            <SelectTrigger className="w-[150px]"><SelectValue placeholder="Event type" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All types</SelectItem>
-              {eventTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
-          </Select>
-          <Select value={f.bookingType} onValueChange={(v) => setF({ ...f, bookingType: v })}>
-            <SelectTrigger className="w-[170px]"><SelectValue placeholder="Booking type" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All bookings</SelectItem>
-              {bookingTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
-          </Select>
-          <Select value={f.bookingStatus} onValueChange={(v) => setF({ ...f, bookingStatus: v })}>
-            <SelectTrigger className="w-[160px]"><SelectValue placeholder="Status" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All statuses</SelectItem>
-              {statuses.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
-          </Select>
-          <Select value={f.source} onValueChange={(v) => setF({ ...f, source: v })}>
-            <SelectTrigger className="w-[140px]"><SelectValue placeholder="Source" /></SelectTrigger>
-            <SelectContent><SelectItem value="all">All sources</SelectItem>
-              <SelectItem value="Inventory">Inventory</SelectItem>
-              <SelectItem value="Enquiry">Enquiry</SelectItem>
-              <SelectItem value="Venue">Venue</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Input placeholder="Guest name" value={f.guestName}
-            onChange={(e) => setF({ ...f, guestName: e.target.value })} className="w-[170px]" />
-          <Input type="date" value={f.from} onChange={(e) => setF({ ...f, from: e.target.value })} className="w-[160px]" />
-          <span className="text-xs text-muted-foreground">to</span>
-          <Input type="date" value={f.to} onChange={(e) => setF({ ...f, to: e.target.value })} className="w-[160px]" />
-          <Input type="number" placeholder="Cost min £" value={f.costMin}
-            onChange={(e) => setF({ ...f, costMin: e.target.value })} className="w-[130px]" />
-          <Input type="number" placeholder="Cost max £" value={f.costMax}
-            onChange={(e) => setF({ ...f, costMax: e.target.value })} className="w-[130px]" />
+          <div className="h-4 w-px bg-border" />
           {activeFilterCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={() => setF(EMPTY)} className="ml-auto h-8 text-xs">
+            <Button variant="ghost" size="sm" onClick={() => setF(EMPTY)} className="h-7 px-2 text-xs">
               <X className="h-3.5 w-3.5" /> Clear ({activeFilterCount})
             </Button>
           )}
+        </div>
+
+        {/* Ribbon row: filter tokens */}
+        <div className="flex flex-wrap items-center gap-2 bg-muted/30 p-2.5">
+          {/* Date range token */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="group flex items-center gap-1.5 rounded-md border border-border bg-card pl-2.5 pr-1.5 py-1 transition-colors hover:border-foreground/30">
+                <span className="text-[10px] font-medium uppercase tracking-tight text-muted-foreground">Date</span>
+                <span className="text-xs font-medium text-foreground">
+                  {f.from || f.to
+                    ? `${f.from ? format(new Date(f.from), "d MMM") : "…"} – ${f.to ? format(new Date(f.to), "d MMM") : "…"}`
+                    : "Any time"}
+                </span>
+                <svg className="h-3 w-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-72 p-3" align="start">
+              <div className="space-y-2">
+                <div>
+                  <Label className="text-[11px] text-muted-foreground">From</Label>
+                  <Input type="date" value={f.from} onChange={(e) => setF({ ...f, from: e.target.value })} className="h-8" />
+                </div>
+                <div>
+                  <Label className="text-[11px] text-muted-foreground">To</Label>
+                  <Input type="date" value={f.to} onChange={(e) => setF({ ...f, to: e.target.value })} className="h-8" />
+                </div>
+                {(f.from || f.to) && (
+                  <Button variant="ghost" size="sm" className="h-7 w-full text-xs" onClick={() => setF({ ...f, from: "", to: "" })}>
+                    Clear date
+                  </Button>
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          {/* Cost range token */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="group flex items-center gap-1.5 rounded-md border border-border bg-card pl-2.5 pr-1.5 py-1 transition-colors hover:border-foreground/30">
+                <span className="text-[10px] font-medium uppercase tracking-tight text-muted-foreground">Cost</span>
+                <span className="text-xs font-medium text-foreground">
+                  {f.costMin || f.costMax
+                    ? `£${f.costMin || "0"} – £${f.costMax || "∞"}`
+                    : "Any price"}
+                </span>
+                <svg className="h-3 w-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 p-3" align="start">
+              <div className="space-y-2">
+                <div>
+                  <Label className="text-[11px] text-muted-foreground">Min £</Label>
+                  <Input type="number" value={f.costMin} onChange={(e) => setF({ ...f, costMin: e.target.value })} className="h-8" />
+                </div>
+                <div>
+                  <Label className="text-[11px] text-muted-foreground">Max £</Label>
+                  <Input type="number" value={f.costMax} onChange={(e) => setF({ ...f, costMax: e.target.value })} className="h-8" />
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          {/* Guest token */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="group flex items-center gap-1.5 rounded-md border border-border bg-card pl-2.5 pr-1.5 py-1 transition-colors hover:border-foreground/30">
+                <span className="text-[10px] font-medium uppercase tracking-tight text-muted-foreground">Guest</span>
+                <span className="text-xs font-medium text-foreground">{f.guestName || "Any"}</span>
+                <svg className="h-3 w-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-60 p-3" align="start">
+              <Label className="text-[11px] text-muted-foreground">Guest name</Label>
+              <Input value={f.guestName} onChange={(e) => setF({ ...f, guestName: e.target.value })} className="h-8" placeholder="e.g. Priya" />
+            </PopoverContent>
+          </Popover>
+
+          <div className="mx-1 h-4 w-px bg-border" />
+
+          {/* Categorical dropdowns — ghost token style */}
+          {[
+            { key: "hostName", label: "Hosts", allLabel: "All hosts", options: hosts },
+            { key: "guestCompany", label: "Companies", allLabel: "All companies", options: companies },
+            { key: "eventType", label: "Types", allLabel: "All types", options: eventTypes },
+            { key: "bookingType", label: "Bookings", allLabel: "All bookings", options: bookingTypes },
+            { key: "bookingStatus", label: "Status", allLabel: "All statuses", options: statuses },
+            { key: "source", label: "Source", allLabel: "All sources", options: ["Inventory", "Enquiry", "Venue"] },
+          ].map((cfg) => {
+            const val = (f as any)[cfg.key] as string;
+            const active = val !== "all";
+            return (
+              <Select key={cfg.key} value={val} onValueChange={(v) => setF({ ...f, [cfg.key]: v } as ReportFilters)}>
+                <SelectTrigger
+                  className={cn(
+                    "h-7 w-auto gap-1.5 rounded-md border-0 bg-transparent px-2.5 text-xs font-medium shadow-none hover:bg-muted focus:ring-0 focus:ring-offset-0",
+                    active ? "bg-card text-foreground border border-border" : "text-muted-foreground",
+                  )}
+                >
+                  {active ? <span className="text-foreground">{val}</span> : cfg.label}
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{cfg.allLabel}</SelectItem>
+                  {cfg.options.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            );
+          })}
         </div>
       </div>
 
