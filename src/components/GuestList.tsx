@@ -133,65 +133,65 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
 
       {/* Table */}
       <div className="overflow-hidden rounded-2xl border border-border bg-card">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead className="text-xs">Guest</TableHead>
-                <TableHead className="text-xs">Company</TableHead>
-                <TableHead className="text-xs">Dietary</TableHead>
-                <TableHead className="text-xs">Access</TableHead>
-                <TableHead className="text-xs">RSVP</TableHead>
-                <TableHead className="text-xs">Invite</TableHead>
-                <TableHead className="w-10" />
+        <Table className="table-fixed">
+          <TableHeader>
+            <TableRow className="bg-muted/40 hover:bg-muted/40">
+              <TableHead className="px-3 text-xs">Guest</TableHead>
+              <TableHead className="hidden px-3 text-xs md:table-cell">Company</TableHead>
+              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell">Dietary</TableHead>
+              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell">Access</TableHead>
+              <TableHead className="w-[110px] px-2 text-xs">RSVP</TableHead>
+              <TableHead className="w-[90px] px-2 text-xs">Invite</TableHead>
+              <TableHead className="w-10 px-1" />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filtered.length === 0 ? (
+              <TableRow><TableCell colSpan={7} className="h-24 text-center text-sm text-muted-foreground">No guests match this view</TableCell></TableRow>
+            ) : filtered.map((g) => (
+              <TableRow key={g.id} className="text-sm">
+                <TableCell className="px-3 py-3">
+                  <div className="truncate font-medium leading-tight">{g.firstName} {g.lastName}</div>
+                  <div className="truncate text-xs text-muted-foreground">{g.email}</div>
+                  <div className="mt-1 flex flex-wrap gap-1 text-[11px] text-muted-foreground md:hidden">
+                    {g.company && <span className="truncate">{g.company}</span>}
+                  </div>
+                </TableCell>
+                <TableCell className="hidden truncate px-3 py-3 text-xs text-muted-foreground md:table-cell">{g.company || "—"}</TableCell>
+                <TableCell className="hidden truncate px-2 py-3 text-xs text-muted-foreground lg:table-cell">{g.dietary || "—"}</TableCell>
+                <TableCell className="hidden truncate px-2 py-3 text-xs text-muted-foreground lg:table-cell">{g.access || "—"}</TableCell>
+                <TableCell className="px-2 py-3"><RsvpChip status={g.rsvp} /></TableCell>
+                <TableCell className="px-2 py-3"><InviteChip status={g.invite} /></TableCell>
+                <TableCell className="px-1 py-3 text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-7 w-7"><MoreHorizontal className="h-4 w-4" /></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem onClick={() => openEdit(g)}>
+                        <Pencil className="mr-2 h-3.5 w-3.5" /> Edit guest
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => { guestApi.resend(eventId, g.id); toast.success("Invite resent"); }}>
+                        <RefreshCw className="mr-2 h-3.5 w-3.5" /> Resend invite
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => { guestApi.simulateRsvp(eventId, g.id, "accepted"); toast.success(`${g.firstName} accepted`); }}>
+                        <CheckCircle2 className="mr-2 h-3.5 w-3.5 text-success" /> Simulate accept
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => { guestApi.simulateRsvp(eventId, g.id, "declined"); toast.message(`${g.firstName} declined`); }}>
+                        <XCircle className="mr-2 h-3.5 w-3.5 text-destructive" /> Simulate decline
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => setRemoving(g)} className="text-destructive focus:text-destructive">
+                        <Trash2 className="mr-2 h-3.5 w-3.5" /> Remove guest
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.length === 0 ? (
-                <TableRow><TableCell colSpan={7} className="h-24 text-center text-sm text-muted-foreground">No guests match this view</TableCell></TableRow>
-              ) : filtered.map((g) => (
-                <TableRow key={g.id} className="text-sm">
-                  <TableCell className="py-3">
-                    <div className="font-medium leading-tight">{g.firstName} {g.lastName}</div>
-                    <div className="text-xs text-muted-foreground">{g.email}</div>
-                  </TableCell>
-                  <TableCell className="py-3 text-xs text-muted-foreground">{g.company || "—"}</TableCell>
-                  <TableCell className="py-3 text-xs text-muted-foreground max-w-[140px] truncate">{g.dietary || "—"}</TableCell>
-                  <TableCell className="py-3 text-xs text-muted-foreground max-w-[140px] truncate">{g.access || "—"}</TableCell>
-                  <TableCell className="py-3"><RsvpChip status={g.rsvp} /></TableCell>
-                  <TableCell className="py-3"><InviteChip status={g.invite} /></TableCell>
-                  <TableCell className="py-3 text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-7 w-7"><MoreHorizontal className="h-4 w-4" /></Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuItem onClick={() => openEdit(g)}>
-                          <Pencil className="mr-2 h-3.5 w-3.5" /> Edit guest
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => { guestApi.resend(eventId, g.id); toast.success("Invite resent"); }}>
-                          <RefreshCw className="mr-2 h-3.5 w-3.5" /> Resend invite
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        {/* Demo: simulate inbound RSVP for real-time feel */}
-                        <DropdownMenuItem onClick={() => { guestApi.simulateRsvp(eventId, g.id, "accepted"); toast.success(`${g.firstName} accepted`); }}>
-                          <CheckCircle2 className="mr-2 h-3.5 w-3.5 text-success" /> Simulate accept
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => { guestApi.simulateRsvp(eventId, g.id, "declined"); toast.message(`${g.firstName} declined`); }}>
-                          <XCircle className="mr-2 h-3.5 w-3.5 text-destructive" /> Simulate decline
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => setRemoving(g)} className="text-destructive focus:text-destructive">
-                          <Trash2 className="mr-2 h-3.5 w-3.5" /> Remove guest
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
       {counts.failed > 0 && (
