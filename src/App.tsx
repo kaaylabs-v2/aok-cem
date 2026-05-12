@@ -7,6 +7,7 @@ import Index from "./pages/Index.tsx";
 import IndexV2 from "./pages/IndexV2.tsx";
 import Enquiries from "./pages/Enquiries.tsx";
 import Approvals from "./pages/Approvals.tsx";
+import Reports from "./pages/Reports.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { DesignToggle } from "./components/DesignToggle";
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/v2" element={<IndexV2 />} />
           <Route path="/enquiries" element={<Enquiries />} />
           <Route path="/approvals" element={<Approvals />} />
+          <Route path="/reports" element={<Reports />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
