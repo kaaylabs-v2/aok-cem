@@ -38,8 +38,8 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
   };
 
   return (
-    <header className="sticky top-2 z-30 px-3 pt-3 md:px-4 md:pt-4">
-      <div className="flex h-14 items-center gap-3 rounded-2xl border border-border/50 bg-secondary/80 px-4 shadow-panel backdrop-blur-xl md:px-5">
+    <header className="sticky top-2 z-30 px-3 pt-3 md:px-4 md:pt-4 before:pointer-events-none before:absolute before:inset-x-0 before:-top-2 before:bottom-0 before:-z-10 before:bg-gradient-to-b before:from-card before:via-card/95 before:to-transparent">
+      <div className="flex h-14 items-center gap-3 rounded-2xl border border-border/60 bg-card/95 px-4 shadow-panel backdrop-blur-xl supports-[backdrop-filter]:bg-card/80 md:px-5">
         {showSidebarTrigger && <SidebarTrigger className="h-8 w-8 md:hidden" />}
 
         {/* Tenant switcher */}
