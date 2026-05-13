@@ -31,6 +31,9 @@ const Index = () => {
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const PAGE_SIZE = 9;
+  const [page, setPage] = useState(1);
+  const [cardLimit, setCardLimit] = useState(PAGE_SIZE);
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
