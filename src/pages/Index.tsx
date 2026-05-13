@@ -282,20 +282,95 @@ const Index = () => {
                     </div>
                   </div>
                 ) : view === "grid" ? (
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {visible.map((e) => <EventCard key={e.id} event={e} onClick={openEvent} selected={selectedIds.has(e.id)} onToggleSelect={toggleSelect} />)}
-                  </div>
+                  <>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                      {visible.slice(0, cardLimit).map((e) => <EventCard key={e.id} event={e} onClick={openEvent} selected={selectedIds.has(e.id)} onToggleSelect={toggleSelect} />)}
+                    </div>
+                    {cardLimit < visible.length && (
+                      <div className="mt-6 flex flex-col items-center gap-2">
+                        <p className="text-xs text-muted-foreground">
+                          Showing <span className="font-semibold text-foreground">{cardLimit}</span> of {visible.length}
+                        </p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-full border-border/60 bg-card px-5"
+                          onClick={() => setCardLimit((n) => n + PAGE_SIZE)}
+                        >
+                          Load more
+                        </Button>
+                      </div>
+                    )}
+                  </>
                 ) : (
-                  <EventTable
-                    events={visible}
-                    onRowClick={openEvent}
-                    selectedIds={selectedIds}
-                    onToggleSelect={toggleSelect}
-                    onToggleSelectAll={() => {
-                      const allSelected = visible.length > 0 && visible.every((e) => selectedIds.has(e.id));
-                      setSelectedIds(allSelected ? new Set() : new Set(visible.map((e) => e.id)));
-                    }}
-                  />
+                  <>
+                    <EventTable
+                      events={visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)}
+                      onRowClick={openEvent}
+                      selectedIds={selectedIds}
+                      onToggleSelect={toggleSelect}
+                      onToggleSelectAll={() => {
+                        const pageRows = visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+                        const allSelected = pageRows.length > 0 && pageRows.every((e) => selectedIds.has(e.id));
+                        setSelectedIds(allSelected ? new Set() : new Set(pageRows.map((e) => e.id)));
+                      }}
+                    />
+                    {visible.length > PAGE_SIZE && (() => {
+                      const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+                      const current = Math.min(page, totalPages);
+                      const start = (current - 1) * PAGE_SIZE + 1;
+                      const end = Math.min(current * PAGE_SIZE, visible.length);
+                      const pages: (number | "…")[] = [];
+                      for (let i = 1; i <= totalPages; i++) {
+                        if (i === 1 || i === totalPages || Math.abs(i - current) <= 1) pages.push(i);
+                        else if (pages[pages.length - 1] !== "…") pages.push("…");
+                      }
+                      return (
+                        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 px-1">
+                          <p className="text-xs text-muted-foreground">
+                            Showing <span className="font-semibold text-foreground">{start}–{end}</span> of {visible.length}
+                          </p>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-full"
+                              disabled={current === 1}
+                              onClick={() => setPage((p) => Math.max(1, p - 1))}
+                              aria-label="Previous page"
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            {pages.map((p, i) =>
+                              p === "…" ? (
+                                <span key={`e${i}`} className="px-1 text-xs text-muted-foreground">…</span>
+                              ) : (
+                                <Button
+                                  key={p}
+                                  variant={p === current ? "default" : "ghost"}
+                                  size="icon"
+                                  className="h-8 w-8 rounded-full text-xs"
+                                  onClick={() => setPage(p)}
+                                >
+                                  {p}
+                                </Button>
+                              )
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-full"
+                              disabled={current === totalPages}
+                              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                              aria-label="Next page"
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </>
                 )}
               </section>
       </AppShell>
