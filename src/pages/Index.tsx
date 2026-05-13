@@ -63,6 +63,8 @@ const Index = () => {
     return list;
   }, [scope, statusTab, venue, type, sort, query]);
 
+  useEffect(() => { setPage(1); setCardLimit(PAGE_SIZE); }, [scope, statusTab, venue, type, sort, query, view]);
+
   const summary = useMemo(() => {
     const upcoming = allEvents.filter((e) => !e.past);
     const totalBookings = upcoming.reduce((s, e) => s + e.booked, 0);
