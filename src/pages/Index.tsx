@@ -36,7 +36,7 @@ const Index = () => {
   const PAGE_SIZE = 9;
   const [page, setPage] = useState(1);
   const [cardLimit, setCardLimit] = useState(PAGE_SIZE);
-  const [date, setDate] = useState<{ from?: Date; to?: Date } | undefined>(undefined);
+  const [date, setDate] = useState<{ from: Date | undefined; to?: Date } | undefined>(undefined);
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
