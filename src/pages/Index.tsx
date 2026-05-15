@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download, LayoutGrid, List, Table2, Search, X } from "lucide-react";
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Filter, ListChecks, TrendingUp, Users2, ClipboardList, ArrowUpDown, Download, LayoutGrid, List, Search, X } from "lucide-react";
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
 import { events as allEvents, venues, eventTypes, utilisation, isUnderperforming, PortfolioEvent, EventStatus, NotificationItem } from "@/data/portfolio";
 import { StatCard } from "@/components/StatCard";
 import { EventCard } from "@/components/EventCard";
@@ -34,6 +36,7 @@ const Index = () => {
   const PAGE_SIZE = 9;
   const [page, setPage] = useState(1);
   const [cardLimit, setCardLimit] = useState(PAGE_SIZE);
+  const [date, setDate] = useState<{ from: Date | undefined; to?: Date } | undefined>(undefined);
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
@@ -49,6 +52,8 @@ const Index = () => {
     if (statusTab !== "all") list = list.filter((e) => e.status === statusTab);
     if (venue !== "all") list = list.filter((e) => e.venue === venue);
     if (type !== "all") list = list.filter((e) => e.type === type);
+    if (date?.from) list = list.filter((e) => new Date(e.date) >= date.from!);
+    if (date?.to) list = list.filter((e) => new Date(e.date) <= date.to!);
     if (query.trim()) {
       const q = query.trim().toLowerCase();
       list = list.filter((e) =>
@@ -61,9 +66,9 @@ const Index = () => {
     if (sort === "util") list = [...list].sort((a, b) => utilisation(b) - utilisation(a));
     if (sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
     return list;
-  }, [scope, statusTab, venue, type, sort, query]);
+  }, [scope, statusTab, venue, type, sort, query, date]);
 
-  useEffect(() => { setPage(1); setCardLimit(PAGE_SIZE); }, [scope, statusTab, venue, type, sort, query, view]);
+  useEffect(() => { setPage(1); setCardLimit(PAGE_SIZE); }, [scope, statusTab, venue, type, sort, query, view, date]);
 
   const summary = useMemo(() => {
     const upcoming = allEvents.filter((e) => !e.past);
@@ -163,7 +168,8 @@ const Index = () => {
                       const activeCount =
                         (statusTab !== "all" ? 1 : 0) +
                         (venue !== "all" ? 1 : 0) +
-                        (type !== "all" ? 1 : 0);
+                        (type !== "all" ? 1 : 0) +
+                        (date?.from || date?.to ? 1 : 0);
                       return (
                         <Popover>
                           <PopoverTrigger asChild>
@@ -183,7 +189,7 @@ const Index = () => {
                               {activeCount > 0 && (
                                 <button
                                   type="button"
-                                  onClick={() => { setStatusTab("all"); setVenue("all"); setType("all"); }}
+                                  onClick={() => { setStatusTab("all"); setVenue("all"); setType("all"); setDate(undefined); }}
                                   className="text-[11px] text-primary hover:underline"
                                 >
                                   Clear all
@@ -223,6 +229,26 @@ const Index = () => {
                                   {eventTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
                                 </SelectContent>
                               </Select>
+                            </div>
+                            <div className="space-y-1.5">
+                              <Label className="text-[11px] text-muted-foreground">Date Range</Label>
+                              <div className="rounded-md border border-border/60 bg-card p-2">
+                                <Calendar
+                                  mode="range"
+                                  selected={date}
+                                  onSelect={setDate}
+                                  numberOfMonths={1}
+                                  className="pointer-events-auto mx-auto w-full"
+                                  classNames={{ months: "flex flex-col", caption: "flex justify-center pt-0 relative items-center", caption_label: "text-xs font-medium", nav: "space-x-1 flex items-center", nav_button: "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100", nav_button_previous: "absolute left-0", nav_button_next: "absolute right-0", table: "w-full border-collapse space-y-1", head_row: "flex", head_cell: "text-muted-foreground rounded-md w-8 font-normal text-[0.7rem]", row: "flex w-full mt-1", cell: "h-8 w-8 text-center text-xs p-0 relative", day: "h-8 w-8 p-0 font-normal aria-selected:opacity-100", day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground", day_today: "bg-accent text-accent-foreground", day_outside: "text-muted-foreground opacity-50", day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground" }}
+                                />
+                              </div>
+                              {(date?.from || date?.to) && (
+                                <p className="text-[11px] text-muted-foreground">
+                                  {date.from ? format(date.from, "PP") : ""}
+                                  {date.from && date.to ? " – " : ""}
+                                  {date.to ? format(date.to, "PP") : ""}
+                                </p>
+                              )}
                             </div>
                           </PopoverContent>
                         </Popover>
