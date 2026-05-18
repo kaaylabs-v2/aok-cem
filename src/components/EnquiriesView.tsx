@@ -446,16 +446,19 @@ function NewEnquiryDialog({
 }) {
   const [step, setStep] = useState(0);
   const [eventType, setEventType] = useState<Enquiry["eventType"]>("Corporate Hospitality");
+  const [audience, setAudience] = useState<"business" | "personal">("business");
+  const [clients, setClients] = useState("");
+  const [eventName, setEventName] = useState("");
   const [dates, setDates] = useState<Date[]>([]);
   const [guests, setGuests] = useState<number>(50);
-  const [budget, setBudget] = useState<number>(10000);
-  const [location, setLocation] = useState("");
+  const [venue, setVenue] = useState("");
+  const [packageType, setPackageType] = useState("");
   const [notes, setNotes] = useState("");
-  const [audience, setAudience] = useState<"business" | "personal">("business");
 
   const reset = () => {
-    setStep(0); setEventType("Corporate Hospitality"); setDates([]); setGuests(50);
-    setBudget(10000); setLocation(""); setNotes(""); setAudience("business");
+    setStep(0); setEventType("Corporate Hospitality"); setAudience("business");
+    setClients(""); setEventName(""); setDates([]); setGuests(50);
+    setVenue(""); setPackageType(""); setNotes("");
   };
 
   const close = () => { onOpenChange(false); setTimeout(reset, 200); };
@@ -467,15 +470,21 @@ function NewEnquiryDialog({
 
   const submit = () => {
     const now = new Date().toISOString();
+    const noteParts = [
+      eventName && `Event: ${eventName}`,
+      packageType && `Type: ${packageType}`,
+      audience === "business" && clients && `Clients: ${clients}`,
+      notes,
+    ].filter(Boolean);
     const enq: Enquiry = {
       id: `q-${Date.now()}`,
       ref: nextRef,
       eventType,
       preferredDates: dates.map((d) => d.toISOString()),
       guests,
-      budget,
-      location: location || "—",
-      notes,
+      budget: 0,
+      location: venue || "—",
+      notes: noteParts.join(" · "),
       audience,
       status: "submitted",
       submittedBy: "Elena Rossi",
@@ -489,7 +498,7 @@ function NewEnquiryDialog({
     close();
   };
 
-  const steps = ["Type", "Dates", "Guests & budget", "Location & notes", "Review"];
+  const steps = ["Category", "Purpose", "Event", "Guests & venue", "Package", "Review"];
 
   return (
     <Dialog open={open} onOpenChange={(o) => (o ? onOpenChange(true) : close())}>
@@ -509,10 +518,10 @@ function NewEnquiryDialog({
           ))}
         </div>
 
-        <div className="min-h-[200px]">
+        <div className="min-h-[240px]">
           {step === 0 && (
             <div className="space-y-3">
-              <p className="text-sm text-foreground/70">What kind of event are you planning?</p>
+              <p className="text-sm text-foreground/70">What kind of enquiry is this?</p>
               <div className="flex flex-wrap gap-2">
                 {enquiryTypes.map((t) => (
                   <button
@@ -527,52 +536,71 @@ function NewEnquiryDialog({
                   >{t}</button>
                 ))}
               </div>
-              <div className="flex gap-2 pt-2">
-                {(["business", "personal"] as const).map((a) => (
-                  <button
-                    key={a}
-                    onClick={() => setAudience(a)}
-                    className={cn(
-                      "flex-1 rounded-xl border px-3 py-2 text-sm capitalize",
-                      audience === a ? "border-foreground bg-foreground/5" : "border-black/10",
-                    )}
-                  >{a}</button>
-                ))}
-              </div>
             </div>
           )}
 
           {step === 1 && (
-            <div className="space-y-3">
-              <p className="text-sm text-foreground/70">Pick one or more preferred dates.</p>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-start">
-                    <CalendarDays className="mr-2 h-4 w-4" />
-                    {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "Pick dates"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="multiple"
-                    selected={dates}
-                    onSelect={(d) => setDates((d as Date[]) ?? [])}
-                    className="pointer-events-auto p-3"
+            <div className="space-y-4">
+              <div>
+                <Label className="text-xs">Purpose</Label>
+                <div className="mt-1.5 flex gap-2">
+                  {(["personal", "business"] as const).map((a) => (
+                    <button
+                      key={a}
+                      onClick={() => setAudience(a)}
+                      className={cn(
+                        "flex-1 rounded-xl border px-3 py-2 text-sm capitalize",
+                        audience === a ? "border-foreground bg-foreground/5" : "border-black/10",
+                      )}
+                    >{a}</button>
+                  ))}
+                </div>
+              </div>
+              {audience === "business" && (
+                <div>
+                  <Label className="text-xs">Client(s) being entertained</Label>
+                  <Textarea
+                    value={clients}
+                    onChange={(e) => setClients(e.target.value)}
+                    placeholder="Please describe the purpose of the event and tell us which client(s) you wish to entertain"
+                    className="mt-1.5"
+                    maxLength={1000}
                   />
-                </PopoverContent>
-              </Popover>
+                </div>
+              )}
             </div>
           )}
 
           {step === 2 && (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-3">
               <div>
-                <Label className="text-xs">Number of guests</Label>
-                <Input type="number" min={1} value={guests} onChange={(e) => setGuests(+e.target.value || 0)} className="mt-1.5" />
+                <Label className="text-xs">Event</Label>
+                <Input
+                  value={eventName}
+                  onChange={(e) => setEventName(e.target.value)}
+                  placeholder="if known"
+                  className="mt-1.5"
+                  maxLength={120}
+                />
               </div>
               <div>
-                <Label className="text-xs">Budget (USD)</Label>
-                <Input type="number" min={0} step={500} value={budget} onChange={(e) => setBudget(+e.target.value || 0)} className="mt-1.5" />
+                <Label className="text-xs">Date</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="mt-1.5 w-full justify-start font-normal">
+                      <CalendarDays className="mr-2 h-4 w-4" />
+                      {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "Pick date(s)"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="multiple"
+                      selected={dates}
+                      onSelect={(d) => setDates((d as Date[]) ?? [])}
+                      className="pointer-events-auto p-3"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           )}
@@ -580,24 +608,61 @@ function NewEnquiryDialog({
           {step === 3 && (
             <div className="space-y-3">
               <div>
-                <Label className="text-xs">Location preference</Label>
-                <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="e.g. London, Online" className="mt-1.5" />
+                <Label className="text-xs">Number of guests</Label>
+                <Input type="number" min={1} value={guests} onChange={(e) => setGuests(+e.target.value || 0)} className="mt-1.5" />
               </div>
               <div>
-                <Label className="text-xs">Additional notes</Label>
-                <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Anything we should know…" className="mt-1.5" />
+                <Label className="text-xs">Venue</Label>
+                <Input
+                  value={venue}
+                  onChange={(e) => setVenue(e.target.value)}
+                  placeholder="if known"
+                  className="mt-1.5"
+                  maxLength={120}
+                />
               </div>
             </div>
           )}
 
           {step === 4 && (
+            <div className="space-y-3">
+              <div>
+                <Label className="text-xs">Type</Label>
+                <Input
+                  value={packageType}
+                  onChange={(e) => setPackageType(e.target.value)}
+                  placeholder="e.g. ticket only, drinks package, Bobby Moore package"
+                  className="mt-1.5"
+                  maxLength={200}
+                />
+              </div>
+              <div>
+                <Label className="text-xs">Additional notes</Label>
+                <Textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Anything else we should know…"
+                  className="mt-1.5"
+                  maxLength={1000}
+                />
+              </div>
+            </div>
+          )}
+
+          {step === 5 && (
             <div className="space-y-3 text-sm">
-              <div className="rounded-xl border border-black/5 bg-[hsl(220_20%_98%)] p-3">
-                <p><span className="text-foreground/50">Type:</span> {eventType} · {audience}</p>
-                <p><span className="text-foreground/50">Dates:</span> {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "—"}</p>
-                <p><span className="text-foreground/50">Guests / Budget:</span> {guests} · ${budget.toLocaleString()}</p>
-                <p><span className="text-foreground/50">Location:</span> {location || "—"}</p>
-                {notes && <p className="mt-1 text-foreground/70">{notes}</p>}
+              <div className="rounded-xl border border-black/5 bg-[hsl(220_20%_98%)] p-3 space-y-1">
+                <p><span className="text-foreground/50">Category:</span> {eventType}</p>
+                <p><span className="text-foreground/50">Purpose:</span> <span className="capitalize">{audience}</span></p>
+                {audience === "business" && clients && (
+                  <p><span className="text-foreground/50">Clients:</span> {clients}</p>
+                )}
+                <p><span className="text-foreground/50">Event:</span> {eventName || "—"}</p>
+                <p><span className="text-foreground/50">Date:</span> {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "—"}</p>
+                <p><span className="text-foreground/50">Guests:</span> {guests}</p>
+                <p><span className="text-foreground/50">Venue:</span> {venue || "—"}</p>
+                <p><span className="text-foreground/50">Type:</span> {packageType || "—"}</p>
+                {notes && <p className="pt-1 text-foreground/70">{notes}</p>}
               </div>
               {similar.length > 0 && (
                 <div className="flex items-start gap-2 rounded-xl border border-[hsl(220_85%_60%)]/30 bg-[hsl(220_85%_97%)] p-3">
@@ -605,7 +670,7 @@ function NewEnquiryDialog({
                   <div className="text-xs">
                     <p className="font-semibold text-[hsl(220_85%_45%)]">Smart suggestion</p>
                     <p className="mt-0.5 text-foreground/70">
-                      You already have {similar.length} similar {eventType.toLowerCase()} event{similar.length > 1 ? "s" : ""} available in your inventory.
+                      You already have {similar.length} similar {eventType.toLowerCase()} option{similar.length > 1 ? "s" : ""} available in your inventory.
                     </p>
                     <ul className="mt-1.5 space-y-0.5 text-foreground/60">
                       {similar.map((s) => <li key={s.id}>· {s.name} — {s.venue}</li>)}
