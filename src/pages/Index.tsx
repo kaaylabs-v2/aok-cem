@@ -232,22 +232,63 @@ const Index = () => {
                             </div>
                             <div className="space-y-1.5">
                               <Label className="text-[11px] text-muted-foreground">Date Range</Label>
-                              <div className="rounded-md border border-border/60 bg-card p-2">
-                                <Calendar
-                                  mode="range"
-                                  selected={date}
-                                  onSelect={setDate}
-                                  numberOfMonths={1}
-                                  className="pointer-events-auto mx-auto w-full"
-                                  classNames={{ months: "flex flex-col", caption: "flex justify-center pt-0 relative items-center", caption_label: "text-xs font-medium", nav: "space-x-1 flex items-center", nav_button: "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100", nav_button_previous: "absolute left-0", nav_button_next: "absolute right-0", table: "w-full border-collapse space-y-1", head_row: "flex", head_cell: "text-muted-foreground rounded-md w-8 font-normal text-[0.7rem]", row: "flex w-full mt-1", cell: "h-8 w-8 text-center text-xs p-0 relative", day: "h-8 w-8 p-0 font-normal aria-selected:opacity-100", day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground", day_today: "bg-accent text-accent-foreground", day_outside: "text-muted-foreground opacity-50", day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground" }}
-                                />
+                              <div className="flex flex-wrap gap-1.5">
+                                {[
+                                  { k: "7", label: "Next 7 days", days: 7 },
+                                  { k: "30", label: "Next 30 days", days: 30 },
+                                  { k: "90", label: "Next 90 days", days: 90 },
+                                  { k: "month", label: "This month", days: -1 },
+                                ].map((p) => {
+                                  const active = (() => {
+                                    if (!date?.from || !date?.to) return false;
+                                    const now = new Date(); now.setHours(0,0,0,0);
+                                    if (p.days > 0) {
+                                      const end = new Date(now); end.setDate(end.getDate() + p.days);
+                                      return date.from.getTime() === now.getTime() && date.to.getTime() === end.getTime();
+                                    }
+                                    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+                                    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                                    return date.from.getTime() === start.getTime() && date.to.getTime() === end.getTime();
+                                  })();
+                                  return (
+                                    <button
+                                      key={p.k}
+                                      type="button"
+                                      onClick={() => {
+                                        const now = new Date(); now.setHours(0,0,0,0);
+                                        if (p.days > 0) {
+                                          const end = new Date(now); end.setDate(end.getDate() + p.days);
+                                          setDate({ from: now, to: end });
+                                        } else {
+                                          const start = new Date(now.getFullYear(), now.getMonth(), 1);
+                                          const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                                          setDate({ from: start, to: end });
+                                        }
+                                      }}
+                                      className={`rounded-full border px-2.5 py-1 text-[11px] transition ${active ? "border-primary bg-primary/10 text-primary" : "border-border/60 bg-card text-foreground/80 hover:bg-secondary"}`}
+                                    >
+                                      {p.label}
+                                    </button>
+                                  );
+                                })}
                               </div>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <Button variant="outline" size="sm" className="h-8 w-full justify-start rounded-md text-[11px] font-normal">
+                                    <CalendarIcon className="mr-2 h-3.5 w-3.5" />
+                                    {date?.from || date?.to
+                                      ? `${date.from ? format(date.from, "PP") : "…"}${date.to ? ` – ${format(date.to, "PP")}` : ""}`
+                                      : "Custom range"}
+                                  </Button>
+                                </PopoverTrigger>
+                                <PopoverContent align="start" className="w-auto p-0">
+                                  <Calendar mode="range" selected={date} onSelect={setDate} numberOfMonths={1} className="pointer-events-auto" />
+                                </PopoverContent>
+                              </Popover>
                               {(date?.from || date?.to) && (
-                                <p className="text-[11px] text-muted-foreground">
-                                  {date.from ? format(date.from, "PP") : ""}
-                                  {date.from && date.to ? " – " : ""}
-                                  {date.to ? format(date.to, "PP") : ""}
-                                </p>
+                                <button type="button" onClick={() => setDate(undefined)} className="text-[11px] text-muted-foreground underline-offset-2 hover:underline">
+                                  Clear date range
+                                </button>
                               )}
                             </div>
                           </PopoverContent>
