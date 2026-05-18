@@ -461,7 +461,7 @@ function NewEnquiryDialog({
   const close = () => { onOpenChange(false); setTimeout(reset, 200); };
 
   const similar = useMemo(
-    () => allEvents.filter((e) => e.type === eventType && !e.past && e.status !== "cancelled").slice(0, 3),
+    () => allEvents.filter((e) => (e.type as string) === eventType && !e.past && e.status !== "cancelled").slice(0, 3),
     [eventType],
   );
 
