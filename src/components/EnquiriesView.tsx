@@ -437,6 +437,70 @@ function Field({ icon, label, value }: { icon: React.ReactNode; label: string; v
   );
 }
 
+/* ---------- Per-event-type field schemas (from spec) ---------- */
+type FieldKey =
+  | "event" | "restaurant" | "details"
+  | "date" | "dateTime"
+  | "guests"
+  | "venue" | "location" | "specialRequests"
+  | "type" | "budget"
+  | "preferredCuisine";
+
+type FieldDef = { key: FieldKey; label: string; kind: "text" | "textarea" | "date" | "number" | "money"; placeholder?: string };
+
+const FIELD_SCHEMA: Record<Enquiry["eventType"], FieldDef[]> = {
+  "Corporate Hospitality": [
+    { key: "event", label: "Event", kind: "text", placeholder: "if known" },
+    { key: "date", label: "Date", kind: "date" },
+    { key: "guests", label: "Number of Guests", kind: "number" },
+    { key: "venue", label: "Venue", kind: "text", placeholder: "if known" },
+    { key: "type", label: "Type", kind: "text", placeholder: "e.g. ticket only, drinks package, Bobby Moore package" },
+  ],
+  "Tickets": [
+    { key: "event", label: "Event", kind: "text", placeholder: "if known" },
+    { key: "date", label: "Date", kind: "date" },
+    { key: "guests", label: "Number of Guests", kind: "number" },
+    { key: "venue", label: "Venue", kind: "text", placeholder: "if known" },
+    { key: "type", label: "Type", kind: "text", placeholder: "e.g. seated, standing, premium" },
+  ],
+  "Private Dining": [
+    { key: "restaurant", label: "Restaurant", kind: "text", placeholder: "if known" },
+    { key: "dateTime", label: "Date & Time", kind: "date" },
+    { key: "guests", label: "Number of Guests", kind: "number" },
+    { key: "specialRequests", label: "Special Requests", kind: "textarea", placeholder: "dietary, seating, allergies…" },
+    { key: "location", label: "Location", kind: "text", placeholder: "city or area" },
+    { key: "preferredCuisine", label: "Preferred Cuisine", kind: "text", placeholder: "e.g. Italian, Japanese" },
+  ],
+  "Bespoke Events": [
+    { key: "details", label: "Details", kind: "textarea", placeholder: "Tell us about the event you have in mind" },
+    { key: "date", label: "Date", kind: "date" },
+    { key: "guests", label: "Number of Guests", kind: "number" },
+    { key: "location", label: "Location", kind: "text", placeholder: "city or area" },
+    { key: "budget", label: "Budget", kind: "money" },
+  ],
+  "Venue Find": [
+    { key: "details", label: "Details", kind: "textarea", placeholder: "What kind of venue are you after?" },
+    { key: "date", label: "Date", kind: "date" },
+    { key: "guests", label: "Number of Guests", kind: "number" },
+    { key: "location", label: "Location", kind: "text", placeholder: "city or area" },
+    { key: "budget", label: "Budget", kind: "money" },
+  ],
+  "Entertainment": [
+    { key: "details", label: "Details", kind: "textarea", placeholder: "Performer, act, or experience" },
+    { key: "date", label: "Date", kind: "date" },
+    { key: "guests", label: "Number of Guests", kind: "number" },
+    { key: "location", label: "Location", kind: "text", placeholder: "city or area" },
+    { key: "budget", label: "Budget", kind: "money" },
+  ],
+  "Anything Else": [
+    { key: "details", label: "Details", kind: "textarea", placeholder: "Describe what you need" },
+    { key: "date", label: "Date", kind: "date" },
+    { key: "guests", label: "Number of Guests", kind: "number" },
+    { key: "location", label: "Location", kind: "text", placeholder: "city or area" },
+    { key: "budget", label: "Budget", kind: "money" },
+  ],
+};
+
 /* ---------- New Enquiry conversational dialog ---------- */
 function NewEnquiryDialog({
   open, onOpenChange, nextRef, onSubmit,
@@ -448,17 +512,14 @@ function NewEnquiryDialog({
   const [eventType, setEventType] = useState<Enquiry["eventType"]>("Corporate Hospitality");
   const [audience, setAudience] = useState<"business" | "personal">("business");
   const [clients, setClients] = useState("");
-  const [eventName, setEventName] = useState("");
+  const [values, setValues] = useState<Record<string, string>>({});
   const [dates, setDates] = useState<Date[]>([]);
-  const [guests, setGuests] = useState<number>(50);
-  const [venue, setVenue] = useState("");
-  const [packageType, setPackageType] = useState("");
-  const [notes, setNotes] = useState("");
+
+  const schema = FIELD_SCHEMA[eventType];
 
   const reset = () => {
     setStep(0); setEventType("Corporate Hospitality"); setAudience("business");
-    setClients(""); setEventName(""); setDates([]); setGuests(50);
-    setVenue(""); setPackageType(""); setNotes("");
+    setClients(""); setValues({}); setDates([]);
   };
 
   const close = () => { onOpenChange(false); setTimeout(reset, 200); };
@@ -468,23 +529,31 @@ function NewEnquiryDialog({
     [eventType],
   );
 
+  const setVal = (k: string, v: string) => setValues((s) => ({ ...s, [k]: v }));
+
   const submit = () => {
     const now = new Date().toISOString();
-    const noteParts = [
-      eventName && `Event: ${eventName}`,
-      packageType && `Type: ${packageType}`,
-      audience === "business" && clients && `Clients: ${clients}`,
-      notes,
-    ].filter(Boolean);
+    const guests = Number(values.guests) || 0;
+    const budget = Number(values.budget) || 0;
+    const location = values.location || values.venue || "—";
+    const notesLines: string[] = [];
+    schema.forEach((f) => {
+      if (f.kind === "date") return;
+      if (["guests", "budget", "location", "venue"].includes(f.key)) return;
+      const v = values[f.key];
+      if (v) notesLines.push(`${f.label}: ${v}`);
+    });
+    if (values.venue && location !== values.venue) notesLines.push(`Venue: ${values.venue}`);
+    if (audience === "business" && clients) notesLines.push(`Client(s): ${clients}`);
     const enq: Enquiry = {
       id: `q-${Date.now()}`,
       ref: nextRef,
       eventType,
       preferredDates: dates.map((d) => d.toISOString()),
       guests,
-      budget: 0,
-      location: venue || "—",
-      notes: noteParts.join(" · "),
+      budget,
+      location,
+      notes: notesLines.join(" · "),
       audience,
       status: "submitted",
       submittedBy: "Elena Rossi",
@@ -498,11 +567,79 @@ function NewEnquiryDialog({
     close();
   };
 
-  const steps = ["Category", "Purpose", "Event", "Guests & venue", "Package", "Review"];
+  const steps = ["Category", "Purpose", "Details", "Review"];
+
+  const renderField = (f: FieldDef) => {
+    if (f.kind === "date") {
+      return (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="mt-1.5 w-full justify-start font-normal">
+              <CalendarDays className="mr-2 h-4 w-4" />
+              {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "Pick date(s)"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="multiple"
+              selected={dates}
+              onSelect={(d) => setDates((d as Date[]) ?? [])}
+              className="pointer-events-auto p-3"
+            />
+          </PopoverContent>
+        </Popover>
+      );
+    }
+    if (f.kind === "textarea") {
+      return (
+        <Textarea
+          value={values[f.key] || ""}
+          onChange={(e) => setVal(f.key, e.target.value)}
+          placeholder={f.placeholder}
+          className="mt-1.5"
+          maxLength={1000}
+        />
+      );
+    }
+    if (f.kind === "number") {
+      return (
+        <Input
+          type="number" min={1}
+          value={values[f.key] || ""}
+          onChange={(e) => setVal(f.key, e.target.value)}
+          placeholder={f.placeholder}
+          className="mt-1.5"
+        />
+      );
+    }
+    if (f.kind === "money") {
+      return (
+        <div className="relative mt-1.5">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/50">$</span>
+          <Input
+            type="number" min={0}
+            value={values[f.key] || ""}
+            onChange={(e) => setVal(f.key, e.target.value)}
+            placeholder={f.placeholder || "0"}
+            className="pl-7"
+          />
+        </div>
+      );
+    }
+    return (
+      <Input
+        value={values[f.key] || ""}
+        onChange={(e) => setVal(f.key, e.target.value)}
+        placeholder={f.placeholder}
+        className="mt-1.5"
+        maxLength={200}
+      />
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={(o) => (o ? onOpenChange(true) : close())}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogDescription className="text-xs uppercase tracking-wide">{nextRef}</DialogDescription>
           <DialogTitle>New enquiry · {steps[step]}</DialogTitle>
@@ -526,7 +663,7 @@ function NewEnquiryDialog({
                 {enquiryTypes.map((t) => (
                   <button
                     key={t}
-                    onClick={() => setEventType(t)}
+                    onClick={() => { setEventType(t); setValues({}); setDates([]); }}
                     className={cn(
                       "rounded-full border px-4 py-2 text-sm transition-colors",
                       eventType === t
@@ -558,7 +695,7 @@ function NewEnquiryDialog({
               </div>
               {audience === "business" && (
                 <div>
-                  <Label className="text-xs">Client(s) being entertained</Label>
+                  <Label className="text-xs">Client(s) Being Entertained</Label>
                   <Textarea
                     value={clients}
                     onChange={(e) => setClients(e.target.value)}
@@ -573,96 +710,41 @@ function NewEnquiryDialog({
 
           {step === 2 && (
             <div className="space-y-3">
-              <div>
-                <Label className="text-xs">Event</Label>
-                <Input
-                  value={eventName}
-                  onChange={(e) => setEventName(e.target.value)}
-                  placeholder="if known"
-                  className="mt-1.5"
-                  maxLength={120}
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Date</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="mt-1.5 w-full justify-start font-normal">
-                      <CalendarDays className="mr-2 h-4 w-4" />
-                      {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "Pick date(s)"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="multiple"
-                      selected={dates}
-                      onSelect={(d) => setDates((d as Date[]) ?? [])}
-                      className="pointer-events-auto p-3"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
+              <p className="text-xs text-foreground/60">Fields tailored to <span className="font-medium text-foreground/80">{eventType}</span></p>
+              {schema.map((f) => (
+                <div key={f.key}>
+                  <Label className="text-xs">{f.label}</Label>
+                  {renderField(f)}
+                </div>
+              ))}
             </div>
           )}
 
           {step === 3 && (
-            <div className="space-y-3">
-              <div>
-                <Label className="text-xs">Number of guests</Label>
-                <Input type="number" min={1} value={guests} onChange={(e) => setGuests(+e.target.value || 0)} className="mt-1.5" />
-              </div>
-              <div>
-                <Label className="text-xs">Venue</Label>
-                <Input
-                  value={venue}
-                  onChange={(e) => setVenue(e.target.value)}
-                  placeholder="if known"
-                  className="mt-1.5"
-                  maxLength={120}
-                />
-              </div>
-            </div>
-          )}
-
-          {step === 4 && (
-            <div className="space-y-3">
-              <div>
-                <Label className="text-xs">Type</Label>
-                <Input
-                  value={packageType}
-                  onChange={(e) => setPackageType(e.target.value)}
-                  placeholder="e.g. ticket only, drinks package, Bobby Moore package"
-                  className="mt-1.5"
-                  maxLength={200}
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Additional notes</Label>
-                <Textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Anything else we should know…"
-                  className="mt-1.5"
-                  maxLength={1000}
-                />
-              </div>
-            </div>
-          )}
-
-          {step === 5 && (
             <div className="space-y-3 text-sm">
               <div className="rounded-xl border border-black/5 bg-[hsl(220_20%_98%)] p-3 space-y-1">
                 <p><span className="text-foreground/50">Category:</span> {eventType}</p>
                 <p><span className="text-foreground/50">Purpose:</span> <span className="capitalize">{audience}</span></p>
                 {audience === "business" && clients && (
-                  <p><span className="text-foreground/50">Clients:</span> {clients}</p>
+                  <p><span className="text-foreground/50">Client(s):</span> {clients}</p>
                 )}
-                <p><span className="text-foreground/50">Event:</span> {eventName || "—"}</p>
-                <p><span className="text-foreground/50">Date:</span> {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "—"}</p>
-                <p><span className="text-foreground/50">Guests:</span> {guests}</p>
-                <p><span className="text-foreground/50">Venue:</span> {venue || "—"}</p>
-                <p><span className="text-foreground/50">Type:</span> {packageType || "—"}</p>
-                {notes && <p className="pt-1 text-foreground/70">{notes}</p>}
+                {schema.map((f) => {
+                  if (f.kind === "date") {
+                    return (
+                      <p key={f.key}>
+                        <span className="text-foreground/50">{f.label}:</span>{" "}
+                        {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "—"}
+                      </p>
+                    );
+                  }
+                  const v = values[f.key];
+                  return (
+                    <p key={f.key}>
+                      <span className="text-foreground/50">{f.label}:</span>{" "}
+                      {v ? (f.kind === "money" ? `$${Number(v).toLocaleString()}` : v) : "—"}
+                    </p>
+                  );
+                })}
               </div>
               {similar.length > 0 && (
                 <div className="flex items-start gap-2 rounded-xl border border-[hsl(220_85%_60%)]/30 bg-[hsl(220_85%_97%)] p-3">
