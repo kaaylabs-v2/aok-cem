@@ -232,63 +232,16 @@ const Index = () => {
                             </div>
                             <div className="space-y-1.5">
                               <Label className="text-[11px] text-muted-foreground">Date Range</Label>
-                              {(() => {
-                                const today = new Date(); today.setHours(0,0,0,0);
-                                const presets: { label: string; range: () => { from: Date; to: Date } }[] = [
-                                  { label: "Today", range: () => ({ from: today, to: today }) },
-                                  { label: "Next 7 days", range: () => { const to = new Date(today); to.setDate(to.getDate()+7); return { from: today, to }; } },
-                                  { label: "Next 30 days", range: () => { const to = new Date(today); to.setDate(to.getDate()+30); return { from: today, to }; } },
-                                  { label: "This week", range: () => { const from = new Date(today); from.setDate(from.getDate() - from.getDay()); const to = new Date(from); to.setDate(to.getDate()+6); return { from, to }; } },
-                                  { label: "This month", range: () => ({ from: new Date(today.getFullYear(), today.getMonth(), 1), to: new Date(today.getFullYear(), today.getMonth()+1, 0) }) },
-                                  { label: "Next month", range: () => ({ from: new Date(today.getFullYear(), today.getMonth()+1, 1), to: new Date(today.getFullYear(), today.getMonth()+2, 0) }) },
-                                  { label: "This quarter", range: () => { const q = Math.floor(today.getMonth()/3); return { from: new Date(today.getFullYear(), q*3, 1), to: new Date(today.getFullYear(), q*3+3, 0) }; } },
-                                  { label: "This year", range: () => ({ from: new Date(today.getFullYear(), 0, 1), to: new Date(today.getFullYear(), 11, 31) }) },
-                                ];
-                                const isActive = (r: { from: Date; to: Date }) =>
-                                  date?.from && date?.to &&
-                                  +date.from === +r.from && +date.to === +r.to;
-                                const isPresetMatch = presets.some((p) => isActive(p.range()));
-                                const customActive = (date?.from || date?.to) && !isPresetMatch;
-                                return (
-                                  <>
-                                    <div className="flex flex-wrap gap-1.5">
-                                      {presets.map((p) => {
-                                        const r = p.range();
-                                        const active = isActive(r);
-                                        return (
-                                          <button
-                                            key={p.label}
-                                            type="button"
-                                            onClick={() => setDate(active ? undefined : r)}
-                                            className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${active ? "border-primary bg-primary text-primary-foreground" : "border-border/60 bg-card text-foreground hover:bg-secondary"}`}
-                                          >
-                                            {p.label}
-                                          </button>
-                                        );
-                                      })}
-                                      <button
-                                        type="button"
-                                        onClick={() => setDate(customActive ? undefined : { from: undefined })}
-                                        className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${customActive ? "border-primary bg-primary text-primary-foreground" : "border-border/60 bg-card text-foreground hover:bg-secondary"}`}
-                                      >
-                                        Custom range
-                                      </button>
-                                    </div>
-                                    {customActive && (
-                                      <div className="mt-2 rounded-md border border-border/60 bg-card p-2">
-                                        <Calendar
-                                          mode="range"
-                                          selected={date}
-                                          onSelect={setDate}
-                                          numberOfMonths={1}
-                                          className="pointer-events-auto mx-auto w-full"
-                                          classNames={{ months: "flex flex-col", caption: "flex justify-center pt-0 relative items-center", caption_label: "text-xs font-medium", nav: "space-x-1 flex items-center", nav_button: "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100", nav_button_previous: "absolute left-0", nav_button_next: "absolute right-0", table: "w-full border-collapse space-y-1", head_row: "flex", head_cell: "text-muted-foreground rounded-md w-8 font-normal text-[0.7rem]", row: "flex w-full mt-1", cell: "h-8 w-8 text-center text-xs p-0 relative", day: "h-8 w-8 p-0 font-normal aria-selected:opacity-100", day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground", day_today: "bg-accent text-accent-foreground", day_outside: "text-muted-foreground opacity-50", day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground" }}
-                                        />
-                                      </div>
-                                    )}
-                                  </>
-                                );
-                              })()}
+                              <div className="rounded-md border border-border/60 bg-card p-2">
+                                <Calendar
+                                  mode="range"
+                                  selected={date}
+                                  onSelect={setDate}
+                                  numberOfMonths={1}
+                                  className="pointer-events-auto mx-auto w-full"
+                                  classNames={{ months: "flex flex-col", caption: "flex justify-center pt-0 relative items-center", caption_label: "text-xs font-medium", nav: "space-x-1 flex items-center", nav_button: "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100", nav_button_previous: "absolute left-0", nav_button_next: "absolute right-0", table: "w-full border-collapse space-y-1", head_row: "flex", head_cell: "text-muted-foreground rounded-md w-8 font-normal text-[0.7rem]", row: "flex w-full mt-1", cell: "h-8 w-8 text-center text-xs p-0 relative", day: "h-8 w-8 p-0 font-normal aria-selected:opacity-100", day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground", day_today: "bg-accent text-accent-foreground", day_outside: "text-muted-foreground opacity-50", day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground" }}
+                                />
+                              </div>
                               {(date?.from || date?.to) && (
                                 <p className="text-[11px] text-muted-foreground">
                                   {date.from ? format(date.from, "PP") : ""}
