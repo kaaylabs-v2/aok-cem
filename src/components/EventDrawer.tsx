@@ -30,6 +30,11 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
   const tone = utilisationTone(pct);
   const date = new Date(event.date);
   const seatsLeft = Math.max(event.capacity - event.booked, 0);
+  const isFull = seatsLeft === 0 && !event.past && event.status !== "cancelled";
+  const description = getDescription(event);
+  const dressCode = getDressCode(event);
+  const bookingDeadline = new Date(getBookingDeadline(event));
+  const deadlinePassed = bookingDeadline.getTime() < Date.now();
 
   const toneRing: Record<string, string> = {
     success: "bg-success/10 text-success ring-success/20",
