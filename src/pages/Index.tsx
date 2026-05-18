@@ -37,6 +37,8 @@ const Index = () => {
   const [page, setPage] = useState(1);
   const [cardLimit, setCardLimit] = useState(PAGE_SIZE);
   const [date, setDate] = useState<{ from: Date | undefined; to?: Date } | undefined>(undefined);
+  const [fromOpen, setFromOpen] = useState(false);
+  const [toOpen, setToOpen] = useState(false);
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
@@ -273,7 +275,7 @@ const Index = () => {
                                 })}
                               </div>
                               <div className="flex items-center gap-2">
-                                <Popover>
+                                <Popover open={fromOpen} onOpenChange={setFromOpen}>
                                   <PopoverTrigger asChild>
                                     <Button variant="outline" size="sm" className="h-8 w-full justify-start rounded-md text-[11px] font-normal">
                                       <CalendarIcon className="mr-2 h-3.5 w-3.5" />
@@ -281,11 +283,11 @@ const Index = () => {
                                     </Button>
                                   </PopoverTrigger>
                                   <PopoverContent align="start" className="w-auto p-0">
-                                    <Calendar mode="single" selected={date?.from} onSelect={(d) => setDate(prev => ({ from: d, to: prev?.to }))} defaultMonth={date?.from} captionLayout="dropdown-buttons" fromYear={2020} toYear={2035} initialFocus className="pointer-events-auto" />
+                                    <Calendar mode="single" selected={date?.from} onSelect={(d) => { setDate(prev => ({ from: d, to: prev?.to })); if (d) { setFromOpen(false); setToOpen(true); } }} defaultMonth={date?.from} captionLayout="dropdown-buttons" fromYear={2020} toYear={2035} initialFocus className="pointer-events-auto" />
                                   </PopoverContent>
                                 </Popover>
                                 <span className="text-muted-foreground">–</span>
-                                <Popover>
+                                <Popover open={toOpen} onOpenChange={setToOpen}>
                                   <PopoverTrigger asChild>
                                     <Button variant="outline" size="sm" className="h-8 w-full justify-start rounded-md text-[11px] font-normal">
                                       <CalendarIcon className="mr-2 h-3.5 w-3.5" />
@@ -293,7 +295,7 @@ const Index = () => {
                                     </Button>
                                   </PopoverTrigger>
                                   <PopoverContent align="start" className="w-auto p-0">
-                                    <Calendar mode="single" selected={date?.to} onSelect={(d) => setDate(prev => ({ from: prev?.from, to: d }))} defaultMonth={date?.to} captionLayout="dropdown-buttons" fromYear={2020} toYear={2035} initialFocus className="pointer-events-auto" />
+                                    <Calendar mode="single" selected={date?.to} onSelect={(d) => { setDate(prev => ({ from: prev?.from, to: d })); if (d) setToOpen(false); }} defaultMonth={date?.to ?? date?.from} captionLayout="dropdown-buttons" fromYear={2020} toYear={2035} initialFocus className="pointer-events-auto" />
                                   </PopoverContent>
                                 </Popover>
                               </div>
