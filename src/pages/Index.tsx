@@ -272,19 +272,31 @@ const Index = () => {
                                   );
                                 })}
                               </div>
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <Button variant="outline" size="sm" className="h-8 w-full justify-start rounded-md text-[11px] font-normal">
-                                    <CalendarIcon className="mr-2 h-3.5 w-3.5" />
-                                    {date?.from || date?.to
-                                      ? `${date.from ? format(date.from, "PP") : "…"}${date.to ? ` – ${format(date.to, "PP")}` : ""}`
-                                      : "Custom range"}
-                                  </Button>
-                                </PopoverTrigger>
-                                <PopoverContent align="start" className="w-auto p-0">
-                                  <Calendar mode="range" selected={date} onSelect={setDate} numberOfMonths={1} className="pointer-events-auto" />
-                                </PopoverContent>
-                              </Popover>
+                              <div className="flex items-center gap-2">
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button variant="outline" size="sm" className="h-8 w-full justify-start rounded-md text-[11px] font-normal">
+                                      <CalendarIcon className="mr-2 h-3.5 w-3.5" />
+                                      {date?.from ? format(date.from, "PP") : "From"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent align="start" className="w-auto p-0">
+                                    <Calendar mode="single" selected={date?.from} onSelect={(d) => setDate(prev => ({ from: d, to: prev?.to }))} initialFocus className="pointer-events-auto" />
+                                  </PopoverContent>
+                                </Popover>
+                                <span className="text-muted-foreground">–</span>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button variant="outline" size="sm" className="h-8 w-full justify-start rounded-md text-[11px] font-normal">
+                                      <CalendarIcon className="mr-2 h-3.5 w-3.5" />
+                                      {date?.to ? format(date.to, "PP") : "To"}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent align="start" className="w-auto p-0">
+                                    <Calendar mode="single" selected={date?.to} onSelect={(d) => setDate(prev => ({ from: prev?.from, to: d }))} initialFocus className="pointer-events-auto" />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
                               {(date?.from || date?.to) && (
                                 <button type="button" onClick={() => setDate(undefined)} className="text-[11px] text-muted-foreground underline-offset-2 hover:underline">
                                   Clear date range
