@@ -127,10 +127,29 @@ export interface EnquiryTimelineEvent {
   note?: string;
 }
 
+export type EnquiryType =
+  | "Corporate Hospitality"
+  | "Tickets"
+  | "Private Dining"
+  | "Bespoke Events"
+  | "Venue Find"
+  | "Entertainment"
+  | "Anything Else";
+
+export const enquiryTypes: EnquiryType[] = [
+  "Corporate Hospitality",
+  "Tickets",
+  "Private Dining",
+  "Bespoke Events",
+  "Venue Find",
+  "Entertainment",
+  "Anything Else",
+];
+
 export interface Enquiry {
   id: string;
   ref: string; // ENQ-1023
-  eventType: PortfolioEvent["type"];
+  eventType: EnquiryType;
   preferredDates: string[]; // ISO
   guests: number;
   budget: number; // USD
@@ -171,7 +190,7 @@ export const enquiries: Enquiry[] = [
   {
     id: "q1",
     ref: "ENQ-1023",
-    eventType: "Conference",
+    eventType: "Corporate Hospitality",
     preferredDates: [d(35, 9), d(42, 9)],
     guests: 180,
     budget: 45000,
@@ -204,7 +223,7 @@ export const enquiries: Enquiry[] = [
   {
     id: "q2",
     ref: "ENQ-1024",
-    eventType: "Workshop",
+    eventType: "Bespoke Events",
     preferredDates: [d(20, 14)],
     guests: 35,
     budget: 8000,
@@ -229,7 +248,7 @@ export const enquiries: Enquiry[] = [
   {
     id: "q3",
     ref: "ENQ-1025",
-    eventType: "Gala",
+    eventType: "Private Dining",
     preferredDates: [d(60, 19)],
     guests: 220,
     budget: 120000,
@@ -247,7 +266,7 @@ export const enquiries: Enquiry[] = [
   {
     id: "q4",
     ref: "ENQ-1026",
-    eventType: "Networking",
+    eventType: "Entertainment",
     preferredDates: [d(15, 19)],
     guests: 80,
     budget: 12000,
@@ -273,7 +292,7 @@ export const enquiries: Enquiry[] = [
   {
     id: "q5",
     ref: "ENQ-1027",
-    eventType: "Webinar",
+    eventType: "Anything Else",
     preferredDates: [d(8, 16)],
     guests: 500,
     budget: 4000,
