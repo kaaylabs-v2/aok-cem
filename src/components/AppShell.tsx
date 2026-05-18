@@ -14,10 +14,10 @@ export function AppShell({ children, onOpenNotification }: AppShellProps) {
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-gradient-bg">
         <AppSidebar />
-        <div className="min-w-0 flex-1 p-2 md:p-3">
-          <div className="mx-auto flex min-w-0 max-w-[1600px] flex-col rounded-[2rem] border border-border/60 bg-card/70 shadow-panel backdrop-blur-xl">
+        <div className="flex min-w-0 flex-1 p-2 md:p-3">
+          <div className="mx-auto flex min-w-0 max-w-[1600px] flex-1 flex-col rounded-[2rem] border border-border/60 bg-card/70 shadow-panel backdrop-blur-xl">
             <TopBar onOpenNotification={onOpenNotification} showSidebarTrigger />
-            <main className="px-3 py-4 sm:px-4 sm:py-6 md:px-6">
+            <main className="flex-1 px-3 py-4 sm:px-4 sm:py-6 md:px-6">
               <div className="w-full space-y-6">{children}</div>
             </main>
           </div>
