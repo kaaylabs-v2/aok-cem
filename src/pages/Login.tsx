@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Ticket, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,89 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
 import loginHero from "@/assets/login-hero.jpg";
+
+function InteractiveHero() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [t, setT] = useState({ rx: 0, ry: 0, mx: 50, my: 50, active: false });
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    setT({
+      rx: (0.5 - y) * 10,
+      ry: (x - 0.5) * 14,
+      mx: x * 100,
+      my: y * 100,
+      active: true,
+    });
+  };
+
+  const handleLeave = () => setT({ rx: 0, ry: 0, mx: 50, my: 50, active: false });
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      className="group relative hidden overflow-hidden lg:block"
+      style={{ perspective: "1200px" }}
+    >
+      <div
+        className="absolute inset-0 transition-transform duration-300 ease-out will-change-transform"
+        style={{
+          transform: `rotateX(${t.rx}deg) rotateY(${t.ry}deg) scale(${t.active ? 1.06 : 1})`,
+          transformStyle: "preserve-3d",
+        }}
+      >
+        <img
+          src={loginHero}
+          alt="Live event stage with crowd and tickets"
+          className="absolute inset-0 h-full w-full object-cover"
+          width={1024}
+          height={1280}
+        />
+        {/* cursor spotlight */}
+        <div
+          className="pointer-events-none absolute inset-0 transition-opacity duration-300"
+          style={{
+            opacity: t.active ? 1 : 0,
+            background: `radial-gradient(420px circle at ${t.mx}% ${t.my}%, hsla(0,0%,100%,0.28), transparent 60%)`,
+            mixBlendMode: "screen",
+          }}
+        />
+        {/* color shimmer */}
+        <div
+          className="pointer-events-none absolute inset-0 transition-opacity duration-500"
+          style={{
+            opacity: t.active ? 0.55 : 0,
+            background: `radial-gradient(600px circle at ${t.mx}% ${t.my}%, hsla(280,90%,65%,0.35), hsla(210,90%,60%,0.15) 40%, transparent 70%)`,
+            mixBlendMode: "overlay",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+      </div>
+
+      {/* floating text on top layer */}
+      <div
+        className="pointer-events-none absolute bottom-10 left-10 right-10 text-white transition-transform duration-300 ease-out"
+        style={{
+          transform: `translate3d(${(t.mx - 50) * 0.15}px, ${(t.my - 50) * 0.15}px, 0)`,
+        }}
+      >
+        <h2 className="text-4xl font-bold leading-tight tracking-tight drop-shadow-lg md:text-5xl">
+          DISCOVER.<br />BOOK.<br />EXPERIENCE.
+        </h2>
+        <p className="mt-3 max-w-md text-sm text-white/85">
+          Manage every enquiry, approval and booking for the events that matter most.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 
 export default function Login() {
   const navigate = useNavigate();
