@@ -216,13 +216,46 @@ const Index = () => {
                             </div>
                             <div className="space-y-1.5">
                               <Label className="text-[11px] text-muted-foreground">Venue</Label>
-                              <Select value={venue} onValueChange={setVenue}>
-                                <SelectTrigger className="h-9 w-full"><SelectValue /></SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="all">All venues</SelectItem>
-                                  {venues.map((v) => <SelectItem key={v} value={v}>{v}</SelectItem>)}
-                                </SelectContent>
-                              </Select>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    role="combobox"
+                                    className="h-9 w-full justify-between bg-background px-3 font-normal"
+                                  >
+                                    <span className="flex min-w-0 items-center gap-1.5">
+                                      <MapPin className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                                      <span className="truncate">{venue === "all" ? "All venues" : venue}</span>
+                                    </span>
+                                    <ChevronsUpDown className="ml-2 h-3.5 w-3.5 shrink-0 opacity-50" />
+                                  </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-[280px] p-0" align="start">
+                                  <Command>
+                                    <CommandInput placeholder="Search venues..." className="h-9" />
+                                    <CommandList>
+                                      <CommandEmpty>No venue found.</CommandEmpty>
+                                      <CommandGroup>
+                                        <CommandItem value="all venues" onSelect={() => setVenue("all")}>
+                                          <Check className={cn("mr-2 h-4 w-4", venue === "all" ? "opacity-100" : "opacity-0")} />
+                                          All venues
+                                          <span className="ml-auto text-[11px] text-muted-foreground">{venues.length}</span>
+                                        </CommandItem>
+                                        {venues.map((v) => {
+                                          const count = allEvents.filter((e) => e.venue === v).length;
+                                          return (
+                                            <CommandItem key={v} value={v} onSelect={() => setVenue(v)}>
+                                              <Check className={cn("mr-2 h-4 w-4", venue === v ? "opacity-100" : "opacity-0")} />
+                                              <span className="truncate">{v}</span>
+                                              <span className="ml-auto text-[11px] text-muted-foreground">{count}</span>
+                                            </CommandItem>
+                                          );
+                                        })}
+                                      </CommandGroup>
+                                    </CommandList>
+                                  </Command>
+                                </PopoverContent>
+                              </Popover>
                             </div>
                             <div className="space-y-1.5">
                               <Label className="text-[11px] text-muted-foreground">Type</Label>
