@@ -167,7 +167,7 @@ export function EnquiriesView({ pushNotification }: Props) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All types</SelectItem>
-                {eventTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                {enquiryTypes.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
               </SelectContent>
             </Select>
             <Select value={submitterF} onValueChange={setSubmitterF}>
@@ -445,7 +445,7 @@ function NewEnquiryDialog({
   onSubmit: (e: Enquiry) => void;
 }) {
   const [step, setStep] = useState(0);
-  const [eventType, setEventType] = useState<Enquiry["eventType"]>("Conference");
+  const [eventType, setEventType] = useState<Enquiry["eventType"]>("Corporate Hospitality");
   const [dates, setDates] = useState<Date[]>([]);
   const [guests, setGuests] = useState<number>(50);
   const [budget, setBudget] = useState<number>(10000);
@@ -454,7 +454,7 @@ function NewEnquiryDialog({
   const [audience, setAudience] = useState<"business" | "personal">("business");
 
   const reset = () => {
-    setStep(0); setEventType("Conference"); setDates([]); setGuests(50);
+    setStep(0); setEventType("Corporate Hospitality"); setDates([]); setGuests(50);
     setBudget(10000); setLocation(""); setNotes(""); setAudience("business");
   };
 
@@ -514,7 +514,7 @@ function NewEnquiryDialog({
             <div className="space-y-3">
               <p className="text-sm text-foreground/70">What kind of event are you planning?</p>
               <div className="flex flex-wrap gap-2">
-                {eventTypes.map((t) => (
+                {enquiryTypes.map((t) => (
                   <button
                     key={t}
                     onClick={() => setEventType(t)}
