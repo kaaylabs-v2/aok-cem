@@ -99,6 +99,27 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
 
             <div className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-6 py-5">
               <TabsContent value="overview" className="m-0 space-y-5">
+                {isFull && (
+                  <div className="flex items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+                    <div className="flex items-start gap-2.5">
+                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-emerald-900">Full — join waitlist</p>
+                        <p className="text-xs text-emerald-800/80">
+                          This event is fully booked. {event.waitlist} guest{event.waitlist === 1 ? "" : "s"} already on waitlist.
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      className="shrink-0 rounded-xl bg-emerald-700 text-white hover:bg-emerald-800"
+                      onClick={() => toast.success("Added to waitlist — you'll be notified if a seat opens")}
+                    >
+                      Join waitlist
+                    </Button>
+                  </div>
+                )}
+
                 {/* Hero utilisation card */}
                 <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-card p-5">
                   <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-primary/5 blur-2xl" />
@@ -111,6 +132,53 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                     </div>
                   </div>
                 </div>
+
+                {/* Event details */}
+                <div className="rounded-2xl border border-border/60 bg-card p-4">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-sm font-semibold">About this event</p>
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
+                  <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    <div className="rounded-xl bg-secondary/40 p-3">
+                      <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+                        <Users className="h-3.5 w-3.5" /> Capacity
+                      </div>
+                      <p className="mt-1 text-sm font-semibold tabular-nums">{event.capacity}</p>
+                    </div>
+                    <div className="rounded-xl bg-secondary/40 p-3">
+                      <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+                        <Box className="h-3.5 w-3.5" /> Asset
+                      </div>
+                      <p className="mt-1 truncate text-sm font-semibold">{event.asset}</p>
+                    </div>
+                    <div className="rounded-xl bg-secondary/40 p-3">
+                      <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+                        <Shirt className="h-3.5 w-3.5" /> Dress code
+                      </div>
+                      <p className="mt-1 text-sm font-semibold">{dressCode}</p>
+                    </div>
+                  </div>
+                  <div className={cn(
+                    "mt-3 flex items-center justify-between gap-3 rounded-xl border p-3",
+                    deadlinePassed ? "border-destructive/30 bg-destructive/5" : "border-border/60 bg-secondary/30"
+                  )}>
+                    <div className="flex items-center gap-2">
+                      <CalendarClock className={cn("h-4 w-4", deadlinePassed ? "text-destructive" : "text-muted-foreground")} />
+                      <div>
+                        <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Booking deadline</p>
+                        <p className="text-sm font-semibold">
+                          {bookingDeadline.toLocaleDateString(undefined, { dateStyle: "medium" })} · {bookingDeadline.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                        </p>
+                      </div>
+                    </div>
+                    {deadlinePassed && (
+                      <span className="rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-semibold text-destructive">Closed</span>
+                    )}
+                  </div>
+                </div>
+
 
                 {pct < 50 && !event.past && (
                   <div className="rounded-2xl border border-warning/30 bg-warning/5 p-4">
