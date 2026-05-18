@@ -127,10 +127,29 @@ export interface EnquiryTimelineEvent {
   note?: string;
 }
 
+export type EnquiryType =
+  | "Corporate Hospitality"
+  | "Tickets"
+  | "Private Dining"
+  | "Bespoke Events"
+  | "Venue Find"
+  | "Entertainment"
+  | "Anything Else";
+
+export const enquiryTypes: EnquiryType[] = [
+  "Corporate Hospitality",
+  "Tickets",
+  "Private Dining",
+  "Bespoke Events",
+  "Venue Find",
+  "Entertainment",
+  "Anything Else",
+];
+
 export interface Enquiry {
   id: string;
   ref: string; // ENQ-1023
-  eventType: PortfolioEvent["type"];
+  eventType: EnquiryType;
   preferredDates: string[]; // ISO
   guests: number;
   budget: number; // USD
