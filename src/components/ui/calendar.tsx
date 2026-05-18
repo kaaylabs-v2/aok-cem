@@ -11,14 +11,14 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 function CustomCaption({ displayMonth }: CaptionProps) {
-  const { goToMonth, fromDate, toDate } = useNavigation();
+  const { goToMonth } = useNavigation();
   const [monthOpen, setMonthOpen] = React.useState(false);
   const [yearOpen, setYearOpen] = React.useState(false);
   const currentYear = displayMonth.getFullYear();
   const currentMonth = displayMonth.getMonth();
 
-  const fromYear = fromDate ? fromDate.getFullYear() : currentYear - 10;
-  const toYear = toDate ? toDate.getFullYear() : currentYear + 10;
+  const fromYear = currentYear - 10;
+  const toYear = currentYear + 15;
 
   const yearListRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
