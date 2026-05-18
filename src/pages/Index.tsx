@@ -281,7 +281,7 @@ const Index = () => {
                                     </Button>
                                   </PopoverTrigger>
                                   <PopoverContent align="start" className="w-auto p-0">
-                                    <Calendar mode="single" selected={date?.from} onSelect={(d) => setDate(prev => ({ from: d, to: prev?.to }))} initialFocus className="pointer-events-auto" />
+                                    <Calendar mode="single" selected={date?.from} onSelect={(d) => setDate(prev => ({ from: d, to: prev?.to }))} defaultMonth={date?.from} captionLayout="dropdown-buttons" fromYear={2020} toYear={2035} initialFocus className="pointer-events-auto" />
                                   </PopoverContent>
                                 </Popover>
                                 <span className="text-muted-foreground">–</span>
@@ -293,7 +293,7 @@ const Index = () => {
                                     </Button>
                                   </PopoverTrigger>
                                   <PopoverContent align="start" className="w-auto p-0">
-                                    <Calendar mode="single" selected={date?.to} onSelect={(d) => setDate(prev => ({ from: prev?.from, to: d }))} initialFocus className="pointer-events-auto" />
+                                    <Calendar mode="single" selected={date?.to} onSelect={(d) => setDate(prev => ({ from: prev?.from, to: d }))} defaultMonth={date?.to} captionLayout="dropdown-buttons" fromYear={2020} toYear={2035} initialFocus className="pointer-events-auto" />
                                   </PopoverContent>
                                 </Popover>
                               </div>
