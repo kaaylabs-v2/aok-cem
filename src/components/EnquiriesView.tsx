@@ -15,7 +15,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Enquiry, EnquiryStatus, ENQUIRY_STATUS_LABEL, enquiries as seedEnquiries,
-  eventTypes, events as allEvents, NotificationItem,
+  enquiryTypes, events as allEvents, NotificationItem,
 } from "@/data/portfolio";
 import { format } from "date-fns";
 import { toast } from "sonner";
