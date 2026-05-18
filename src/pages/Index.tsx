@@ -37,6 +37,8 @@ const Index = () => {
   const [page, setPage] = useState(1);
   const [cardLimit, setCardLimit] = useState(PAGE_SIZE);
   const [date, setDate] = useState<{ from: Date | undefined; to?: Date } | undefined>(undefined);
+  const [fromOpen, setFromOpen] = useState(false);
+  const [toOpen, setToOpen] = useState(false);
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
