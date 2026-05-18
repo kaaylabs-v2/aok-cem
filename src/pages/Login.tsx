@@ -483,10 +483,14 @@ export default function Login() {
                 </Link>
               </div>
 
-              <MagneticButton type="submit">Sign In</MagneticButton>
+              <Button type="submit" className="h-11 w-full rounded-lg">
+                Sign In
+              </Button>
 
-              <MagneticButton
+              <Button
+                type="button"
                 variant="outline"
+                className="h-11 w-full rounded-lg"
                 onClick={() => {
                   playClick();
                   toast({ title: "Google Sign-in", description: "Connect Lovable Cloud to enable." });
