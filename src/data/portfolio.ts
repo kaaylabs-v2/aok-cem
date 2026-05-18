@@ -13,7 +13,44 @@ export interface PortfolioEvent {
   type: "Premier League" | "BBC Proms" | "Classical Concert" | "Conference" | "Workshop" | "Networking" | "Webinar" | "Gala";
   status: EventStatus;
   past?: boolean;
+  description?: string;
+  dressCode?: string;
+  bookingDeadline?: string; // ISO
 }
+
+const DRESS_CODE_BY_TYPE: Record<PortfolioEvent["type"], string> = {
+  "Premier League": "Smart casual",
+  "BBC Proms": "Formal / black tie optional",
+  "Classical Concert": "Cocktail / formal",
+  Conference: "Business attire",
+  Workshop: "Smart casual",
+  Networking: "Business casual",
+  Webinar: "No dress code (virtual)",
+  Gala: "Black tie",
+};
+
+const DESCRIPTION_BY_TYPE: Record<PortfolioEvent["type"], string> = {
+  "Premier League": "Premium matchday hospitality including pre-match dining, complimentary bar, padded seating and post-match analysis.",
+  "BBC Proms": "Iconic Royal Albert Hall concert experience with private box access and interval refreshments.",
+  "Classical Concert": "Evening orchestral performance with reserved seating and premium hospitality.",
+  Conference: "Full-day conference access including keynotes, breakout sessions, lunch and networking reception.",
+  Workshop: "Hands-on facilitated session with materials, refreshments and certification.",
+  Networking: "Curated networking event with drinks, canapés and structured introductions.",
+  Webinar: "Live-streamed presentation with interactive Q&A and on-demand replay.",
+  Gala: "Black-tie gala dinner with entertainment, auction and after-party.",
+};
+
+export const getDescription = (e: PortfolioEvent) =>
+  e.description ?? DESCRIPTION_BY_TYPE[e.type];
+export const getDressCode = (e: PortfolioEvent) =>
+  e.dressCode ?? DRESS_CODE_BY_TYPE[e.type];
+export const getBookingDeadline = (e: PortfolioEvent) => {
+  if (e.bookingDeadline) return e.bookingDeadline;
+  const dt = new Date(e.date);
+  dt.setDate(dt.getDate() - 3);
+  dt.setHours(17, 0, 0, 0);
+  return dt.toISOString();
+};
 
 const today = new Date();
 const d = (offsetDays: number, hour = 18) => {
