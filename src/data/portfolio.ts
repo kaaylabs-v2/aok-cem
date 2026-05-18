@@ -10,7 +10,7 @@ export interface PortfolioEvent {
   booked: number;
   waitlist: number;
   wishlist: number;
-  type: "Conference" | "Workshop" | "Networking" | "Webinar" | "Gala";
+  type: "Premier League" | "BBC Proms" | "Classical Concert" | "Conference" | "Workshop" | "Networking" | "Webinar" | "Gala";
   status: EventStatus;
   past?: boolean;
 }
