@@ -88,7 +88,12 @@ export function AppSidebar() {
                 const active = isActive(item.url);
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={active}
+                      tooltip={item.title}
+                      className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:ring-0 data-[active=true]:shadow-elegant data-[active=true]:hover:bg-primary data-[active=true]:hover:text-primary-foreground"
+                    >
                       <NavLink to={item.url} className={`flex items-center gap-3 rounded-lg ${collapsed ? "justify-center" : ""}`}>
                         <item.icon className="h-4 w-4" />
                         {!collapsed && <span className="text-sm font-medium">{item.title}</span>}
@@ -107,7 +112,12 @@ export function AppSidebar() {
             const active = isActive(item.url);
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={active}
+                  tooltip={item.title}
+                  className="data-[active=true]:bg-primary data-[active=true]:text-primary-foreground data-[active=true]:ring-0 data-[active=true]:shadow-elegant data-[active=true]:hover:bg-primary data-[active=true]:hover:text-primary-foreground"
+                >
                   <NavLink to={item.url} className={`flex items-center gap-3 rounded-lg ${collapsed ? "justify-center" : ""}`}>
                     <item.icon className="h-4 w-4" />
                     {!collapsed && <span className="text-sm font-medium">{item.title}</span>}

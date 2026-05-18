@@ -62,14 +62,14 @@
 
     --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 333 86% 52%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 333 86% 35%;
-    --sidebar-accent: 333 80% 44%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 333 70% 46%;
-    --sidebar-ring: 0 0% 100%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 18% 20%;
+    --sidebar-primary: 336 54% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 336 60% 95%;
+    --sidebar-accent-foreground: 336 54% 42%;
+    --sidebar-border: 240 18% 92%;
+    --sidebar-ring: 336 54% 52%;
   }
 
   .dark {
