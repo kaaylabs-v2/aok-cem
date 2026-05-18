@@ -29,24 +29,8 @@ export default function Login() {
     <div className="min-h-screen w-full bg-gradient-bg p-3 md:p-6">
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-[1400px] grid-cols-1 overflow-hidden rounded-[2rem] border border-border/60 bg-card/70 shadow-panel backdrop-blur-xl lg:grid-cols-2">
         {/* Left visual */}
-        <div className="relative hidden lg:block">
-          <img
-            src={loginHero}
-            alt="Live event stage with crowd and tickets"
-            className="absolute inset-0 h-full w-full object-cover"
-            width={1024}
-            height={1280}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <div className="absolute bottom-10 left-10 right-10 text-white">
-            <h2 className="text-4xl font-bold leading-tight tracking-tight md:text-5xl">
-              DISCOVER.<br />BOOK.<br />EXPERIENCE.
-            </h2>
-            <p className="mt-3 max-w-md text-sm text-white/80">
-              Manage every enquiry, approval and booking for the events that matter most.
-            </p>
-          </div>
-        </div>
+        <InteractiveHero />
+
 
         {/* Right form */}
         <div className="flex items-center justify-center p-6 sm:p-10 lg:p-16">
