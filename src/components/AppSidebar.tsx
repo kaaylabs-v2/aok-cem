@@ -30,7 +30,7 @@ const items = [
 const bottomItems = [
   { title: "Settings", url: "/settings", icon: Settings },
   { title: "Support", url: "/support", icon: Headphones },
-  { title: "Log out", url: "/logout", icon: LogOut },
+  { title: "Log out", url: "/login", icon: LogOut },
 ];
 
 export function AppSidebar() {
