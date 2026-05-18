@@ -8,6 +8,7 @@ import IndexV2 from "./pages/IndexV2.tsx";
 import Enquiries from "./pages/Enquiries.tsx";
 import Approvals from "./pages/Approvals.tsx";
 import Reports from "./pages/Reports.tsx";
+import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { DesignToggle } from "./components/DesignToggle";
 
