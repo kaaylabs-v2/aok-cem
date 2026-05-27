@@ -19,11 +19,20 @@ interface Props {
   onOpenChange: (o: boolean) => void;
 }
 
+type PublishState = "published" | "deferred";
+const publishStateStore: Record<string, PublishState> = {};
+
 export function EventDrawer({ event, open, onOpenChange }: Props) {
   const [tab, setTab] = useState("overview");
   const [pendingUpdate, setPendingUpdate] = useState(false);
+  const [publishState, setPublishState] = useState<PublishState>("published");
 
-  useEffect(() => { if (open) setTab("overview"); }, [open, event?.id]);
+  useEffect(() => {
+    if (open && event) {
+      setTab("overview");
+      setPublishState(publishStateStore[event.id] ?? "published");
+    }
+  }, [open, event?.id]);
 
   if (!event) return null;
   const pct = utilisation(event);
@@ -61,13 +70,28 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               <SheetTitle className="text-2xl font-semibold leading-tight tracking-tight">
                 {event.name}
               </SheetTitle>
-              <span className={cn(
-                "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ring-inset",
-                toneRing[tone] ?? toneRing.muted,
-              )}>
-                <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                {pct}% booked
-              </span>
+              <div className="flex shrink-0 flex-col items-end gap-1.5">
+                <span className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ring-inset",
+                  toneRing[tone] ?? toneRing.muted,
+                )}>
+                  <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                  {pct}% booked
+                </span>
+                <span className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ring-inset",
+                  publishState === "published"
+                    ? "bg-primary/10 text-primary ring-primary/20"
+                    : "bg-muted text-muted-foreground ring-border",
+                )}>
+                  {publishState === "published" ? (
+                    <CheckCircle2 className="h-3 w-3" />
+                  ) : (
+                    <PauseCircle className="h-3 w-3" />
+                  )}
+                  {publishState === "published" ? "Published" : "Deferred"}
+                </span>
+              </div>
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
@@ -233,14 +257,30 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
             {/* Sticky footer (overview only) */}
             {tab === "overview" && (
               <div className="shrink-0 border-t border-border/60 bg-background/95 px-6 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-                <div className="flex gap-2">
-                  <Button className="flex-1 rounded-xl bg-gradient-primary shadow-elegant" onClick={() => { toast.success("Event published"); onOpenChange(false); }}>
-                    <CheckCircle2 className="mr-1.5 h-4 w-4" /> Publish
-                  </Button>
-                  <Button variant="outline" className="flex-1 rounded-xl" onClick={() => { toast.info("Event deferred"); onOpenChange(false); }}>
+                {publishState === "published" ? (
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-xl"
+                    onClick={() => {
+                      publishStateStore[event.id] = "deferred";
+                      setPublishState("deferred");
+                      toast.info("Event deferred");
+                    }}
+                  >
                     <PauseCircle className="mr-1.5 h-4 w-4" /> Defer
                   </Button>
-                </div>
+                ) : (
+                  <Button
+                    className="w-full rounded-xl bg-gradient-primary shadow-elegant"
+                    onClick={() => {
+                      publishStateStore[event.id] = "published";
+                      setPublishState("published");
+                      toast.success("Event published");
+                    }}
+                  >
+                    <CheckCircle2 className="mr-1.5 h-4 w-4" /> Publish
+                  </Button>
+                )}
               </div>
             )}
           </Tabs>
