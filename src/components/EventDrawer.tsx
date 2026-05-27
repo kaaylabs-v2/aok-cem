@@ -257,30 +257,39 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
             {/* Sticky footer (overview only) */}
             {tab === "overview" && (
               <div className="shrink-0 border-t border-border/60 bg-background/95 px-6 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-                {publishState === "published" ? (
+                <div className="flex gap-2">
+                  {publishState === "published" ? (
+                    <Button
+                      variant="outline"
+                      className="flex-1 rounded-xl"
+                      onClick={() => {
+                        publishStateStore[event.id] = "deferred";
+                        setPublishState("deferred");
+                        toast.info("Event deferred");
+                      }}
+                    >
+                      <PauseCircle className="mr-1.5 h-4 w-4" /> Defer
+                    </Button>
+                  ) : (
+                    <Button
+                      className="flex-1 rounded-xl bg-gradient-primary shadow-elegant"
+                      onClick={() => {
+                        publishStateStore[event.id] = "published";
+                        setPublishState("published");
+                        toast.success("Event published");
+                      }}
+                    >
+                      <CheckCircle2 className="mr-1.5 h-4 w-4" /> Publish
+                    </Button>
+                  )}
                   <Button
-                    variant="outline"
-                    className="w-full rounded-xl"
-                    onClick={() => {
-                      publishStateStore[event.id] = "deferred";
-                      setPublishState("deferred");
-                      toast.info("Event deferred");
-                    }}
+                    className="flex-1 rounded-xl"
+                    disabled={isFull || event.past || event.status === "cancelled" || publishState === "deferred"}
+                    onClick={() => toast.success("Booking started")}
                   >
-                    <PauseCircle className="mr-1.5 h-4 w-4" /> Defer
+                    <Users className="mr-1.5 h-4 w-4" /> Book
                   </Button>
-                ) : (
-                  <Button
-                    className="w-full rounded-xl bg-gradient-primary shadow-elegant"
-                    onClick={() => {
-                      publishStateStore[event.id] = "published";
-                      setPublishState("published");
-                      toast.success("Event published");
-                    }}
-                  >
-                    <CheckCircle2 className="mr-1.5 h-4 w-4" /> Publish
-                  </Button>
-                )}
+                </div>
               </div>
             )}
           </Tabs>
