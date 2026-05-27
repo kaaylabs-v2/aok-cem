@@ -19,11 +19,20 @@ interface Props {
   onOpenChange: (o: boolean) => void;
 }
 
+type PublishState = "published" | "deferred";
+const publishStateStore: Record<string, PublishState> = {};
+
 export function EventDrawer({ event, open, onOpenChange }: Props) {
   const [tab, setTab] = useState("overview");
   const [pendingUpdate, setPendingUpdate] = useState(false);
+  const [publishState, setPublishState] = useState<PublishState>("published");
 
-  useEffect(() => { if (open) setTab("overview"); }, [open, event?.id]);
+  useEffect(() => {
+    if (open && event) {
+      setTab("overview");
+      setPublishState(publishStateStore[event.id] ?? "published");
+    }
+  }, [open, event?.id]);
 
   if (!event) return null;
   const pct = utilisation(event);
