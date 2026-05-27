@@ -458,7 +458,7 @@ const Index = () => {
                               {viewAll ? "Show pages" : "View all"}
                             </button>
                           </div>
-                          <div className="flex items-center gap-1">
+                          {!viewAll && <div className="flex items-center gap-1">
                             <Button
                               variant="ghost"
                               size="icon"
@@ -494,7 +494,7 @@ const Index = () => {
                             >
                               <ChevronRight className="h-4 w-4" />
                             </Button>
-                          </div>
+                          </div>}
                         </div>
                       );
                     })()}
