@@ -10,7 +10,7 @@ import Approvals from "./pages/Approvals.tsx";
 import Reports from "./pages/Reports.tsx";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import { DesignToggle } from "./components/DesignToggle";
+
 
 const queryClient = new QueryClient();
 
@@ -30,7 +30,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <DesignToggle />
+        
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
