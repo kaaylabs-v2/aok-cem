@@ -9,6 +9,7 @@ import { Calendar, MapPin, Users, CheckCircle2, PauseCircle, Sparkles, FileText,
 import { PortfolioEvent, utilisation, utilisationTone, getDescription, getDressCode, getBookingDeadline } from "@/data/portfolio";
 import { CircularUtilisation } from "./CircularUtilisation";
 import { GuestList } from "./GuestList";
+import { GuestFormDialog } from "./GuestFormDialog";
 import { AuditTrail } from "./AuditTrail";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -26,6 +27,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
   const [tab, setTab] = useState("overview");
   const [pendingUpdate, setPendingUpdate] = useState(false);
   const [publishState, setPublishState] = useState<PublishState>("published");
+  const [bookOpen, setBookOpen] = useState(false);
 
   useEffect(() => {
     if (open && event) {
@@ -285,7 +287,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                   <Button
                     className="flex-1 rounded-xl"
                     disabled={isFull || event.past || event.status === "cancelled" || publishState === "deferred"}
-                    onClick={() => toast.success("Booking started")}
+                    onClick={() => setBookOpen(true)}
                   >
                     <Users className="mr-1.5 h-4 w-4" /> Book
                   </Button>
@@ -295,6 +297,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
           </Tabs>
         </div>
       </SheetContent>
+      <GuestFormDialog open={bookOpen} onOpenChange={setBookOpen} eventId={event.id} />
     </Sheet>
   );
 }
