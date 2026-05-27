@@ -287,7 +287,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                   <Button
                     className="flex-1 rounded-xl"
                     disabled={isFull || event.past || event.status === "cancelled" || publishState === "deferred"}
-                    onClick={() => toast.success("Booking started")}
+                    onClick={() => setBookOpen(true)}
                   >
                     <Users className="mr-1.5 h-4 w-4" /> Book
                   </Button>
@@ -297,6 +297,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
           </Tabs>
         </div>
       </SheetContent>
+      <GuestFormDialog open={bookOpen} onOpenChange={setBookOpen} eventId={event.id} />
     </Sheet>
   );
 }
