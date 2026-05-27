@@ -38,6 +38,7 @@ const Index = () => {
   const PAGE_SIZE = 9;
   const [page, setPage] = useState(1);
   const [cardLimit, setCardLimit] = useState(PAGE_SIZE);
+  const [viewAll, setViewAll] = useState(false);
   const [date, setDate] = useState<{ from: Date | undefined; to?: Date } | undefined>(undefined);
   const [fromOpen, setFromOpen] = useState(false);
   const [toOpen, setToOpen] = useState(false);
@@ -72,7 +73,7 @@ const Index = () => {
     return list;
   }, [scope, statusTab, venue, type, sort, query, date]);
 
-  useEffect(() => { setPage(1); setCardLimit(PAGE_SIZE); }, [scope, statusTab, venue, type, sort, query, view, date]);
+  useEffect(() => { setPage(1); setCardLimit(PAGE_SIZE); setViewAll(false); }, [scope, statusTab, venue, type, sort, query, view, date]);
 
   const summary = useMemo(() => {
     const upcoming = allEvents.filter((e) => !e.past);
@@ -423,12 +424,12 @@ const Index = () => {
                 ) : (
                   <>
                     <EventTable
-                      events={visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)}
+                      events={viewAll ? visible : visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)}
                       onRowClick={openEvent}
                       selectedIds={selectedIds}
                       onToggleSelect={toggleSelect}
                       onToggleSelectAll={() => {
-                        const pageRows = visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+                        const pageRows = viewAll ? visible : visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
                         const allSelected = pageRows.length > 0 && pageRows.every((e) => selectedIds.has(e.id));
                         setSelectedIds(allSelected ? new Set() : new Set(pageRows.map((e) => e.id)));
                       }}
@@ -445,10 +446,19 @@ const Index = () => {
                       }
                       return (
                         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 px-1">
-                          <p className="text-xs text-muted-foreground">
-                            Showing <span className="font-semibold text-foreground">{start}–{end}</span> of {visible.length}
-                          </p>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-3">
+                            <p className="text-xs text-muted-foreground">
+                              Showing <span className="font-semibold text-foreground">{viewAll ? `1–${visible.length}` : `${start}–${end}`}</span> of {visible.length}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => { setViewAll((v) => !v); setPage(1); }}
+                              className="text-xs font-semibold text-primary hover:underline"
+                            >
+                              {viewAll ? "Show pages" : "View all"}
+                            </button>
+                          </div>
+                          {!viewAll && <div className="flex items-center gap-1">
                             <Button
                               variant="ghost"
                               size="icon"
@@ -484,7 +494,7 @@ const Index = () => {
                             >
                               <ChevronRight className="h-4 w-4" />
                             </Button>
-                          </div>
+                          </div>}
                         </div>
                       );
                     })()}
