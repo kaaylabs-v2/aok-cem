@@ -28,53 +28,43 @@ function generateBars(seedSource: string | number, points = 12): number[] {
   return out;
 }
 
-function MiniArea({ current, previous, up }: { current: number[]; previous: number[]; up: boolean }) {
-  const all = [...current, ...previous];
-  const max = Math.max(...all);
-  const min = Math.min(...all);
-  const range = Math.max(1, max - min);
-  const w = 100;
-  const h = 32;
-  const toPts = (data: number[]) => {
-    const stepX = w / (data.length - 1);
-    return data.map((d, i) => {
-      const x = i * stepX;
-      const y = h - ((d - min) / range) * (h - 4) - 2;
-      return [x, y] as const;
-    });
+function PairedBars({ current, previous, up, buckets = 5 }: { current: number[]; previous: number[]; up: boolean; buckets?: number }) {
+  // Down-sample input series into `buckets` averaged groups
+  const sample = (data: number[]) => {
+    const size = Math.max(1, Math.floor(data.length / buckets));
+    const out: number[] = [];
+    for (let i = 0; i < buckets; i++) {
+      const slice = data.slice(i * size, i === buckets - 1 ? data.length : (i + 1) * size);
+      out.push(slice.reduce((a, b) => a + b, 0) / Math.max(1, slice.length));
+    }
+    return out;
   };
-  const curPts = toPts(current);
-  const prevPts = toPts(previous);
-  const curLine = curPts.map(([x, y]) => `${x},${y}`).join(" ");
-  const prevLine = prevPts.map(([x, y]) => `${x},${y}`).join(" ");
-  const area = `0,${h} ${curLine} ${w},${h}`;
-  const last = curPts[curPts.length - 1];
+  const cur = sample(current);
+  const prev = sample(previous);
+  const max = Math.max(...cur, ...prev, 1);
   const color = up ? "hsl(var(--success))" : "hsl(var(--destructive))";
-  const gradId = `mini-area-${up ? "u" : "d"}`;
+
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="h-8 w-full overflow-visible">
-      <polyline
-        fill="none"
-        stroke="hsl(var(--muted-foreground))"
-        strokeOpacity={0.45}
-        strokeWidth={1.25}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeDasharray="2 2"
-        points={prevLine}
-      />
-      <polyline
-        fill="none"
-        stroke={color}
-        strokeWidth={1.75}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        points={curLine}
-      />
-      <circle cx={last[0]} cy={last[1]} r={2.5} fill={color} />
-    </svg>
+    <div className="flex h-16 items-end justify-between gap-2">
+      {cur.map((c, i) => {
+        const p = prev[i];
+        return (
+          <div key={i} className="group/bar flex h-full flex-1 items-end gap-0.5">
+            <div
+              className="flex-1 rounded-t-md bg-muted/70 transition-all"
+              style={{ height: `${(p / max) * 100}%` }}
+            />
+            <div
+              className="flex-1 rounded-t-md transition-all"
+              style={{ height: `${(c / max) * 100}%`, backgroundColor: color }}
+            />
+          </div>
+        );
+      })}
+    </div>
   );
 }
+
 
 export function StatCard({ icon: Icon, label, value, sub, trend, bars }: StatCardProps) {
   const up = trend >= 0;
