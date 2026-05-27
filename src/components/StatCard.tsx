@@ -83,9 +83,8 @@ export function StatCard({ icon: Icon, label, value, sub, trend, bars }: StatCar
         </div>
       </div>
 
-      <div className="mt-4">
-        <MiniArea current={current} previous={previous} up={up} />
-      </div>
+        <PairedBars current={current} previous={previous} up={up} />
+
 
       <div className="mt-2 flex items-center gap-3 text-[10px] text-muted-foreground">
         <span className="inline-flex items-center gap-1">
