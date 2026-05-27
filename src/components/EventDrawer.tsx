@@ -27,6 +27,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
   const [tab, setTab] = useState("overview");
   const [pendingUpdate, setPendingUpdate] = useState(false);
   const [publishState, setPublishState] = useState<PublishState>("published");
+  const [bookOpen, setBookOpen] = useState(false);
 
   useEffect(() => {
     if (open && event) {
