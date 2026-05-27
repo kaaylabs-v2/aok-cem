@@ -70,13 +70,28 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               <SheetTitle className="text-2xl font-semibold leading-tight tracking-tight">
                 {event.name}
               </SheetTitle>
-              <span className={cn(
-                "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ring-inset",
-                toneRing[tone] ?? toneRing.muted,
-              )}>
-                <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                {pct}% booked
-              </span>
+              <div className="flex shrink-0 flex-col items-end gap-1.5">
+                <span className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ring-inset",
+                  toneRing[tone] ?? toneRing.muted,
+                )}>
+                  <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                  {pct}% booked
+                </span>
+                <span className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ring-inset",
+                  publishState === "published"
+                    ? "bg-primary/10 text-primary ring-primary/20"
+                    : "bg-muted text-muted-foreground ring-border",
+                )}>
+                  {publishState === "published" ? (
+                    <CheckCircle2 className="h-3 w-3" />
+                  ) : (
+                    <PauseCircle className="h-3 w-3" />
+                  )}
+                  {publishState === "published" ? "Published" : "Deferred"}
+                </span>
+              </div>
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
