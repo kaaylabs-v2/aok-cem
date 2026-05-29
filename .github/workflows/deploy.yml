@@ -1,0 +1,96 @@
+name: Deploy etx-lovable to ECS
+
+on:
+  push:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+env:
+  AWS_REGION: eu-west-2
+  ECR_REPOSITORY: etx-lovable
+  ECS_CLUSTER: etx-dev
+  ECS_SERVICE: etx-lovable
+  CONTAINER_NAME: etx-lovable
+  TASK_FAMILY: etx-lovable
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 🔐 AWS Credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # 🔍 Verify AWS
+      - name: Verify AWS Identity
+        run: aws sts get-caller-identity
+
+      # 🔑 Login to ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 🧪 Debug (optional)
+      - name: Verify files
+        run: ls -R
+
+      # 📦 Build & Push
+      - name: Build and Push Image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      # 📥 Fetch Task Definition
+      - name: Fetch Task Definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.TASK_FAMILY }} \
+            --query taskDefinition \
+            > task-definition.json
+
+      # 🧹 Clean JSON
+      - name: Clean Task Definition
+        run: |
+          cat task-definition.json | jq 'del(
+            .taskDefinitionArn,
+            .revision,
+            .status,
+            .requiresAttributes,
+            .compatibilities,
+            .registeredAt,
+            .registeredBy
+          )' > cleaned-task-def.json
+
+      # 🔄 Update Image
+      - name: Render Task Definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: cleaned-task-def.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      # 🚀 Deploy
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
