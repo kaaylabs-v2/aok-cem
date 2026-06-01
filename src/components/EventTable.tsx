@@ -92,11 +92,11 @@ export function EventTable({ events, onRowClick, selectedIds, onToggleSelect, on
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-muted-foreground">{e.venue}</td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {date.toLocaleDateString(undefined, { month: "short", day: "numeric" })} ·{" "}
                     {date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
                   </td>
+                  <td className="px-4 py-3 text-muted-foreground">{e.venue}</td>
                   <td className="px-4 py-3 text-muted-foreground">{e.asset}</td>
                   <td className="px-4 py-3">
                     <Badge variant="outline" className={cn("text-[10px] font-semibold uppercase tracking-wide", badge.cls)}>
