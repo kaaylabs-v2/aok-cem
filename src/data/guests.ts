@@ -201,7 +201,7 @@ export const guestApi = {
 
 export const rsvpLabel: Record<RsvpStatus, string> = {
   accepted: "Accepted",
-  declined: "Declined",
+  declined: "Failed",
   pending: "Pending",
 };
 
