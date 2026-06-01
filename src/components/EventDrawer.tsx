@@ -73,7 +73,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               <SheetTitle className="text-2xl font-semibold leading-tight tracking-tight">
                 {event.name}
               </SheetTitle>
-              <div className="flex shrink-0 flex-col items-end gap-1.5">
+              <div className="flex shrink-0 items-center gap-1.5">
                 <span className={cn(
                   "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ring-inset",
                   toneRing[tone] ?? toneRing.muted,
