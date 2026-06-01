@@ -673,7 +673,7 @@ export default function IndexV2() {
                 <span>Utilisation</span>
                 <span>Date</span>
                 <span>Booked</span>
-                <span>Status</span>
+                <span>Booking Availability</span>
               </div>
               {filtered.length === 0 && (
                 <div className="px-3 py-8 text-center text-sm text-foreground/50">No events match your filters.</div>
