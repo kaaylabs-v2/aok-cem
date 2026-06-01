@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, MapPin, Users, CheckCircle2, PauseCircle, Sparkles, FileText, Shirt, CalendarClock, Box, AlertCircle } from "lucide-react";
+import { Calendar, MapPin, Users, CheckCircle2, PauseCircle, Sparkles, FileText, Shirt, CalendarClock, Box, AlertCircle, ExternalLink } from "lucide-react";
 import { PortfolioEvent, utilisation, utilisationTone, getDescription, getDressCode, getBookingDeadline } from "@/data/portfolio";
 import { CircularUtilisation } from "./CircularUtilisation";
 import { GuestList } from "./GuestList";
@@ -65,9 +66,18 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
         <div className="flex h-full flex-col overflow-hidden bg-background sm:rounded-2xl sm:border sm:border-border/60 sm:shadow-2xl">
           {/* Sticky header */}
           <div className="relative shrink-0 border-b border-border/60 bg-gradient-to-br from-primary/8 via-background to-background px-6 pb-5 pt-6">
-            <SheetDescription className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-              Booking details
-            </SheetDescription>
+            <div className="flex items-center justify-between">
+              <SheetDescription className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                Booking details
+              </SheetDescription>
+              <Link
+                to={`/events/${event.id}`}
+                onClick={() => onOpenChange(false)}
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
+              >
+                View full details <ExternalLink className="h-3 w-3" />
+              </Link>
+            </div>
             <div className="mt-1 flex items-start justify-between gap-4 pr-10">
               <SheetTitle className="text-2xl font-semibold leading-tight tracking-tight">
                 {event.name}

@@ -1,4 +1,5 @@
-import { AlertTriangle, Heart, Clock } from "lucide-react";
+import { AlertTriangle, Heart, Clock, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CircularUtilisation } from "./CircularUtilisation";
@@ -78,8 +79,14 @@ export function EventTable({ events, onRowClick, selectedIds, onToggleSelect, on
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <div>
-                        <p className="font-semibold leading-tight">{e.name}</p>
+                      <div className="min-w-0">
+                        <Link
+                          to={`/events/${e.id}`}
+                          onClick={(ev) => ev.stopPropagation()}
+                          className="font-semibold leading-tight text-foreground hover:text-primary hover:underline"
+                        >
+                          {e.name}
+                        </Link>
                         <p className="text-[11px] text-muted-foreground">{e.type}</p>
                       </div>
                       {under && (
