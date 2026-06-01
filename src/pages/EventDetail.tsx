@@ -29,7 +29,7 @@ import {
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-type PublishState = "published" | "deferred";
+type PublishState = "published" | "hidden";
 const publishStateStore: Record<string, PublishState> = {};
 
 export default function EventDetail() {
@@ -111,12 +111,12 @@ export default function EventDetail() {
               size="sm"
               className="rounded-xl"
               onClick={() => {
-                publishStateStore[event.id] = "deferred";
-                setPublishState("deferred");
-                toast.info("Event deferred");
+                publishStateStore[event.id] = "hidden";
+                setPublishState("hidden");
+                toast.info("Event hidden");
               }}
             >
-              <PauseCircle className="mr-1.5 h-4 w-4" /> Defer
+              <PauseCircle className="mr-1.5 h-4 w-4" /> Hide
             </Button>
           ) : (
             <Button
@@ -134,7 +134,7 @@ export default function EventDetail() {
           <Button
             size="sm"
             className="rounded-xl"
-            disabled={isFull || event.past || event.status === "cancelled" || publishState === "deferred"}
+            disabled={isFull || event.past || event.status === "cancelled" || publishState === "hidden"}
             onClick={() => setBookOpen(true)}
           >
             <Users className="mr-1.5 h-4 w-4" /> Book
@@ -174,7 +174,7 @@ export default function EventDetail() {
                 ) : (
                   <PauseCircle className="h-3 w-3" />
                 )}
-                {publishState === "published" ? "Published" : "Deferred"}
+                {publishState === "published" ? "Published" : "Hidden"}
               </span>
               <Badge variant="outline" className="text-[10px] font-semibold uppercase tracking-wide">
                 {event.type}
