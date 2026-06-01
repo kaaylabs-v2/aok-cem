@@ -733,7 +733,7 @@ function NewEnquiryDialog({
                 {enquiryTypes.map((t) => (
                   <button
                     key={t}
-                    onClick={() => { setEventType(t); setValues({}); setDates([]); }}
+                    onClick={() => { setEventType(t); setValues({}); setDates([]); setDateInput(""); }}
                     className={cn(
                       "rounded-full border px-4 py-2 text-sm transition-colors",
                       eventType === t
@@ -803,7 +803,7 @@ function NewEnquiryDialog({
                     return (
                       <p key={f.key}>
                         <span className="text-foreground/50">{f.label}:</span>{" "}
-                        {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "—"}
+                        {dates.length ? formatDates(dates, dateMode) : "—"}
                       </p>
                     );
                   }
