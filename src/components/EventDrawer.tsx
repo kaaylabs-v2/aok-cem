@@ -66,18 +66,9 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
         <div className="flex h-full flex-col overflow-hidden bg-background sm:rounded-2xl sm:border sm:border-border/60 sm:shadow-2xl">
           {/* Sticky header */}
           <div className="relative shrink-0 border-b border-border/60 bg-gradient-to-br from-primary/8 via-background to-background px-6 pb-5 pt-6">
-            <div className="flex items-center justify-between">
-              <SheetDescription className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                Booking details
-              </SheetDescription>
-              <Link
-                to={`/events/${event.id}`}
-                onClick={() => onOpenChange(false)}
-                className="inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
-              >
-                View full details <ExternalLink className="h-3 w-3" />
-              </Link>
-            </div>
+            <SheetDescription className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground pr-10">
+              Booking details
+            </SheetDescription>
             <div className="mt-1 flex items-start justify-between gap-4 pr-10">
               <SheetTitle className="text-2xl font-semibold leading-tight tracking-tight">
                 {event.name}
@@ -110,6 +101,16 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               <span className="inline-flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{date.toLocaleDateString(undefined, { dateStyle: "medium" })} · {date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</span>
               <span className="inline-flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{event.venue}</span>
               <span className="inline-flex items-center gap-1.5"><Users className="h-3.5 w-3.5" />{event.booked}/{event.capacity}</span>
+            </div>
+
+            <div className="mt-4 flex">
+              <Link
+                to={`/events/${event.id}`}
+                onClick={() => onOpenChange(false)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+              >
+                View full details <ExternalLink className="h-3 w-3" />
+              </Link>
             </div>
           </div>
 
