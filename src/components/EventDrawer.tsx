@@ -65,7 +65,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
       >
         <div className="flex h-full flex-col overflow-hidden bg-background sm:rounded-2xl sm:border sm:border-border/60 sm:shadow-2xl">
           {/* Sticky header */}
-          <div className="relative shrink-0 border-b border-border/60 bg-gradient-to-br from-primary/8 via-background to-background px-6 pb-5 pt-6">
+          <div className="relative shrink-0 border-b border-border/60 bg-gradient-to-br from-primary/8 via-background to-background px-6 pb-4 pt-6">
             <SheetDescription className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground pr-10">
               Booking details
             </SheetDescription>
@@ -97,7 +97,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               </div>
             </div>
 
-            <div className="mt-2 inline-flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card px-4 py-2.5 shadow-sm">
+            <div className="mt-1 inline-flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card px-4 py-2.5 shadow-sm">
               <span className="inline-flex items-center gap-2.5">
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-100/60 bg-indigo-50 text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
                   <Calendar className="h-4 w-4" strokeWidth={2.5} />
