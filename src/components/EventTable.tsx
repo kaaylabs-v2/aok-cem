@@ -1,4 +1,4 @@
-import { AlertTriangle, Heart, Clock, ExternalLink } from "lucide-react";
+import { AlertTriangle, Heart, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
