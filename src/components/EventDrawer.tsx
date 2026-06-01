@@ -21,7 +21,7 @@ interface Props {
   onOpenChange: (o: boolean) => void;
 }
 
-type PublishState = "published" | "deferred";
+type PublishState = "published" | "hidden";
 const publishStateStore: Record<string, PublishState> = {};
 
 export function EventDrawer({ event, open, onOpenChange }: Props) {
