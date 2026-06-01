@@ -40,8 +40,8 @@ export function EventTable({ events, onRowClick, selectedIds, onToggleSelect, on
                 />
               </th>
               <th className="px-4 py-3">Event</th>
-              <th className="px-4 py-3">Venue</th>
               <th className="px-4 py-3">Date & time</th>
+              <th className="px-4 py-3">Venue</th>
               <th className="px-4 py-3">Asset</th>
               <th className="px-4 py-3">Booking Availability</th>
               <th className="px-4 py-3 text-right">Bookings</th>
