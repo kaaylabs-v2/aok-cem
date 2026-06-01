@@ -300,7 +300,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                         toast.info("Event deferred");
                       }}
                     >
-                      <PauseCircle className="mr-1.5 h-4 w-4" /> Defer
+                    <PauseCircle className="mr-1.5 h-4 w-4" /> Hide
                     </Button>
                   ) : (
                     <Button
