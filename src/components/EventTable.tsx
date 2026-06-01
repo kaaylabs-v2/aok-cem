@@ -43,7 +43,7 @@ export function EventTable({ events, onRowClick, selectedIds, onToggleSelect, on
               <th className="px-4 py-3">Venue</th>
               <th className="px-4 py-3">Date & time</th>
               <th className="px-4 py-3">Asset</th>
-              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Booking Availability</th>
               <th className="px-4 py-3 text-right">Bookings</th>
               <th className="px-4 py-3 text-center">Utilisation</th>
               <th className="px-4 py-3 text-center">Demand</th>

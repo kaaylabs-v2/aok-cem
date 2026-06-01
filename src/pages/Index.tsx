@@ -202,7 +202,7 @@ const Index = () => {
                               )}
                             </div>
                             <div className="space-y-1.5">
-                              <Label className="text-[11px] text-muted-foreground">Status</Label>
+                              <Label className="text-[11px] text-muted-foreground">Booking Availability</Label>
                               <Select value={statusTab} onValueChange={(v) => setStatusTab(v as StatusTab)}>
                                 <SelectTrigger className="h-9 w-full"><SelectValue /></SelectTrigger>
                                 <SelectContent>
