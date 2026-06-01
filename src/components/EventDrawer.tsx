@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, MapPin, Users, CheckCircle2, PauseCircle, Sparkles, FileText, Shirt, CalendarClock, Box, AlertCircle } from "lucide-react";
+import { Calendar, MapPin, Users, CheckCircle2, PauseCircle, Sparkles, FileText, Shirt, CalendarClock, Box, AlertCircle, ExternalLink } from "lucide-react";
 import { PortfolioEvent, utilisation, utilisationTone, getDescription, getDressCode, getBookingDeadline } from "@/data/portfolio";
 import { CircularUtilisation } from "./CircularUtilisation";
 import { GuestList } from "./GuestList";
