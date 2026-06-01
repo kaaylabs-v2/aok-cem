@@ -142,6 +142,14 @@ export function EventCard({ event, onClick, selected, onToggleSelect }: Props) {
           </div>
         </div>
       </div>
+
+      <Link
+        to={`/events/${event.id}`}
+        onClick={(e) => e.stopPropagation()}
+        className="mt-0.5 inline-flex items-center gap-1 self-end text-[11px] font-medium text-primary hover:underline"
+      >
+        View full details <ExternalLink className="h-3 w-3" />
+      </Link>
     </div>
   );
 }
