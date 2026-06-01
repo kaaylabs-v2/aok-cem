@@ -1,4 +1,5 @@
-import { Calendar, MapPin, Users, AlertTriangle, Heart, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Calendar, MapPin, Users, AlertTriangle, Heart, Clock, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TickBar } from "./TickBar";
