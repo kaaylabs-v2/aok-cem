@@ -97,36 +97,52 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               </div>
             </div>
 
-            <div className="mt-4 inline-flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card px-4 py-2.5 shadow-sm">
-              <span className="inline-flex items-center gap-2.5">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-100/60 bg-indigo-50 text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
-                  <Calendar className="h-4 w-4" strokeWidth={2.5} />
-                </span>
-                <span className="whitespace-nowrap text-[13px] font-semibold tracking-tight text-foreground tabular-nums">
-                  {date.toLocaleDateString(undefined, { dateStyle: "medium" })} <span className="mx-0.5 font-normal text-muted-foreground">·</span> {date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
-                </span>
-              </span>
-              <span className="h-4 w-px bg-border" />
-              <span className="inline-flex items-center gap-2.5">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-100/60 bg-rose-50 text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300">
-                  <MapPin className="h-4 w-4" strokeWidth={2.5} />
-                </span>
-                <span className="whitespace-nowrap text-[13px] font-semibold tracking-tight text-foreground">{event.venue}</span>
-              </span>
-              <span className="h-4 w-px bg-border" />
-              <span className="inline-flex items-center gap-2.5">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-100/60 bg-emerald-50 text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
-                  <Users className="h-4 w-4" strokeWidth={2.5} />
-                </span>
-                <span className="whitespace-nowrap text-[13px] font-semibold tracking-tight text-foreground tabular-nums">{event.booked}/{event.capacity}</span>
-              </span>
+            <div className="mt-5 grid grid-cols-3 gap-3">
+              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-indigo-100/60 bg-indigo-50 text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
+                    <Calendar className="h-3.5 w-3.5" strokeWidth={2.5} />
+                  </span>
+                  <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Date & time</span>
+                </div>
+                <div className="mt-2 text-sm font-semibold tracking-tight text-foreground tabular-nums">
+                  {date.toLocaleDateString(undefined, { dateStyle: "medium" })}
+                </div>
+                <div className="text-xs font-medium text-muted-foreground tabular-nums">
+                  {date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-rose-100/60 bg-rose-50 text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300">
+                    <MapPin className="h-3.5 w-3.5" strokeWidth={2.5} />
+                  </span>
+                  <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Venue</span>
+                </div>
+                <div className="mt-2 truncate text-sm font-semibold tracking-tight text-foreground" title={event.venue}>
+                  {event.venue}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-emerald-100/60 bg-emerald-50 text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
+                    <Users className="h-3.5 w-3.5" strokeWidth={2.5} />
+                  </span>
+                  <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">Seats</span>
+                </div>
+                <div className="mt-2 text-sm font-semibold tracking-tight text-foreground tabular-nums">
+                  {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
+                </div>
+              </div>
             </div>
 
-            <div className="mt-4 flex">
+            <div className="mt-3">
               <Link
                 to={`/events/${event.id}`}
                 onClick={() => onOpenChange(false)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
               >
                 View full details <ExternalLink className="h-3 w-3" />
               </Link>
