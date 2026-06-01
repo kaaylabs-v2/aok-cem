@@ -119,7 +119,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="accepted">Accepted</SelectItem>
             <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="declined">Declined</SelectItem>
+            <SelectItem value="declined">Failed</SelectItem>
             {counts.failed > 0 && (
               <SelectItem value="failed">Failed · {counts.failed}</SelectItem>
             )}
