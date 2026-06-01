@@ -91,55 +91,33 @@ export function EventCard({ event, onClick, selected, onToggleSelect }: Props) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 divide-x divide-border/60 rounded-xl bg-white/60 backdrop-blur-sm">
-        <div className="p-2.5">
-          <div className="flex items-center justify-between text-xs">
-            <span className="font-medium text-foreground/80">Bookings</span>
-            <span className="font-semibold tabular-nums">
-              {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
-            </span>
-          </div>
-          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full bg-foreground/70 transition-all"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
-          <div className="mt-1.5 flex items-center gap-1.5">
-            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-              <Users className="h-3 w-3" strokeWidth={1.75} /> {remaining} left
-            </span>
-            {event.waitlist > 0 && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-1.5 py-0.5 text-[11px] font-semibold text-sky-700">
-                <Clock className="h-3 w-3" strokeWidth={1.75} /> {event.waitlist}
-              </span>
-            )}
-            {event.wishlist > 0 && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-pink-100 px-1.5 py-0.5 text-[11px] font-semibold text-pink-700">
-                <Heart className="h-3 w-3" strokeWidth={1.75} /> {event.wishlist}
-              </span>
-            )}
-          </div>
+      <div className="rounded-xl bg-white/60 backdrop-blur-sm p-2.5">
+        <div className="flex items-center justify-between text-xs">
+          <span className="font-medium text-foreground/80">Bookings</span>
+          <span className="font-semibold tabular-nums">
+            {event.booked}<span className="text-muted-foreground">/{event.capacity}</span>
+          </span>
         </div>
-        <div className="p-2.5">
-          <div className="flex items-center justify-between text-xs">
-            <span className="font-medium text-foreground/80">Utilisation</span>
-            <span
-              className="font-bold tabular-nums"
-              style={{ color: `hsl(var(--${tone}))` }}
-            >
-              {pct}%
+        <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-muted">
+          <div
+            className="h-full rounded-full bg-foreground/70 transition-all"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+        <div className="mt-1.5 flex items-center gap-1.5">
+          <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+            <Users className="h-3 w-3" strokeWidth={1.75} /> {remaining} left
+          </span>
+          {event.waitlist > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-1.5 py-0.5 text-[11px] font-semibold text-sky-700">
+              <Clock className="h-3 w-3" strokeWidth={1.75} /> {event.waitlist}
             </span>
-          </div>
-          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full transition-all"
-              style={{ width: `${pct}%`, backgroundColor: `hsl(var(--${tone}))` }}
-            />
-          </div>
-          <div className="mt-1.5 text-[11px] text-muted-foreground">
-            {pct >= 70 ? "Healthy" : pct >= 40 ? "Needs attention" : "Underperforming"}
-          </div>
+          )}
+          {event.wishlist > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-pink-100 px-1.5 py-0.5 text-[11px] font-semibold text-pink-700">
+              <Heart className="h-3 w-3" strokeWidth={1.75} /> {event.wishlist}
+            </span>
+          )}
         </div>
       </div>
 

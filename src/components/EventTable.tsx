@@ -1,9 +1,8 @@
-import { AlertTriangle, Heart, Clock, ExternalLink } from "lucide-react";
+import { AlertTriangle, Heart, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CircularUtilisation } from "./CircularUtilisation";
-import { SegmentedBar } from "./SegmentedBar";
 import { PortfolioEvent, utilisation, utilisationTone, isUnderperforming } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -46,7 +45,7 @@ export function EventTable({ events, onRowClick, selectedIds, onToggleSelect, on
               <th className="px-4 py-3">Asset</th>
               <th className="px-4 py-3">Booking Availability</th>
               <th className="px-4 py-3 text-right">Bookings</th>
-              <th className="px-4 py-3 text-center">Utilisation</th>
+              
               <th className="px-4 py-3 text-center">Demand</th>
             </tr>
           </thead>
@@ -114,12 +113,6 @@ export function EventTable({ events, onRowClick, selectedIds, onToggleSelect, on
                     <span className="font-semibold">{e.booked}</span>
                     <span className="text-muted-foreground">/{e.capacity}</span>
                     <p className="text-[11px] text-muted-foreground">{remaining} left</p>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <SegmentedBar value={pct} tone={tone} ticks={28} className="h-3 w-28" />
-                      <span className="text-[11px] font-semibold tabular-nums" style={{ color: `hsl(var(--${tone}))` }}>{pct}%</span>
-                    </div>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-1.5 text-[11px]">
