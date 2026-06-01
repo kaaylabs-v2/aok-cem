@@ -97,7 +97,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               </div>
             </div>
 
-            <div className="mt-0.5 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 shadow-sm">
+            <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 shadow-sm">
               <span className="inline-flex items-center gap-2">
                 <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-indigo-100/60 bg-indigo-50 text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
                   <Calendar className="h-3.5 w-3.5" strokeWidth={2.5} />
