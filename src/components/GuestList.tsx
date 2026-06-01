@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -110,36 +111,20 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
             className="h-9 rounded-full border border-border/60 bg-card pl-9 text-xs"
           />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-9 rounded-full border-border/60 bg-card px-3 text-xs font-medium"
-            >
-              {filter === "all" && "All"}
-              {filter === "accepted" && "Accepted"}
-              {filter === "pending" && "Pending"}
-              {filter === "declined" && "Declined"}
-              {filter === "failed" && `Failed · ${counts.failed}`}
-              <ChevronDown className="ml-1.5 h-3.5 w-3.5 opacity-60" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-auto rounded-2xl border-border/60 bg-card p-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <FilterPill active={filter === "all"} onClick={() => setFilter("all")}>All</FilterPill>
-              <FilterPill active={filter === "accepted"} onClick={() => setFilter("accepted")}>Accepted</FilterPill>
-              <FilterPill active={filter === "pending"} onClick={() => setFilter("pending")}>Pending</FilterPill>
-              <FilterPill active={filter === "declined"} onClick={() => setFilter("declined")}>Declined</FilterPill>
-              {counts.failed > 0 && (
-                <FilterPill active={filter === "failed"} onClick={() => setFilter("failed")} tone="warning">
-                  Failed · {counts.failed}
-                </FilterPill>
-              )}
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Select value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
+          <SelectTrigger className="h-9 w-auto min-w-[120px] rounded-full border-border/60 bg-card px-3 text-xs font-medium">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="rounded-xl border-border/60">
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="accepted">Accepted</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="declined">Declined</SelectItem>
+            {counts.failed > 0 && (
+              <SelectItem value="failed">Failed · {counts.failed}</SelectItem>
+            )}
+          </SelectContent>
+        </Select>
         <div className="ml-auto flex gap-2">
           <Button size="sm" variant="outline" className="h-9 rounded-full" onClick={handleSendAll} disabled={counts.notSent === 0}>
             <Send className="mr-1.5 h-3.5 w-3.5" />
