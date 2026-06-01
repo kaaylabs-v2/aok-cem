@@ -92,7 +92,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                   ) : (
                     <PauseCircle className="h-3 w-3" />
                   )}
-                  {publishState === "published" ? "Published" : "Deferred"}
+                  {publishState === "published" ? "Published" : "Hidden"}
                 </span>
               </div>
             </div>
@@ -295,9 +295,9 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                       variant="outline"
                       className="flex-1 rounded-xl"
                       onClick={() => {
-                        publishStateStore[event.id] = "deferred";
-                        setPublishState("deferred");
-                        toast.info("Event deferred");
+                        publishStateStore[event.id] = "hidden";
+                        setPublishState("hidden");
+                        toast.info("Event hidden");
                       }}
                     >
                     <PauseCircle className="mr-1.5 h-4 w-4" /> Hide
@@ -316,7 +316,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                   )}
                   <Button
                     className="flex-1 rounded-xl"
-                    disabled={isFull || event.past || event.status === "cancelled" || publishState === "deferred"}
+                    disabled={isFull || event.past || event.status === "cancelled" || publishState === "hidden"}
                     onClick={() => setBookOpen(true)}
                   >
                     <Users className="mr-1.5 h-4 w-4" /> Book
