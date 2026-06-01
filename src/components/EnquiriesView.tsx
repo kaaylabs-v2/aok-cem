@@ -514,12 +514,43 @@ function NewEnquiryDialog({
   const [clients, setClients] = useState("");
   const [values, setValues] = useState<Record<string, string>>({});
   const [dates, setDates] = useState<Date[]>([]);
+  const [dateMode, setDateMode] = useState<"multiple" | "range">("multiple");
+  const [dateInput, setDateInput] = useState("");
 
   const schema = FIELD_SCHEMA[eventType];
 
+  const formatDates = (ds: Date[], mode: "multiple" | "range") => {
+    if (!ds.length) return "";
+    if (mode === "range" && ds.length >= 2) {
+      const sorted = [...ds].sort((a, b) => +a - +b);
+      return `${format(sorted[0], "PP")} – ${format(sorted[sorted.length - 1], "PP")}`;
+    }
+    return ds.map((d) => format(d, "PP")).join(", ");
+  };
+
+  const commitDateInput = (text: string) => {
+    const t = text.trim();
+    if (!t) { setDates([]); return; }
+    const rangeParts = t.split(/\s*(?:–|—|-|to)\s*/i).filter(Boolean);
+    if (dateMode === "range" && rangeParts.length === 2) {
+      const from = new Date(rangeParts[0]);
+      const to = new Date(rangeParts[1]);
+      if (!isNaN(+from) && !isNaN(+to)) {
+        const next = [from, to].sort((a, b) => +a - +b);
+        setDates(next);
+        setDateInput(formatDates(next, "range"));
+        return;
+      }
+    }
+    const parts = t.split(/\s*,\s*/);
+    const parsed = parts.map((p) => new Date(p)).filter((d) => !isNaN(+d));
+    setDates(parsed);
+    if (parsed.length) setDateInput(formatDates(parsed, dateMode));
+  };
+
   const reset = () => {
     setStep(0); setEventType("Corporate Hospitality"); setAudience("business");
-    setClients(""); setValues({}); setDates([]);
+    setClients(""); setValues({}); setDates([]); setDateMode("multiple"); setDateInput("");
   };
 
   const close = () => { onOpenChange(false); setTimeout(reset, 200); };
@@ -572,22 +603,61 @@ function NewEnquiryDialog({
   const renderField = (f: FieldDef) => {
     if (f.kind === "date") {
       return (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="mt-1.5 w-full justify-start font-normal">
-              <CalendarDays className="mr-2 h-4 w-4" />
-              {dates.length ? dates.map((d) => format(d, "PP")).join(", ") : "Pick date(s)"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="multiple"
-              selected={dates}
-              onSelect={(d) => setDates((d as Date[]) ?? [])}
-              className="pointer-events-auto p-3"
-            />
-          </PopoverContent>
-        </Popover>
+        <div className="mt-1.5 flex gap-2">
+          <Input
+            value={dateInput}
+            onChange={(e) => setDateInput(e.target.value)}
+            onBlur={(e) => commitDateInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); commitDateInput((e.target as HTMLInputElement).value); } }}
+            placeholder={dateMode === "range" ? "e.g. 5 Jan 2026 – 10 Jan 2026" : "e.g. 5 Jan 2026, 12 Jan 2026"}
+            className="flex-1"
+          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="icon" type="button" aria-label="Open calendar">
+                <CalendarDays className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <div className="flex gap-1 border-b p-2">
+                <Button
+                  type="button" size="sm" variant={dateMode === "multiple" ? "default" : "ghost"}
+                  className="h-7 flex-1 text-xs"
+                  onClick={() => { setDateMode("multiple"); setDates([]); setDateInput(""); }}
+                >Multiple</Button>
+                <Button
+                  type="button" size="sm" variant={dateMode === "range" ? "default" : "ghost"}
+                  className="h-7 flex-1 text-xs"
+                  onClick={() => { setDateMode("range"); setDates([]); setDateInput(""); }}
+                >Range</Button>
+              </div>
+              {dateMode === "multiple" ? (
+                <Calendar
+                  mode="multiple"
+                  selected={dates}
+                  onSelect={(d) => {
+                    const next = (d as Date[]) ?? [];
+                    setDates(next);
+                    setDateInput(formatDates(next, "multiple"));
+                  }}
+                  className="pointer-events-auto p-3"
+                />
+              ) : (
+                <Calendar
+                  mode="range"
+                  selected={{ from: dates[0], to: dates[1] }}
+                  onSelect={(r: any) => {
+                    const next = [r?.from, r?.to].filter(Boolean) as Date[];
+                    setDates(next);
+                    setDateInput(formatDates(next, "range"));
+                  }}
+                  numberOfMonths={2}
+                  className="pointer-events-auto p-3"
+                />
+              )}
+            </PopoverContent>
+          </Popover>
+        </div>
       );
     }
     if (f.kind === "textarea") {
