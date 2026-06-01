@@ -97,7 +97,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
               </div>
             </div>
 
-            <div className="mt-0.5 inline-flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 shadow-sm">
+            <div className="mt-0.5 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 shadow-sm">
               <span className="inline-flex items-center gap-2">
                 <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-indigo-100/60 bg-indigo-50 text-indigo-600 dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300">
                   <Calendar className="h-3.5 w-3.5" strokeWidth={2.5} />
@@ -120,13 +120,10 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                 </span>
                 <span className="whitespace-nowrap text-[13px] font-semibold tracking-tight text-foreground tabular-nums leading-none">{event.booked}/{event.capacity}</span>
               </span>
-            </div>
-
-            <div className="mt-4 flex">
               <Link
                 to={`/events/${event.id}`}
                 onClick={() => onOpenChange(false)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+                className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
               >
                 View full details <ExternalLink className="h-3 w-3" />
               </Link>
