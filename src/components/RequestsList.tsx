@@ -390,9 +390,6 @@ export function RequestsList({ eventId }: Props) {
                         <div className="flex items-center gap-2">
                           <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
                           <Chip className={PRIORITY_TONE[r.priority]}>{r.priority}</Chip>
-                          <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                            <Clock className="h-2.5 w-2.5" /> Pending
-                          </span>
                         </div>
                         <p className="mt-0.5 truncate text-xs text-muted-foreground">
                           {r.department} · {r.company} · {r.position} · {r.seniority}
