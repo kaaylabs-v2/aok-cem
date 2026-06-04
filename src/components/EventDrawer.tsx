@@ -10,6 +10,7 @@ import { Calendar, MapPin, Users, CheckCircle2, PauseCircle, Sparkles, FileText,
 import { PortfolioEvent, utilisation, utilisationTone, getDescription, getDressCode, getBookingDeadline } from "@/data/portfolio";
 import { CircularUtilisation } from "./CircularUtilisation";
 import { GuestList } from "./GuestList";
+import { RequestsList } from "./RequestsList";
 import { GuestFormDialog } from "./GuestFormDialog";
 import { AuditTrail } from "./AuditTrail";
 import { cn } from "@/lib/utils";
@@ -137,6 +138,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                 {[
                   { v: "overview", label: "Overview" },
                   { v: "guests", label: "Guest list" },
+                  { v: "requests", label: "Requests" },
                   { v: "audit", label: "Audit" },
                 ].map((t) => (
                   <TabsTrigger
@@ -277,6 +279,12 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                   onSendUpdateAck={() => setPendingUpdate(false)}
                 />
               </TabsContent>
+
+              <TabsContent value="requests" className="m-0">
+                <RequestsList eventId={event.id} />
+              </TabsContent>
+
+
 
               <TabsContent value="audit" className="m-0">
                 <AuditTrail eventId={event.id} />
