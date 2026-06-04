@@ -155,11 +155,13 @@ export function RequestsList({ eventId }: Props) {
   const handleApprove = (r: BookingRequest) => {
     requestApi.approve(eventId, r.id);
     moveToGuestList(r);
+    logAudit(eventId, "Request approved", `${r.firstName} ${r.lastName} · ${r.company}`);
     toast.success("Request approved successfully.");
   };
 
   const handleDecline = (r: BookingRequest, reason: string) => {
     requestApi.decline(eventId, r.id, reason);
+    logAudit(eventId, "Request declined", `${r.firstName} ${r.lastName}`, reason);
     toast.message(`${r.firstName} ${r.lastName} declined`, { description: reason });
   };
 
