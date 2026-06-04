@@ -38,7 +38,7 @@ interface Props {
   eventId: string;
 }
 
-type SortKey = "requestedAt" | "seniority" | "position" | "usageScore" | "acceptanceRate" | "priority";
+type SortKey = "requestedAt" | "seniority" | "position" | "acceptanceRate" | "priority";
 type SortDir = "asc" | "desc";
 
 const SENIORITY_RANK: Record<Seniority, number> = {
@@ -55,7 +55,6 @@ export function RequestsList({ eventId }: Props) {
   const [priorityF, setPriorityF] = useState<string>("all");
   const [deptF, setDeptF] = useState<string>("all");
   const [companyF, setCompanyF] = useState<string>("all");
-  const [usageRange, setUsageRange] = useState<[number, number]>([0, 100]);
   const [acceptRange, setAcceptRange] = useState<[number, number]>([0, 100]);
   const [flaggedOnly, setFlaggedOnly] = useState(false);
 

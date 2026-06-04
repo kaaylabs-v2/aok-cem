@@ -16,37 +16,7 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
   if (!request) return null;
 
   const acceptedCount = Math.round((request.acceptanceRate / 100) * request.previousRequests);
-  const trend = request.usageHistory.map((h) => h.score);
-  const maxScore = Math.max(...trend, request.usageScore, 100);
-  const minScore = Math.min(...trend, 0);
-  const delta = trend.length >= 2 ? trend[trend.length - 1] - trend[0] : 0;
   const reliable = request.noShows === 0;
-
-  const scoreTone =
-    request.usageScore >= 75 ? "success" : request.usageScore >= 50 ? "warning" : "danger";
-
-  const ringColor =
-    scoreTone === "success" ? "hsl(var(--success))" :
-    scoreTone === "warning" ? "hsl(var(--warning))" : "hsl(var(--destructive))";
-
-  const initials = (request.firstName[0] + request.lastName[0]).toUpperCase();
-
-  // Sparkline geometry
-  const w = 280;
-  const h = 70;
-  const pad = 6;
-  const range = Math.max(1, maxScore - minScore);
-  const points = trend.map((v, i) => {
-    const x = pad + (i * (w - pad * 2)) / Math.max(1, trend.length - 1);
-    const y = h - pad - ((v - minScore) / range) * (h - pad * 2);
-    return [x, y] as const;
-  });
-  const path = points.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]},${p[1]}`).join(" ");
-  const areaPath = `${path} L${points[points.length - 1][0]},${h - pad} L${points[0][0]},${h - pad} Z`;
-
-  const TrendIcon = delta > 0 ? TrendingUp : delta < 0 ? TrendingDown : Minus;
-  const trendTone =
-    delta > 0 ? "text-success" : delta < 0 ? "text-destructive" : "text-muted-foreground";
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -57,25 +27,7 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
             Guest history
           </SheetDescription>
 
-
-
-          <div className="relative mt-2 flex items-start gap-4">
-            {/* Score Ring */}
-            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center">
-              <svg viewBox="0 0 36 36" className="h-16 w-16 -rotate-90">
-                <circle cx="18" cy="18" r="15.5" fill="none" stroke="hsl(var(--muted))" strokeWidth="2.5" />
-                <circle
-                  cx="18" cy="18" r="15.5" fill="none" stroke={ringColor} strokeWidth="2.5"
-                  strokeDasharray={`${(request.usageScore / 100) * 97.4} 97.4`}
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-sm font-bold tabular-nums">{request.usageScore}</span>
-                <span className="text-[8px] font-medium uppercase tracking-wide text-muted-foreground">Score</span>
-              </div>
-            </div>
-
+          <div className="mt-2 flex items-start gap-4">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-1.5">
                 <SheetTitle className="text-lg font-semibold leading-tight">
