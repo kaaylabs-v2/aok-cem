@@ -30,7 +30,7 @@ import {
   useRequests, requestApi, BookingRequest, Priority, Seniority,
   FLAG_LABEL, SENIORITY_TONE, PRIORITY_TONE, RiskFlag,
 } from "@/data/requests";
-import { guestApi } from "@/data/guests";
+import { guestApi, logAudit } from "@/data/guests";
 import { RequestHistoryDrawer } from "./RequestHistoryDrawer";
 
 interface Props {
