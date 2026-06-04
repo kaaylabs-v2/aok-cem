@@ -354,11 +354,8 @@ export function RequestsList({ eventId }: Props) {
               {filtered.map((r) => {
                 const d = new Date(r.requestedAt);
 
-
-                const scoreTone = r.usageScore >= 75 ? "success" : r.usageScore >= 50 ? "warning" : "danger";
-                const scoreDot = scoreTone === "success" ? "bg-success" : scoreTone === "warning" ? "bg-warning" : "bg-destructive";
-                const scoreText = scoreTone === "success" ? "text-success" : scoreTone === "warning" ? "text-warning-foreground" : "text-destructive";
                 const hasFlags = r.flags.length > 0;
+
                 return (
                   <li key={r.id} className={cn("transition-colors", selected.has(r.id) ? "bg-primary/5" : hasFlags ? "bg-muted/20" : "")}>
                     <div className="flex items-start gap-3 px-4 py-3">
@@ -394,13 +391,7 @@ export function RequestsList({ eventId }: Props) {
 
                       {/* Right cluster */}
                       <div className="flex shrink-0 items-center gap-6">
-                        <div className="text-right leading-tight">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <span className={cn("h-1.5 w-1.5 rounded-full", scoreDot)} />
-                            <span className={cn("text-xs font-semibold tabular-nums", scoreText)}>Score {r.usageScore}</span>
-                          </div>
-                          <p className="text-[10px] tabular-nums text-muted-foreground">{r.acceptanceRate}% Match</p>
-                        </div>
+
                         <div className="min-w-[78px] text-right leading-tight">
                           <p className="text-xs font-medium tabular-nums text-foreground">
                             {d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })}
