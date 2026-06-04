@@ -15,6 +15,7 @@ import {
 import {
   Search, Plus, Send, MoreHorizontal, RefreshCw, Pencil, Trash2,
   AlertTriangle, BellRing, CheckCircle2, XCircle, Mail, MailX, ChevronDown,
+  Users, Clock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Guest, RsvpStatus, InviteStatus, useGuests, guestApi, rsvpLabel, inviteLabel } from "@/data/guests";
@@ -79,10 +80,10 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
     <div className="space-y-4">
       {/* Stat strip */}
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Stat label="Guests" value={counts.total} />
-        <Stat label="Accepted" value={counts.accepted} tone="success" />
-        <Stat label="Pending" value={counts.pending} tone="muted" />
-        <Stat label="Failed" value={counts.failed} tone="warning" />
+        <Stat icon={Users} label="Guests" value={counts.total} />
+        <Stat icon={CheckCircle2} label="Accepted" value={counts.accepted} tone="success" />
+        <Stat icon={Clock} label="Pending" value={counts.pending} tone="muted" />
+        <Stat icon={AlertTriangle} label="Failed" value={counts.failed} tone="warning" />
       </div>
 
       {hasPendingUpdate && (
@@ -241,17 +242,19 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
 
 /* ---------- Sub-components ---------- */
 
-function Stat({ label, value, tone = "default" }: { label: string; value: number; tone?: "default" | "success" | "warning" | "muted" }) {
+function Stat({ icon: Icon, label, value, tone = "default" }: { icon?: any; label: string; value: number; tone?: "default" | "success" | "warning" | "muted" }) {
   const tones: Record<string, string> = {
-    default: "text-foreground",
+    default: "text-primary",
     success: "text-success",
     warning: "text-warning-foreground",
     muted: "text-muted-foreground",
   };
   return (
-    <div className="flex items-center justify-between border border-border bg-card px-2.5 py-1.5">
-      <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>
-      <p className={cn("text-base font-semibold tabular-nums", tones[tone])}>{value}</p>
+    <div className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-2.5 py-1.5">
+      <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground">
+        {Icon && <Icon className="h-3 w-3" />} {label}
+      </div>
+      <p className={cn("text-base font-semibold leading-none tabular-nums", tones[tone])}>{value}</p>
     </div>
   );
 }
