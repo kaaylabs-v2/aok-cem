@@ -337,82 +337,85 @@ export function RequestsList({ eventId }: Props) {
 
         {/* Table */}
         <div className="overflow-hidden rounded-2xl border border-border bg-card">
-          <div className="overflow-x-auto">
-            <Table className="min-w-[1100px]">
-              <TableHeader>
-                <TableRow className="bg-muted/40 hover:bg-muted/40">
-                  <TableHead className="w-10 px-3">
-                    <Checkbox
-                      checked={filtered.length > 0 && selected.size === filtered.length}
-                      onCheckedChange={toggleSelectAll}
-                      aria-label="Select all"
-                    />
-                  </TableHead>
-                  <TableHead className="px-3 text-xs">Requester</TableHead>
-                  <TableHead className="px-3 text-xs">Company</TableHead>
-                  <TableHead className="px-3 text-xs">Requested For</TableHead>
-                  <SortHead label="Request Date" k="requestedAt" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
-                  <SortHead label="Seniority" k="seniority" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
-                  <SortHead label="Position" k="position" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
-                  <SortHead label="Usage" k="usageScore" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
-                  <SortHead label="Acceptance" k="acceptanceRate" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
-                  <SortHead label="Priority" k="priority" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
-                  <TableHead className="px-3 text-xs">Status</TableHead>
-                  <TableHead className="sticky right-0 z-10 w-[200px] bg-muted/40 px-3 text-xs">Actions</TableHead>
+          <Table className="w-full table-fixed">
+            <colgroup>
+              <col className="w-10" />
+              <col className="w-8" />
+              <col style={{ width: "36%" }} />
+              <col style={{ width: "14%" }} />
+              <col style={{ width: "20%" }} />
+              <col style={{ width: "9%" }} />
+              <col style={{ width: "9%" }} />
+              <col style={{ width: "12%" }} />
+            </colgroup>
+            <TableHeader>
+              <TableRow className="bg-muted/40 hover:bg-muted/40">
+                <TableHead className="h-9 px-2">
+                  <Checkbox
+                    checked={filtered.length > 0 && selected.size === filtered.length}
+                    onCheckedChange={toggleSelectAll}
+                    aria-label="Select all"
+                  />
+                </TableHead>
+                <TableHead className="h-9 px-1" />
+                <TableHead className="h-9 px-3 text-xs">Requester</TableHead>
+                <SortHead label="Request Date" k="requestedAt" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
+                <TableHead className="h-9 px-3 text-xs">Risk</TableHead>
+                <SortHead label="Priority" k="priority" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
+                <TableHead className="h-9 px-3 text-xs">Status</TableHead>
+                <TableHead className="h-9 px-3 text-right text-xs">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filtered.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="h-24 text-center text-sm text-muted-foreground">
+                    No pending requests match this view
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={12} className="h-24 text-center text-sm text-muted-foreground">
-                      No pending requests match this view
-                    </TableCell>
-                  </TableRow>
-                ) : filtered.map((r) => {
-                  const d = new Date(r.requestedAt);
-                  return (
-                    <TableRow key={r.id} className={cn("text-sm", selected.has(r.id) && "bg-primary/5")}>
-                      <TableCell className="px-3 py-3">
+              ) : filtered.map((r) => {
+                const d = new Date(r.requestedAt);
+                const isOpen = expanded.has(r.id);
+                const acceptedCount = Math.round((r.acceptanceRate / 100) * r.previousRequests);
+                return (
+                  <>
+                    <TableRow key={r.id} className={cn("text-sm align-middle", selected.has(r.id) && "bg-primary/5")}>
+                      <TableCell className="px-2 py-2">
                         <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} />
                       </TableCell>
-                      <TableCell className="px-3 py-3">
-                        <div className="flex items-center gap-2.5">
+                      <TableCell className="px-1 py-2">
+                        <button
+                          onClick={() => toggleExpand(r.id)}
+                          className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+                          aria-label={isOpen ? "Collapse" : "Expand"}
+                        >
+                          {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+                        </button>
+                      </TableCell>
+                      <TableCell className="px-3 py-2">
+                        <div className="flex items-center gap-2.5 min-w-0">
                           <Avatar className="h-8 w-8 shrink-0"><AvatarFallback className="bg-primary/10 text-[11px] text-primary">{initials(r)}</AvatarFallback></Avatar>
-                          <div className="min-w-0">
-                            <p className="truncate font-medium leading-tight">{r.firstName} {r.lastName}</p>
-                            <p className="truncate text-[11px] text-muted-foreground">{r.department}</p>
-                            {r.flags.length > 0 && (
-                              <div className="mt-1 flex flex-wrap gap-1">
-                                {r.flags.map((f) => <FlagChip key={f} flag={f} />)}
-                              </div>
-                            )}
+                          <div className="min-w-0 leading-tight">
+                            <p className="truncate text-sm font-medium">{r.firstName} {r.lastName}</p>
+                            <p className="truncate text-[11px] text-muted-foreground">{r.department} · {r.company}</p>
+                            <p className="truncate text-[11px] text-muted-foreground">{r.position} · {r.seniority}</p>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="px-3 py-3 text-xs text-muted-foreground">{r.company}</TableCell>
-                      <TableCell className="px-3 py-3 text-xs">{r.requestedFor}</TableCell>
-                      <TableCell className="px-3 py-3 text-xs">
-                        <div className="tabular-nums">{d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })}</div>
+                      <TableCell className="px-3 py-2 text-xs">
+                        <div className="tabular-nums leading-tight">{d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })}</div>
                         <div className="text-[11px] tabular-nums text-muted-foreground">{d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</div>
                       </TableCell>
-                      <TableCell className="px-3 py-3"><Chip className={SENIORITY_TONE[r.seniority]}>{r.seniority}</Chip></TableCell>
-                      <TableCell className="px-3 py-3 text-xs">{r.position}</TableCell>
-                      <TableCell className="px-3 py-3"><UsageScore value={r.usageScore} /></TableCell>
-                      <TableCell className="px-3 py-3">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="cursor-help text-xs font-medium tabular-nums">{r.acceptanceRate}%</span>
-                          </TooltipTrigger>
-                          <TooltipContent>Percentage of invitations accepted historically.</TooltipContent>
-                        </Tooltip>
+                      <TableCell className="px-3 py-2">
+                        <RiskCell score={r.usageScore} acceptance={r.acceptanceRate} flags={r.flags} />
                       </TableCell>
-                      <TableCell className="px-3 py-3"><Chip className={PRIORITY_TONE[r.priority]}>{r.priority}</Chip></TableCell>
-                      <TableCell className="px-3 py-3">
+                      <TableCell className="px-3 py-2"><Chip className={PRIORITY_TONE[r.priority]}>{r.priority}</Chip></TableCell>
+                      <TableCell className="px-3 py-2">
                         <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
                           <Clock className="h-3 w-3" /> Pending
                         </span>
                       </TableCell>
-                      <TableCell className="sticky right-0 z-10 w-[200px] bg-card px-3 py-3">
+                      <TableCell className="px-3 py-2">
                         <div className="flex justify-end gap-1">
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -422,21 +425,45 @@ export function RequestsList({ eventId }: Props) {
                             </TooltipTrigger>
                             <TooltipContent>View history</TooltipContent>
                           </Tooltip>
-                          <Button size="sm" variant="outline" className="h-7 rounded-full px-2.5 text-[11px]" onClick={() => setDeclineFor(r)}>
-                            <XCircle className="mr-1 h-3 w-3 text-destructive" /> Decline
-                          </Button>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setDeclineFor(r)}>
+                                <XCircle className="h-3.5 w-3.5 text-destructive" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>Decline</TooltipContent>
+                          </Tooltip>
                           <Button size="sm" className="h-7 rounded-full bg-success px-2.5 text-[11px] text-white hover:bg-success/90" onClick={() => handleApprove(r)}>
                             <CheckCircle2 className="mr-1 h-3 w-3" /> Approve
                           </Button>
                         </div>
                       </TableCell>
                     </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
+                    {isOpen && (
+                      <TableRow key={r.id + "-exp"} className="bg-muted/20 hover:bg-muted/20">
+                        <TableCell colSpan={8} className="px-4 py-3">
+                          <div className="grid gap-3 sm:grid-cols-4">
+                            <ExpandStat label="Position" value={`${r.position}`} sub={r.seniority} />
+                            <ExpandStat label="Usage score" value={`${r.usageScore}/100`} sub={`Trend ${r.usageHistory.map(h => h.score).join(" · ")}`} />
+                            <ExpandStat label="Acceptance" value={`${r.acceptanceRate}%`} sub={`${acceptedCount}/${r.previousRequests} accepted`} />
+                            <ExpandStat label="Previous bookings" value={`${r.previousBookings}`} sub={`${r.noShows} no-show${r.noShows === 1 ? "" : "s"}`} />
+                          </div>
+                          <p className="mt-2 text-xs text-muted-foreground">{r.attendanceSummary}</p>
+                          {r.flags.length > 0 && (
+                            <div className="mt-2 flex flex-wrap gap-1">
+                              {r.flags.map((f) => <FlagChip key={f} flag={f} />)}
+                            </div>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </>
+                );
+              })}
+            </TableBody>
+          </Table>
         </div>
+
 
         <p className="text-[11px] text-muted-foreground">
           Sorted by {sortKey === "requestedAt" ? "request date" : sortKey} ({sortDir === "asc" ? "ascending" : "descending"}).
