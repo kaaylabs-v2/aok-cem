@@ -10,6 +10,7 @@ import { Calendar, MapPin, Users, CheckCircle2, PauseCircle, Sparkles, FileText,
 import { PortfolioEvent, utilisation, utilisationTone, getDescription, getDressCode, getBookingDeadline } from "@/data/portfolio";
 import { CircularUtilisation } from "./CircularUtilisation";
 import { GuestList } from "./GuestList";
+import { RequestsList } from "./RequestsList";
 import { GuestFormDialog } from "./GuestFormDialog";
 import { AuditTrail } from "./AuditTrail";
 import { cn } from "@/lib/utils";

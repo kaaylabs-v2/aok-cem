@@ -134,6 +134,11 @@ const log = (eventId: string, action: string, target?: string, previous?: string
   audits.push({ id: uid(), eventId, actor: ACTOR, action, target, previous, timestamp: new Date().toISOString() });
 };
 
+export function logAudit(eventId: string, action: string, target?: string, previous?: string) {
+  log(eventId, action, target, previous);
+  emit();
+}
+
 export const guestApi = {
   add(eventId: string, g: Omit<Guest, "id" | "eventId" | "rsvp" | "invite">, sendInvite = false) {
     const list = store[eventId] ?? [];
