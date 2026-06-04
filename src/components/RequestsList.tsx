@@ -23,7 +23,6 @@ import {
 import {
   AlertTriangle, ArrowDownUp, ArrowDown, ArrowUp, CheckCircle2, XCircle,
   History, Search, Filter, Download, Inbox, Clock, Flame, Flag,
-  ChevronDown, ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";

@@ -1,7 +1,6 @@
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { BookingRequest, FLAG_LABEL, PRIORITY_TONE, PRIORITY_LABEL, SENIORITY_TONE } from "@/data/requests";
 import {
-  Calendar, CheckCircle2, XCircle, TrendingUp, TrendingDown, Minus,
   AlertCircle, Briefcase, Mail, Building2, BadgeCheck, Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -61,39 +60,6 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
         </div>
 
         <div className="space-y-4 px-5 py-5">
-          {/* Usage Trend with sparkline */}
-          <Section
-            title="Usage Score · 3-month trend"
-            badge={
-              <span className={cn("inline-flex items-center gap-1 rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold tabular-nums", trendTone)}>
-                <TrendIcon className="h-2.5 w-2.5" />
-                {delta > 0 ? "+" : ""}{delta}
-              </span>
-            }
-          >
-            <svg viewBox={`0 0 ${w} ${h}`} className="w-full" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="spark-fill" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor={ringColor} stopOpacity="0.25" />
-                  <stop offset="100%" stopColor={ringColor} stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <path d={areaPath} fill="url(#spark-fill)" />
-              <path d={path} fill="none" stroke={ringColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              {points.map((p, i) => (
-                <circle key={i} cx={p[0]} cy={p[1]} r={i === points.length - 1 ? 3 : 2} fill={ringColor} />
-              ))}
-            </svg>
-            <div className="mt-1 flex justify-between px-1">
-              {request.usageHistory.map((p) => (
-                <div key={p.month} className="flex flex-col items-center">
-                  <span className="text-[10px] font-semibold tabular-nums text-foreground">{p.score}</span>
-                  <span className="text-[9px] uppercase tracking-wide text-muted-foreground">{p.month}</span>
-                </div>
-              ))}
-            </div>
-          </Section>
-
           {/* Acceptance breakdown */}
           <Section title="Acceptance breakdown">
             <div className="flex items-baseline justify-between">
