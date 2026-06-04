@@ -280,6 +280,12 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                 />
               </TabsContent>
 
+              <TabsContent value="requests" className="m-0">
+                <RequestsList eventId={event.id} />
+              </TabsContent>
+
+
+
               <TabsContent value="audit" className="m-0">
                 <AuditTrail eventId={event.id} />
               </TabsContent>
