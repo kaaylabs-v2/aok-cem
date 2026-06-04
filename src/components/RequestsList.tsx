@@ -394,7 +394,7 @@ export function RequestsList({ eventId }: Props) {
                       </TableCell>
                       <TableCell className="px-3 py-2">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <Avatar className="h-8 w-8 shrink-0"><AvatarFallback className="bg-primary/10 text-[11px] text-primary">{initials(r)}</AvatarFallback></Avatar>
+                          {/* avatar removed */}
                           <div className="min-w-0 leading-tight">
                             <p className="truncate text-sm font-medium">{r.firstName} {r.lastName}</p>
                             <p className="truncate text-[11px] text-muted-foreground">{r.department} · {r.company}</p>
