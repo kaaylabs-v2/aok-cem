@@ -383,10 +383,11 @@ export function RequestsList({ eventId }: Props) {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
+                          <Chip className={SENIORITY_TONE[r.seniority]}>{r.seniority}</Chip>
                           <Chip className={PRIORITY_TONE[r.priority]}>{PRIORITY_LABEL[r.priority]}</Chip>
                         </div>
                         <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                          {r.department} · {r.company} · {r.position} · {r.seniority}
+                          {r.department} · {r.company} · {r.position}
                         </p>
                         {hasFlags && (
                           <div className="mt-2 flex flex-wrap gap-1">
