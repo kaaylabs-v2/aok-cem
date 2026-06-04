@@ -365,8 +365,8 @@ export function RequestsList({ eventId }: Props) {
             <ul className="divide-y divide-border">
               {filtered.map((r) => {
                 const d = new Date(r.requestedAt);
-                const isOpen = expanded.has(r.id);
-                const acceptedCount = Math.round((r.acceptanceRate / 100) * r.previousRequests);
+
+
                 const scoreTone = r.usageScore >= 75 ? "success" : r.usageScore >= 50 ? "warning" : "danger";
                 const scoreDot = scoreTone === "success" ? "bg-success" : scoreTone === "warning" ? "bg-warning" : "bg-destructive";
                 const scoreText = scoreTone === "success" ? "text-success" : scoreTone === "warning" ? "text-warning-foreground" : "text-destructive";
@@ -374,16 +374,10 @@ export function RequestsList({ eventId }: Props) {
                 return (
                   <li key={r.id} className={cn("transition-colors", selected.has(r.id) ? "bg-primary/5" : hasFlags ? "bg-muted/20" : "")}>
                     <div className="flex items-start gap-3 px-4 py-3">
-                      <div className="flex items-center gap-2 pt-0.5">
+                      <div className="flex items-center pt-0.5">
                         <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} />
-                        <button
-                          onClick={() => toggleExpand(r.id)}
-                          className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
-                          aria-label={isOpen ? "Collapse" : "Expand"}
-                        >
-                          {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-                        </button>
                       </div>
+
 
                       {/* Identity */}
                       <div className="min-w-0 flex-1">
@@ -447,94 +441,13 @@ export function RequestsList({ eventId }: Props) {
                       </div>
                     </div>
 
-                    {isOpen && (() => {
-                      const trend = r.usageHistory.map((h) => h.score);
-                      const maxTrend = Math.max(...trend, 1);
-                      const delta = trend.length >= 2 ? trend[trend.length - 1] - trend[0] : 0;
-                      const deltaTone = delta > 0 ? "text-success" : delta < 0 ? "text-destructive" : "text-muted-foreground";
-                      const reliable = r.noShows === 0;
-                      return (
-                        <div className="border-t border-border bg-muted/20">
-                          <div className="grid grid-cols-2 items-center gap-4 px-4 py-3 sm:grid-cols-4">
-                            {/* Position */}
-                            <div className="flex flex-col gap-1">
-                              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Position</span>
-                              <span className="text-xs font-semibold text-foreground">
-                                {r.position} <span className="ml-1 font-medium text-muted-foreground">({r.seniority})</span>
-                              </span>
-                            </div>
-
-                            {/* Usage Score with sparkline */}
-                            <div className="flex flex-col gap-1">
-                              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Usage Score</span>
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs font-semibold tabular-nums text-foreground">{r.usageScore}/100</span>
-                                <div className="flex h-3 items-end gap-0.5">
-                                  {trend.map((v, i) => {
-                                    const h = Math.max(2, Math.round((v / maxTrend) * 12));
-                                    const isLast = i === trend.length - 1;
-                                    return (
-                                      <div
-                                        key={i}
-                                        className={cn("w-1 rounded-t-[1px]", isLast ? "bg-success" : i === trend.length - 2 ? "bg-muted-foreground/40" : "bg-muted-foreground/20")}
-                                        style={{ height: `${h}px` }}
-                                      />
-                                    );
-                                  })}
-                                </div>
-                                {delta !== 0 && (
-                                  <span className={cn("text-[9px] font-bold tabular-nums", deltaTone)}>
-                                    {delta > 0 ? "+" : ""}{delta}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* Acceptance with progress bar */}
-                            <div className="flex flex-col gap-1">
-                              <div className="flex items-center justify-between">
-                                <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Acceptance</span>
-                                <span className="text-[10px] font-semibold tabular-nums text-muted-foreground">{acceptedCount}/{r.previousRequests}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <div className="h-1 flex-1 overflow-hidden rounded-full bg-muted">
-                                  <div className="h-full rounded-full bg-success" style={{ width: `${r.acceptanceRate}%` }} />
-                                </div>
-                                <span className="text-[10px] font-semibold tabular-nums text-foreground">{r.acceptanceRate}%</span>
-                              </div>
-                            </div>
-
-                            {/* Reliability */}
-                            <div className="flex flex-col gap-1">
-                              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Reliability</span>
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs font-semibold tabular-nums text-foreground">{r.previousBookings} events</span>
-                                <span className={cn(
-                                  "rounded border px-1 py-0.5 text-[9px] font-bold uppercase tracking-tight",
-                                  reliable
-                                    ? "border-success/30 bg-success/10 text-success"
-                                    : "border-warning/30 bg-warning/10 text-warning-foreground"
-                                )}>
-                                  {reliable ? "Perfect" : `${r.noShows} no-show${r.noShows === 1 ? "" : "s"}`}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Micro footer */}
-                          <div className="flex items-center gap-2 border-t border-border/60 px-4 py-1.5">
-                            <span className={cn("h-1 w-1 rounded-full", reliable ? "bg-success" : "bg-warning")} />
-                            <span className="text-[10px] font-medium text-muted-foreground">{r.attendanceSummary}</span>
-                          </div>
-                        </div>
-                      );
-                    })()}
                   </li>
                 );
               })}
             </ul>
           )}
         </div>
+
 
 
 
