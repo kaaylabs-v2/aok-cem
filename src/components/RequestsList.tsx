@@ -374,16 +374,10 @@ export function RequestsList({ eventId }: Props) {
                 return (
                   <li key={r.id} className={cn("transition-colors", selected.has(r.id) ? "bg-primary/5" : hasFlags ? "bg-muted/20" : "")}>
                     <div className="flex items-start gap-3 px-4 py-3">
-                      <div className="flex items-center gap-2 pt-0.5">
+                      <div className="flex items-center pt-0.5">
                         <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} />
-                        <button
-                          onClick={() => toggleExpand(r.id)}
-                          className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
-                          aria-label={isOpen ? "Collapse" : "Expand"}
-                        >
-                          {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-                        </button>
                       </div>
+
 
                       {/* Identity */}
                       <div className="min-w-0 flex-1">
