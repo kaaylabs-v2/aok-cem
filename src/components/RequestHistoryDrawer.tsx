@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { BookingRequest, FLAG_LABEL, PRIORITY_TONE } from "@/data/requests";
+import { BookingRequest, FLAG_LABEL, PRIORITY_TONE, PRIORITY_LABEL } from "@/data/requests";
 import {
   Calendar, CheckCircle2, XCircle, TrendingUp, TrendingDown, Minus,
   AlertCircle, Briefcase, Mail, Building2, BadgeCheck, Sparkles,
@@ -82,7 +82,7 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
                   {request.firstName} {request.lastName}
                 </SheetTitle>
                 <span className={cn("rounded-full border px-1.5 py-0.5 text-[10px] font-semibold", PRIORITY_TONE[request.priority])}>
-                  {request.priority}
+                  {PRIORITY_LABEL[request.priority]}
                 </span>
               </div>
               <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">

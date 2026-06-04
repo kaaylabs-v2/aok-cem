@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import {
   useRequests, requestApi, BookingRequest, Priority, Seniority,
-  FLAG_LABEL, SENIORITY_TONE, PRIORITY_TONE, RiskFlag,
+  FLAG_LABEL, SENIORITY_TONE, PRIORITY_TONE, PRIORITY_LABEL, RiskFlag,
 } from "@/data/requests";
 import { guestApi, logAudit } from "@/data/guests";
 import { RequestHistoryDrawer } from "./RequestHistoryDrawer";
@@ -183,7 +183,7 @@ export function RequestsList({ eventId }: Props) {
 
   const handleExport = () => {
     const rows = filtered.length ? filtered : requests;
-    const header = ["Name", "Email", "Company", "Department", "Position", "Seniority", "Priority", "Usage Score", "Acceptance Rate", "Requested At", "Flags"];
+    const header = ["Name", "Email", "Company", "Department", "Position", "Seniority", "Group", "Usage Score", "Acceptance Rate", "Requested At", "Flags"];
     const csv = [header.join(",")].concat(
       rows.map((r) => [
         `${r.firstName} ${r.lastName}`, r.email, r.company, r.department, r.position,
@@ -215,7 +215,7 @@ export function RequestsList({ eventId }: Props) {
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <Kpi icon={Inbox} label="Pending Requests" value={kpis.pending} />
           <Kpi icon={Clock} label="Awaiting Review" value={kpis.awaiting} tone="muted" />
-          <Kpi icon={Flame} label="High Priority" value={kpis.high} tone="danger" />
+          <Kpi icon={Flame} label="Executive" value={kpis.high} tone="danger" />
           <Kpi icon={Flag} label="Flagged" value={kpis.flagged} tone="warning" />
         </div>
 
@@ -278,8 +278,8 @@ export function RequestsList({ eventId }: Props) {
             <PopoverContent align="end" className="w-80 space-y-3 p-3">
               <FilterRow label="Seniority" value={seniorityF} onChange={setSeniorityF}
                 options={[["all","All"],["Partner","Partner"],["Director","Director"],["VP","VP"],["Manager","Manager"],["Associate","Associate"]]} />
-              <FilterRow label="Priority" value={priorityF} onChange={setPriorityF}
-                options={[["all","All"],["High","High"],["Medium","Medium"],["Low","Low"]]} />
+              <FilterRow label="Group" value={priorityF} onChange={setPriorityF}
+                options={[["all","All"],["High","Executive"],["Medium","Team"],["Low","Guest"]]} />
               <FilterRow label="Department" value={deptF} onChange={setDeptF}
                 options={[["all","All"], ...departments.map((d) => [d, d] as [string,string])]} />
               <FilterRow label="Company" value={companyF} onChange={setCompanyF}
@@ -383,7 +383,7 @@ export function RequestsList({ eventId }: Props) {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
-                          <Chip className={PRIORITY_TONE[r.priority]}>{r.priority}</Chip>
+                          <Chip className={PRIORITY_TONE[r.priority]}>{PRIORITY_LABEL[r.priority]}</Chip>
                         </div>
                         <p className="mt-0.5 truncate text-xs text-muted-foreground">
                           {r.department} · {r.company} · {r.position} · {r.seniority}
