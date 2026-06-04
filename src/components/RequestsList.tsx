@@ -365,7 +365,7 @@ export function RequestsList({ eventId }: Props) {
             <ul className="divide-y divide-border">
               {filtered.map((r) => {
                 const d = new Date(r.requestedAt);
-                const acceptedCount = Math.round((r.acceptanceRate / 100) * r.previousRequests);
+
 
                 const scoreTone = r.usageScore >= 75 ? "success" : r.usageScore >= 50 ? "warning" : "danger";
                 const scoreDot = scoreTone === "success" ? "bg-success" : scoreTone === "warning" ? "bg-warning" : "bg-destructive";
