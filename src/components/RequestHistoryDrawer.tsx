@@ -57,8 +57,7 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
             Guest history
           </SheetDescription>
 
-            Guest history
-          </SheetDescription>
+
 
           <div className="relative mt-2 flex items-start gap-4">
             {/* Score Ring */}
