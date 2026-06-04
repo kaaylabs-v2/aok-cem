@@ -156,7 +156,13 @@ export const SENIORITY_TONE: Record<Seniority, string> = {
 };
 
 export const PRIORITY_TONE: Record<Priority, string> = {
-  High: "bg-[hsl(0_75%_94%)] text-[hsl(0_75%_42%)] border-[hsl(0_60%_85%)]",
-  Medium: "bg-[hsl(45_95%_92%)] text-[hsl(35_85%_38%)] border-[hsl(40_80%_82%)]",
+  High: "bg-[hsl(265_60%_94%)] text-[hsl(265_55%_40%)] border-[hsl(265_45%_85%)]",
+  Medium: "bg-[hsl(210_70%_94%)] text-[hsl(210_70%_38%)] border-[hsl(210_55%_82%)]",
   Low: "bg-[hsl(220_10%_94%)] text-[hsl(220_10%_45%)] border-[hsl(220_10%_85%)]",
+};
+
+export const PRIORITY_LABEL: Record<Priority, string> = {
+  High: "Executive",
+  Medium: "Team",
+  Low: "Guest",
 };
