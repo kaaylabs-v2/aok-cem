@@ -382,12 +382,12 @@ export function RequestsList({ eventId }: Props) {
                       {/* Identity */}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
+                          <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
                           <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-0.5", SENIORITY_TONE[r.seniority])}>
-                            <span className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</span>
-                            <span className="text-foreground/30">|</span>
                             <span className="text-[11px] font-medium opacity-90">{r.seniority}</span>
+                            <span className="text-foreground/30">|</span>
+                            <span className="text-[11px] font-medium opacity-90">{PRIORITY_LABEL[r.priority]}</span>
                           </span>
-                          <Chip className={PRIORITY_TONE[r.priority]}>{PRIORITY_LABEL[r.priority]}</Chip>
                         </div>
                         <p className="mt-0.5 truncate text-xs text-muted-foreground">
                           {r.department} · {r.company} · {r.position}
