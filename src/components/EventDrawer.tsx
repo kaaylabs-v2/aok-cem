@@ -138,6 +138,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                 {[
                   { v: "overview", label: "Overview" },
                   { v: "guests", label: "Guest list" },
+                  { v: "requests", label: "Requests" },
                   { v: "audit", label: "Audit" },
                 ].map((t) => (
                   <TabsTrigger
