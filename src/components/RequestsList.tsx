@@ -378,8 +378,8 @@ export function RequestsList({ eventId }: Props) {
                 const isOpen = expanded.has(r.id);
                 const acceptedCount = Math.round((r.acceptanceRate / 100) * r.previousRequests);
                 return (
-                  <>
-                    <TableRow key={r.id} className={cn("text-sm align-middle", selected.has(r.id) && "bg-primary/5")}>
+                  <Fragment key={r.id}>
+                    <TableRow className={cn("text-sm align-middle", selected.has(r.id) && "bg-primary/5")}>
                       <TableCell className="px-2 py-2">
                         <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} />
                       </TableCell>
