@@ -590,6 +590,43 @@ function FlagChip({ flag }: { flag: RiskFlag }) {
   );
 }
 
+function RiskCell({ score, acceptance, flags }: { score: number; acceptance: number; flags: RiskFlag[] }) {
+  const tone = score >= 75 ? "success" : score >= 50 ? "warning" : "danger";
+  const dot = tone === "success" ? "bg-success" : tone === "warning" ? "bg-warning" : "bg-destructive";
+  const txt = tone === "success" ? "text-success" : tone === "warning" ? "text-warning-foreground" : "text-destructive";
+  const visible = flags.slice(0, 2);
+  const extra = flags.length - visible.length;
+  return (
+    <div className="flex flex-col gap-1 min-w-0">
+      <div className="flex items-center gap-1.5 text-[11px]">
+        <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />
+        <span className={cn("font-semibold tabular-nums", txt)}>Score {score}</span>
+        <span className="text-muted-foreground">· {acceptance}%</span>
+      </div>
+      {visible.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {visible.map((f) => <FlagChip key={f} flag={f} />)}
+          {extra > 0 && (
+            <span className="inline-flex items-center rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+              +{extra} more
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ExpandStat({ label, value, sub }: { label: string; value: string; sub?: string }) {
+  return (
+    <div className="rounded-lg border border-border bg-card px-2.5 py-2">
+      <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-0.5 text-sm font-semibold tabular-nums">{value}</p>
+      {sub && <p className="text-[11px] text-muted-foreground truncate">{sub}</p>}
+    </div>
+  );
+}
+
 const DECLINE_REASONS = [
   "Capacity constraints",
   "Priority allocation",
