@@ -23,7 +23,6 @@ import {
 import {
   AlertTriangle, ArrowDownUp, ArrowDown, ArrowUp, CheckCircle2, XCircle,
   History, Search, Filter, Download, Inbox, Clock, Flame, Flag,
-  ChevronDown, ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -38,7 +37,7 @@ interface Props {
   eventId: string;
 }
 
-type SortKey = "requestedAt" | "seniority" | "position" | "usageScore" | "acceptanceRate" | "priority";
+type SortKey = "requestedAt" | "seniority" | "position" | "acceptanceRate" | "priority";
 type SortDir = "asc" | "desc";
 
 const SENIORITY_RANK: Record<Seniority, number> = {
@@ -55,7 +54,6 @@ export function RequestsList({ eventId }: Props) {
   const [priorityF, setPriorityF] = useState<string>("all");
   const [deptF, setDeptF] = useState<string>("all");
   const [companyF, setCompanyF] = useState<string>("all");
-  const [usageRange, setUsageRange] = useState<[number, number]>([0, 100]);
   const [acceptRange, setAcceptRange] = useState<[number, number]>([0, 100]);
   const [flaggedOnly, setFlaggedOnly] = useState(false);
 
@@ -91,7 +89,6 @@ export function RequestsList({ eventId }: Props) {
     if (priorityF !== "all") r = r.filter((x) => x.priority === priorityF);
     if (deptF !== "all") r = r.filter((x) => x.department === deptF);
     if (companyF !== "all") r = r.filter((x) => x.company === companyF);
-    r = r.filter((x) => x.usageScore >= usageRange[0] && x.usageScore <= usageRange[1]);
     r = r.filter((x) => x.acceptanceRate >= acceptRange[0] && x.acceptanceRate <= acceptRange[1]);
     if (flaggedOnly) r = r.filter((x) => x.flags.length > 0);
     if (query.trim()) {
@@ -110,12 +107,11 @@ export function RequestsList({ eventId }: Props) {
         case "requestedAt": return (+new Date(a.requestedAt) - +new Date(b.requestedAt)) * dir;
         case "seniority": return (SENIORITY_RANK[a.seniority] - SENIORITY_RANK[b.seniority]) * dir;
         case "position": return a.position.localeCompare(b.position) * dir;
-        case "usageScore": return (a.usageScore - b.usageScore) * dir;
         case "acceptanceRate": return (a.acceptanceRate - b.acceptanceRate) * dir;
         case "priority": return (PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority]) * dir;
       }
     });
-  }, [requests, seniorityF, priorityF, deptF, companyF, usageRange, acceptRange, flaggedOnly, query, sortKey, sortDir]);
+  }, [requests, seniorityF, priorityF, deptF, companyF, acceptRange, flaggedOnly, query, sortKey, sortDir]);
 
   const kpis = useMemo(() => ({
     pending: requests.length,
@@ -131,7 +127,6 @@ export function RequestsList({ eventId }: Props) {
     (priorityF !== "all" ? 1 : 0) +
     (deptF !== "all" ? 1 : 0) +
     (companyF !== "all" ? 1 : 0) +
-    (usageRange[0] !== 0 || usageRange[1] !== 100 ? 1 : 0) +
     (acceptRange[0] !== 0 || acceptRange[1] !== 100 ? 1 : 0) +
     (flaggedOnly ? 1 : 0);
 
@@ -183,11 +178,11 @@ export function RequestsList({ eventId }: Props) {
 
   const handleExport = () => {
     const rows = filtered.length ? filtered : requests;
-    const header = ["Name", "Email", "Company", "Department", "Position", "Seniority", "Group", "Usage Score", "Acceptance Rate", "Requested At", "Flags"];
+    const header = ["Name", "Email", "Company", "Department", "Position", "Seniority", "Group", "Acceptance Rate", "Requested At", "Flags"];
     const csv = [header.join(",")].concat(
       rows.map((r) => [
         `${r.firstName} ${r.lastName}`, r.email, r.company, r.department, r.position,
-        r.seniority, r.priority, r.usageScore, r.acceptanceRate, r.requestedAt,
+        r.seniority, r.priority, r.acceptanceRate, r.requestedAt,
         r.flags.map((f) => FLAG_LABEL[f]).join("; "),
       ].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")),
     ).join("\n");
@@ -203,7 +198,7 @@ export function RequestsList({ eventId }: Props) {
 
   const resetFilters = () => {
     setSeniorityF("all"); setPriorityF("all"); setDeptF("all"); setCompanyF("all");
-    setUsageRange([0, 100]); setAcceptRange([0, 100]); setFlaggedOnly(false);
+    setAcceptRange([0, 100]); setFlaggedOnly(false);
   };
 
   const initials = (r: BookingRequest) => (r.firstName[0] + r.lastName[0]).toUpperCase();
@@ -284,13 +279,6 @@ export function RequestsList({ eventId }: Props) {
                 options={[["all","All"], ...departments.map((d) => [d, d] as [string,string])]} />
               <FilterRow label="Company" value={companyF} onChange={setCompanyF}
                 options={[["all","All"], ...companies.map((c) => [c, c] as [string,string])]} />
-              <div>
-                <Label className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                  Usage score · {usageRange[0]}–{usageRange[1]}
-                </Label>
-                <Slider value={usageRange} min={0} max={100} step={1}
-                  onValueChange={(v) => setUsageRange([v[0], v[1]] as [number, number])} className="mt-2" />
-              </div>
               <div>
                 <Label className="text-[11px] uppercase tracking-wide text-muted-foreground">
                   Acceptance rate · {acceptRange[0]}–{acceptRange[1]}%

@@ -1,7 +1,6 @@
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { BookingRequest, FLAG_LABEL, PRIORITY_TONE, PRIORITY_LABEL, SENIORITY_TONE } from "@/data/requests";
 import {
-  Calendar, CheckCircle2, XCircle, TrendingUp, TrendingDown, Minus,
   AlertCircle, Briefcase, Mail, Building2, BadgeCheck, Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -16,37 +15,7 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
   if (!request) return null;
 
   const acceptedCount = Math.round((request.acceptanceRate / 100) * request.previousRequests);
-  const trend = request.usageHistory.map((h) => h.score);
-  const maxScore = Math.max(...trend, request.usageScore, 100);
-  const minScore = Math.min(...trend, 0);
-  const delta = trend.length >= 2 ? trend[trend.length - 1] - trend[0] : 0;
   const reliable = request.noShows === 0;
-
-  const scoreTone =
-    request.usageScore >= 75 ? "success" : request.usageScore >= 50 ? "warning" : "danger";
-
-  const ringColor =
-    scoreTone === "success" ? "hsl(var(--success))" :
-    scoreTone === "warning" ? "hsl(var(--warning))" : "hsl(var(--destructive))";
-
-  const initials = (request.firstName[0] + request.lastName[0]).toUpperCase();
-
-  // Sparkline geometry
-  const w = 280;
-  const h = 70;
-  const pad = 6;
-  const range = Math.max(1, maxScore - minScore);
-  const points = trend.map((v, i) => {
-    const x = pad + (i * (w - pad * 2)) / Math.max(1, trend.length - 1);
-    const y = h - pad - ((v - minScore) / range) * (h - pad * 2);
-    return [x, y] as const;
-  });
-  const path = points.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]},${p[1]}`).join(" ");
-  const areaPath = `${path} L${points[points.length - 1][0]},${h - pad} L${points[0][0]},${h - pad} Z`;
-
-  const TrendIcon = delta > 0 ? TrendingUp : delta < 0 ? TrendingDown : Minus;
-  const trendTone =
-    delta > 0 ? "text-success" : delta < 0 ? "text-destructive" : "text-muted-foreground";
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -57,25 +26,7 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
             Guest history
           </SheetDescription>
 
-
-
-          <div className="relative mt-2 flex items-start gap-4">
-            {/* Score Ring */}
-            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center">
-              <svg viewBox="0 0 36 36" className="h-16 w-16 -rotate-90">
-                <circle cx="18" cy="18" r="15.5" fill="none" stroke="hsl(var(--muted))" strokeWidth="2.5" />
-                <circle
-                  cx="18" cy="18" r="15.5" fill="none" stroke={ringColor} strokeWidth="2.5"
-                  strokeDasharray={`${(request.usageScore / 100) * 97.4} 97.4`}
-                  strokeLinecap="round"
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-sm font-bold tabular-nums">{request.usageScore}</span>
-                <span className="text-[8px] font-medium uppercase tracking-wide text-muted-foreground">Score</span>
-              </div>
-            </div>
-
+          <div className="mt-2 flex items-start gap-4">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-1.5">
                 <SheetTitle className="text-lg font-semibold leading-tight">
@@ -109,39 +60,6 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
         </div>
 
         <div className="space-y-4 px-5 py-5">
-          {/* Usage Trend with sparkline */}
-          <Section
-            title="Usage Score · 3-month trend"
-            badge={
-              <span className={cn("inline-flex items-center gap-1 rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold tabular-nums", trendTone)}>
-                <TrendIcon className="h-2.5 w-2.5" />
-                {delta > 0 ? "+" : ""}{delta}
-              </span>
-            }
-          >
-            <svg viewBox={`0 0 ${w} ${h}`} className="w-full" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="spark-fill" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor={ringColor} stopOpacity="0.25" />
-                  <stop offset="100%" stopColor={ringColor} stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <path d={areaPath} fill="url(#spark-fill)" />
-              <path d={path} fill="none" stroke={ringColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              {points.map((p, i) => (
-                <circle key={i} cx={p[0]} cy={p[1]} r={i === points.length - 1 ? 3 : 2} fill={ringColor} />
-              ))}
-            </svg>
-            <div className="mt-1 flex justify-between px-1">
-              {request.usageHistory.map((p) => (
-                <div key={p.month} className="flex flex-col items-center">
-                  <span className="text-[10px] font-semibold tabular-nums text-foreground">{p.score}</span>
-                  <span className="text-[9px] uppercase tracking-wide text-muted-foreground">{p.month}</span>
-                </div>
-              ))}
-            </div>
-          </Section>
-
           {/* Acceptance breakdown */}
           <Section title="Acceptance breakdown">
             <div className="flex items-baseline justify-between">
