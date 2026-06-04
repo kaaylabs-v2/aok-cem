@@ -335,55 +335,47 @@ export function RequestsList({ eventId }: Props) {
           </div>
         )}
 
-        {/* Table */}
-        <div className="overflow-hidden rounded-2xl border border-border bg-card">
-          <Table className="w-full table-fixed">
-            <colgroup>
-              <col className="w-10" />
-              <col className="w-8" />
-              <col style={{ width: "36%" }} />
-              <col style={{ width: "14%" }} />
-              <col style={{ width: "20%" }} />
-              <col style={{ width: "9%" }} />
-              <col style={{ width: "9%" }} />
-              <col style={{ width: "12%" }} />
-            </colgroup>
-            <TableHeader>
-              <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead className="h-9 px-2">
-                  <Checkbox
-                    checked={filtered.length > 0 && selected.size === filtered.length}
-                    onCheckedChange={toggleSelectAll}
-                    aria-label="Select all"
-                  />
-                </TableHead>
-                <TableHead className="h-9 px-1" />
-                <TableHead className="h-9 px-3 text-xs">Requester</TableHead>
-                <SortHead label="Request Date" k="requestedAt" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
-                <TableHead className="h-9 px-3 text-xs">Risk</TableHead>
-                <SortHead label="Priority" k="priority" sortKey={sortKey} sortDir={sortDir} onClick={toggleSort} />
-                <TableHead className="h-9 px-3 text-xs">Status</TableHead>
-                <TableHead className="h-9 px-3 text-right text-xs">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="h-24 text-center text-sm text-muted-foreground">
-                    No pending requests match this view
-                  </TableCell>
-                </TableRow>
-              ) : filtered.map((r) => {
+        {/* Card list */}
+        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          {/* Header bar */}
+          <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/40 px-4 py-2">
+            <div className="flex items-center gap-2.5">
+              <Checkbox
+                checked={filtered.length > 0 && selected.size === filtered.length}
+                onCheckedChange={toggleSelectAll}
+                aria-label="Select all"
+              />
+              <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                {filtered.length} Pending
+              </span>
+            </div>
+            <button
+              onClick={() => toggleSort("requestedAt")}
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground"
+            >
+              Date {sortKey === "requestedAt" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-70" />}
+            </button>
+          </div>
+
+          {filtered.length === 0 ? (
+            <div className="px-4 py-10 text-center text-sm text-muted-foreground">
+              No pending requests match this view
+            </div>
+          ) : (
+            <ul className="divide-y divide-border">
+              {filtered.map((r) => {
                 const d = new Date(r.requestedAt);
                 const isOpen = expanded.has(r.id);
                 const acceptedCount = Math.round((r.acceptanceRate / 100) * r.previousRequests);
+                const scoreTone = r.usageScore >= 75 ? "success" : r.usageScore >= 50 ? "warning" : "danger";
+                const scoreDot = scoreTone === "success" ? "bg-success" : scoreTone === "warning" ? "bg-warning" : "bg-destructive";
+                const scoreText = scoreTone === "success" ? "text-success" : scoreTone === "warning" ? "text-warning-foreground" : "text-destructive";
+                const hasFlags = r.flags.length > 0;
                 return (
-                  <Fragment key={r.id}>
-                    <TableRow className={cn("text-sm align-middle", selected.has(r.id) && "bg-primary/5")}>
-                      <TableCell className="px-2 py-2">
+                  <li key={r.id} className={cn("transition-colors", selected.has(r.id) ? "bg-primary/5" : hasFlags ? "bg-muted/20" : "")}>
+                    <div className="flex items-start gap-3 px-4 py-3">
+                      <div className="flex items-center gap-2 pt-0.5">
                         <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} />
-                      </TableCell>
-                      <TableCell className="px-1 py-2">
                         <button
                           onClick={() => toggleExpand(r.id)}
                           className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -391,32 +383,50 @@ export function RequestsList({ eventId }: Props) {
                         >
                           {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                         </button>
-                      </TableCell>
-                      <TableCell className="px-3 py-2">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          {/* avatar removed */}
-                          <div className="min-w-0 leading-tight">
-                            <p className="truncate text-sm font-medium">{r.firstName} {r.lastName}</p>
-                            <p className="truncate text-[11px] text-muted-foreground">{r.department} · {r.company}</p>
-                            <p className="truncate text-[11px] text-muted-foreground">{r.position} · {r.seniority}</p>
-                          </div>
+                      </div>
+
+                      {/* Identity */}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
+                          <Chip className={PRIORITY_TONE[r.priority]}>{r.priority}</Chip>
+                          <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                            <Clock className="h-2.5 w-2.5" /> Pending
+                          </span>
                         </div>
-                      </TableCell>
-                      <TableCell className="px-3 py-2 text-xs">
-                        <div className="tabular-nums leading-tight">{d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })}</div>
-                        <div className="text-[11px] tabular-nums text-muted-foreground">{d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</div>
-                      </TableCell>
-                      <TableCell className="px-3 py-2">
-                        <RiskCell score={r.usageScore} acceptance={r.acceptanceRate} flags={r.flags} />
-                      </TableCell>
-                      <TableCell className="px-3 py-2"><Chip className={PRIORITY_TONE[r.priority]}>{r.priority}</Chip></TableCell>
-                      <TableCell className="px-3 py-2">
-                        <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                          <Clock className="h-3 w-3" /> Pending
-                        </span>
-                      </TableCell>
-                      <TableCell className="px-3 py-2">
-                        <div className="flex justify-end gap-1">
+                        <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                          {r.department} · {r.company} · {r.position} · {r.seniority}
+                        </p>
+                        {hasFlags && (
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {r.flags.slice(0, 2).map((f) => <FlagChip key={f} flag={f} />)}
+                            {r.flags.length > 2 && (
+                              <span className="inline-flex items-center rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                                +{r.flags.length - 2} more
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Right cluster */}
+                      <div className="flex shrink-0 items-center gap-6">
+                        <div className="text-right leading-tight">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <span className={cn("h-1.5 w-1.5 rounded-full", scoreDot)} />
+                            <span className={cn("text-xs font-semibold tabular-nums", scoreText)}>Score {r.usageScore}</span>
+                          </div>
+                          <p className="text-[10px] tabular-nums text-muted-foreground">{r.acceptanceRate}% Match</p>
+                        </div>
+                        <div className="min-w-[78px] text-right leading-tight">
+                          <p className="text-xs font-medium tabular-nums text-foreground">
+                            {d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })}
+                          </p>
+                          <p className="text-[10px] tabular-nums text-muted-foreground">
+                            {d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1">
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openHistory(r)}>
@@ -427,42 +437,37 @@ export function RequestsList({ eventId }: Props) {
                           </Tooltip>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setDeclineFor(r)}>
-                                <XCircle className="h-3.5 w-3.5 text-destructive" />
+                              <Button size="icon" variant="ghost" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => setDeclineFor(r)}>
+                                <XCircle className="h-3.5 w-3.5" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>Decline</TooltipContent>
                           </Tooltip>
-                          <Button size="sm" className="h-7 rounded-full bg-success px-2.5 text-[11px] text-white hover:bg-success/90" onClick={() => handleApprove(r)}>
-                            <CheckCircle2 className="mr-1 h-3 w-3" /> Approve
+                          <Button size="sm" className="h-7 rounded-lg bg-success px-3 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
+                            Approve
                           </Button>
                         </div>
-                      </TableCell>
-                    </TableRow>
+                      </div>
+                    </div>
+
                     {isOpen && (
-                      <TableRow key={r.id + "-exp"} className="bg-muted/20 hover:bg-muted/20">
-                        <TableCell colSpan={8} className="px-4 py-3">
-                          <div className="grid gap-3 sm:grid-cols-4">
-                            <ExpandStat label="Position" value={`${r.position}`} sub={r.seniority} />
-                            <ExpandStat label="Usage score" value={`${r.usageScore}/100`} sub={`Trend ${r.usageHistory.map(h => h.score).join(" · ")}`} />
-                            <ExpandStat label="Acceptance" value={`${r.acceptanceRate}%`} sub={`${acceptedCount}/${r.previousRequests} accepted`} />
-                            <ExpandStat label="Previous bookings" value={`${r.previousBookings}`} sub={`${r.noShows} no-show${r.noShows === 1 ? "" : "s"}`} />
-                          </div>
-                          <p className="mt-2 text-xs text-muted-foreground">{r.attendanceSummary}</p>
-                          {r.flags.length > 0 && (
-                            <div className="mt-2 flex flex-wrap gap-1">
-                              {r.flags.map((f) => <FlagChip key={f} flag={f} />)}
-                            </div>
-                          )}
-                        </TableCell>
-                      </TableRow>
+                      <div className="border-t border-border bg-muted/20 px-4 py-3">
+                        <div className="grid gap-3 sm:grid-cols-4">
+                          <ExpandStat label="Position" value={r.position} sub={r.seniority} />
+                          <ExpandStat label="Usage score" value={`${r.usageScore}/100`} sub={`Trend ${r.usageHistory.map(h => h.score).join(" · ")}`} />
+                          <ExpandStat label="Acceptance" value={`${r.acceptanceRate}%`} sub={`${acceptedCount}/${r.previousRequests} accepted`} />
+                          <ExpandStat label="Previous bookings" value={`${r.previousBookings}`} sub={`${r.noShows} no-show${r.noShows === 1 ? "" : "s"}`} />
+                        </div>
+                        <p className="mt-2 text-xs text-muted-foreground">{r.attendanceSummary}</p>
+                      </div>
                     )}
-                  </Fragment>
+                  </li>
                 );
               })}
-            </TableBody>
-          </Table>
+            </ul>
+          )}
         </div>
+
 
 
         <p className="text-[11px] text-muted-foreground">
