@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,6 +27,8 @@ const publishStateStore: Record<string, PublishState> = {};
 
 export function EventDrawer({ event, open, onOpenChange }: Props) {
   const [tab, setTab] = useState("overview");
+  const [, startTabTransition] = useTransition();
+  const handleTabChange = (v: string) => startTabTransition(() => setTab(v));
   const [pendingUpdate, setPendingUpdate] = useState(false);
   const [publishState, setPublishState] = useState<PublishState>("published");
   const [bookOpen, setBookOpen] = useState(false);
@@ -132,7 +134,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
           </div>
 
           {/* Tabs */}
-          <Tabs value={tab} onValueChange={setTab} className="flex min-h-0 flex-1 flex-col">
+          <Tabs value={tab} onValueChange={handleTabChange} className="flex min-h-0 flex-1 flex-col">
             <div className="shrink-0 border-b border-border/60 bg-background/95 px-6 pt-3 backdrop-blur supports-[backdrop-filter]:bg-background/70">
               <TabsList className="h-auto w-full justify-start gap-1 rounded-none border-0 bg-transparent p-0">
                 {[
