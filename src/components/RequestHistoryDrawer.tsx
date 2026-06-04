@@ -50,13 +50,14 @@ export function RequestHistoryDrawer({ request, open, onOpenChange }: Props) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full overflow-y-auto bg-gradient-to-b from-muted/30 to-background p-0 sm:max-w-md">
+      <SheetContent className="w-full overflow-y-auto bg-background p-0 sm:max-w-md">
         {/* Hero */}
-        <div className="relative overflow-hidden border-b border-border bg-card px-5 pb-5 pt-6">
-          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-br from-primary/10 via-transparent to-success/10" />
-          <SheetDescription className="relative text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        <div className="border-b border-border bg-card px-5 pb-5 pt-6">
+          <SheetDescription className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
             Guest history
           </SheetDescription>
+
+
 
           <div className="relative mt-2 flex items-start gap-4">
             {/* Score Ring */}
