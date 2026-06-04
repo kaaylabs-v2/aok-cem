@@ -249,9 +249,9 @@ function Stat({ label, value, tone = "default" }: { label: string; value: number
     muted: "text-muted-foreground",
   };
   return (
-    <div className="rounded-xl border border-border bg-card px-3 py-2.5">
+    <div className="flex items-center justify-between border border-border bg-card px-2.5 py-1.5">
       <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</p>
-      <p className={cn("text-lg font-semibold tabular-nums", tones[tone])}>{value}</p>
+      <p className={cn("text-base font-semibold tabular-nums", tones[tone])}>{value}</p>
     </div>
   );
 }
