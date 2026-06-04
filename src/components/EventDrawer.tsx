@@ -155,7 +155,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
             </div>
 
             <div className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-6 py-5">
-              <TabsContent value="overview" className="m-0 space-y-5">
+              <TabsContent value="overview" className="m-0 animate-fade-in space-y-5">
                 {isFull && (
                   <div className="flex items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
                     <div className="flex items-start gap-2.5">
@@ -274,7 +274,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                 </div>
               </TabsContent>
 
-              <TabsContent value="guests" className="m-0">
+              <TabsContent value="guests" className="m-0 animate-fade-in">
                 <GuestList
                   eventId={event.id}
                   hasPendingUpdate={pendingUpdate}
@@ -282,13 +282,13 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                 />
               </TabsContent>
 
-              <TabsContent value="requests" className="m-0">
+              <TabsContent value="requests" className="m-0 animate-fade-in">
                 <RequestsList eventId={event.id} />
               </TabsContent>
 
 
 
-              <TabsContent value="audit" className="m-0">
+              <TabsContent value="audit" className="m-0 animate-fade-in">
                 <AuditTrail eventId={event.id} />
               </TabsContent>
             </div>
