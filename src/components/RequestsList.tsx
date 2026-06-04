@@ -457,7 +457,7 @@ export function RequestsList({ eventId }: Props) {
                         </TableCell>
                       </TableRow>
                     )}
-                  </>
+                  </Fragment>
                 );
               })}
             </TableBody>
