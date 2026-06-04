@@ -304,7 +304,7 @@ export function RequestsList({ eventId }: Props) {
         </div>
 
         {/* Bulk action bar */}
-        {selected.size > 0 && (
+        {selected.size > 1 && (
           <div className="sticky top-0 z-10 flex items-center justify-between rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 backdrop-blur">
             <p className="text-xs font-medium text-primary">
               {selected.size} selected
