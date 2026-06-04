@@ -489,11 +489,11 @@ function Kpi({ icon: Icon, label, value, tone = "default" }: { icon: any; label:
     danger: "text-destructive",
   };
   return (
-    <div className="rounded-xl border border-border bg-card px-3 py-2.5">
-      <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">
+    <div className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-2.5 py-1.5">
+      <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground">
         <Icon className="h-3 w-3" /> {label}
       </div>
-      <p className={cn("mt-1 text-xl font-semibold tabular-nums", tones[tone])}>{value}</p>
+      <p className={cn("text-base font-semibold leading-none tabular-nums", tones[tone])}>{value}</p>
     </div>
   );
 }
