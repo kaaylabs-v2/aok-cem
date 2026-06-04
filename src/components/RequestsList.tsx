@@ -466,6 +466,7 @@ export function RequestsList({ eventId }: Props) {
             const finalReason = declineReason === "Other" ? declineCustom.trim() : declineReason;
             if (!finalReason) { toast.error("Decline reason is required"); return; }
             const declined = requestApi.bulkDecline(eventId, Array.from(selected), finalReason);
+            logAudit(eventId, "Bulk request decline", `${declined.length} request${declined.length === 1 ? "" : "s"}`, finalReason);
             toast.message(`${declined.length} request${declined.length === 1 ? "" : "s"} declined`, { description: finalReason });
             setSelected(new Set());
             setBulkDeclineOpen(false); setDeclineReason(""); setDeclineCustom("");
