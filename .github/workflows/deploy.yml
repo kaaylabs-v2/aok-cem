@@ -3,8 +3,7 @@ name: Deploy etx-lovable to ECS
 on:
   push:
     branches:
-      - master
-      - main
+      - develop
 
   workflow_dispatch:
 
