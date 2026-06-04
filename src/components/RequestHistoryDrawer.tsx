@@ -1,5 +1,5 @@
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { BookingRequest, FLAG_LABEL, PRIORITY_TONE, PRIORITY_LABEL } from "@/data/requests";
+import { BookingRequest, FLAG_LABEL, PRIORITY_TONE, PRIORITY_LABEL, SENIORITY_TONE } from "@/data/requests";
 import {
   Calendar, CheckCircle2, XCircle, TrendingUp, TrendingDown, Minus,
   AlertCircle, Briefcase, Mail, Building2, BadgeCheck, Sparkles,
