@@ -69,6 +69,12 @@ export function RequestsList({ eventId }: Props) {
   const [declineCustom, setDeclineCustom] = useState("");
   const [historyFor, setHistoryFor] = useState<BookingRequest | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const toggleExpand = (id: string) => {
+    const next = new Set(expanded);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setExpanded(next);
+  };
 
   const departments = useMemo(
     () => Array.from(new Set(requests.map((r) => r.department))).sort(),
