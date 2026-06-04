@@ -169,6 +169,7 @@ export function RequestsList({ eventId }: Props) {
     const ids = Array.from(selected);
     const approved = requestApi.bulkApprove(eventId, ids);
     approved.forEach(moveToGuestList);
+    logAudit(eventId, "Bulk request approval", `${approved.length} request${approved.length === 1 ? "" : "s"}`);
     toast.success(`${approved.length} request${approved.length === 1 ? "" : "s"} approved`);
     setSelected(new Set());
   };
