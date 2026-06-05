@@ -368,14 +368,12 @@ export function RequestsList({ eventId }: Props) {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
-                          <span className={cn("inline-flex items-center gap-1 whitespace-nowrap rounded-full border px-1.5 py-px text-[10px] font-medium leading-none", SENIORITY_TONE[r.seniority])}>
-                            <span>{r.seniority}</span>
-                            <span className="opacity-40">|</span>
-                            <span>{PRIORITY_LABEL[r.priority]}</span>
+                          <span className={cn("inline-flex items-center whitespace-nowrap rounded-full border px-1.5 py-px text-[10px] font-medium leading-none", PRIORITY_TONE[r.priority])}>
+                            {PRIORITY_LABEL[r.priority]}
                           </span>
                         </div>
                         <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                          {r.department} · {r.company} · {r.position}
+                          {r.department} · {r.position}
                         </p>
                         {hasFlags && (
                           <div className="mt-2 flex flex-wrap gap-1">
@@ -391,6 +389,14 @@ export function RequestsList({ eventId }: Props) {
 
                       {/* Right cluster */}
                       <div className="flex shrink-0 items-center gap-6">
+                        <div className="hidden min-w-[140px] text-sm text-foreground sm:block">
+                          <p className="truncate font-medium">{r.company}</p>
+                        </div>
+                        <div className="hidden w-[88px] sm:block">
+                          <span className={cn("inline-flex items-center whitespace-nowrap rounded-full border px-1.5 py-px text-[10px] font-medium leading-none", SENIORITY_TONE[r.seniority])}>
+                            {r.seniority}
+                          </span>
+                        </div>
 
                         <div className="min-w-[78px] text-right leading-tight">
                           <p className="text-xs font-medium tabular-nums text-foreground">
