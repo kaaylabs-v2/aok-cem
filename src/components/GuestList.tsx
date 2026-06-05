@@ -15,7 +15,7 @@ import {
 import {
   Search, Plus, Send, MoreHorizontal, RefreshCw, Pencil, Trash2,
   AlertTriangle, BellRing, CheckCircle2, XCircle, Mail, MailX, ChevronDown,
-  Users, Clock, ArrowUp, ArrowDown,
+  Users, Clock, ArrowUp, ArrowDown, ArrowDownUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Guest, RsvpStatus, InviteStatus, useGuests, guestApi, rsvpLabel, inviteLabel } from "@/data/guests";
