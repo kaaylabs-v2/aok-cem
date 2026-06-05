@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import {
   useRequests, requestApi, BookingRequest, Priority, Seniority,
-  FLAG_LABEL, SENIORITY_TONE, PRIORITY_TONE, PRIORITY_LABEL, RiskFlag,
+  FLAG_LABEL, SENIORITY_TONE, RiskFlag,
 } from "@/data/requests";
 import { guestApi, logAudit } from "@/data/guests";
 import { RequestHistoryDrawer } from "./RequestHistoryDrawer";
@@ -366,15 +366,7 @@ export function RequestsList({ eventId }: Props) {
 
                       {/* Identity */}
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
-                          <span className={cn("inline-flex items-center whitespace-nowrap rounded-full border px-1.5 py-px text-[10px] font-medium leading-none", PRIORITY_TONE[r.priority])}>
-                            {PRIORITY_LABEL[r.priority]}
-                          </span>
-                        </div>
-                        <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                          {r.department} · {r.position}
-                        </p>
+                        <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
                         {hasFlags && (
                           <div className="mt-2 flex flex-wrap gap-1">
                             {r.flags.slice(0, 2).map((f) => <FlagChip key={f} flag={f} />)}
