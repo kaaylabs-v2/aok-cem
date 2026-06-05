@@ -37,7 +37,7 @@ interface Props {
   eventId: string;
 }
 
-type SortKey = "requestedAt" | "seniority" | "position" | "acceptanceRate" | "priority";
+type SortKey = "name" | "company" | "requestedAt" | "seniority" | "position" | "acceptanceRate" | "priority";
 type SortDir = "asc" | "desc";
 
 const SENIORITY_RANK: Record<Seniority, number> = {
@@ -104,6 +104,8 @@ export function RequestsList({ eventId }: Props) {
     const dir = sortDir === "asc" ? 1 : -1;
     return [...r].sort((a, b) => {
       switch (sortKey) {
+        case "name": return (`${a.firstName} ${a.lastName}`).localeCompare(`${b.firstName} ${b.lastName}`) * dir;
+        case "company": return a.company.localeCompare(b.company) * dir;
         case "requestedAt": return (+new Date(a.requestedAt) - +new Date(b.requestedAt)) * dir;
         case "seniority": return (SENIORITY_RANK[a.seniority] - SENIORITY_RANK[b.seniority]) * dir;
         case "position": return a.position.localeCompare(b.position) * dir;
@@ -132,7 +134,7 @@ export function RequestsList({ eventId }: Props) {
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir(sortDir === "asc" ? "desc" : "asc");
-    else { setSortKey(key); setSortDir(key === "requestedAt" ? "asc" : "desc"); }
+    else { setSortKey(key); setSortDir(["requestedAt", "name", "company"].includes(key) ? "asc" : "desc"); }
   };
 
   const toggleSelectAll = () => {
@@ -326,23 +328,15 @@ export function RequestsList({ eventId }: Props) {
         {/* Card list */}
         <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
           {/* Header bar */}
-          <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/40 px-4 py-2">
-            <div className="flex items-center gap-2.5">
-              <Checkbox
-                checked={filtered.length > 0 && selected.size === filtered.length}
-                onCheckedChange={toggleSelectAll}
-                aria-label="Select all"
-              />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                {filtered.length} Pending
-              </span>
-            </div>
-            <button
-              onClick={() => toggleSort("requestedAt")}
-              className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground"
-            >
-              Date {sortKey === "requestedAt" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-70" />}
-            </button>
+          <div className="flex items-center gap-2.5 border-b border-border bg-muted/40 px-4 py-2">
+            <Checkbox
+              checked={filtered.length > 0 && selected.size === filtered.length}
+              onCheckedChange={toggleSelectAll}
+              aria-label="Select all"
+            />
+            <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              {filtered.length} Pending
+            </span>
           </div>
 
           {/* Column headers */}
@@ -350,19 +344,27 @@ export function RequestsList({ eventId }: Props) {
             <div className="flex items-center gap-2.5">
               <div className="h-4 w-4" /> {/* checkbox spacer */}
             </div>
-            <div className="min-w-0 flex-1">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Name</span>
-            </div>
+            <button onClick={() => toggleSort("name")} className="min-w-0 flex-1 text-left">
+              <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide", sortKey === "name" ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+                Name {sortKey === "name" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
+              </span>
+            </button>
             <div className="flex shrink-0 items-center gap-6">
-              <div className="min-w-[140px]">
-                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Company</span>
-              </div>
-              <div className="w-[88px]">
-                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Seniority</span>
-              </div>
-              <div className="min-w-[78px] text-right">
-                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Date</span>
-              </div>
+              <button onClick={() => toggleSort("company")} className="min-w-[140px] text-left">
+                <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide", sortKey === "company" ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+                  Company {sortKey === "company" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
+                </span>
+              </button>
+              <button onClick={() => toggleSort("seniority")} className="w-[88px] text-left">
+                <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide", sortKey === "seniority" ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+                  Seniority {sortKey === "seniority" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
+                </span>
+              </button>
+              <button onClick={() => toggleSort("requestedAt")} className="min-w-[78px] text-right">
+                <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide", sortKey === "requestedAt" ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+                  Date {sortKey === "requestedAt" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
+                </span>
+              </button>
               <div className="w-[150px]">
                 <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Actions</span>
               </div>
