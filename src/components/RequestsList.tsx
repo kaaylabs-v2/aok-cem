@@ -132,7 +132,7 @@ export function RequestsList({ eventId }: Props) {
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir(sortDir === "asc" ? "desc" : "asc");
-    else { setSortKey(key); setSortDir(key === "requestedAt" ? "asc" : "desc"); }
+    else { setSortKey(key); setSortDir(["requestedAt", "name", "company"].includes(key) ? "asc" : "desc"); }
   };
 
   const toggleSelectAll = () => {
