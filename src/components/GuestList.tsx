@@ -29,6 +29,9 @@ interface Props {
   onSendUpdateAck?: () => void;
 }
 
+type SortKey = "name" | "company" | "dietary" | "access" | "rsvp" | "invite";
+type SortDir = "asc" | "desc";
+
 export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props) {
   const guests = useGuests(eventId);
   const [query, setQuery] = useState("");
@@ -36,9 +39,16 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Guest | null>(null);
   const [removing, setRemoving] = useState<Guest | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>("name");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(key); setSortDir("asc"); }
+  };
 
   const filtered = useMemo(() => {
-    return guests.filter((g) => {
+    const list = guests.filter((g) => {
       if (filter === "failed" && g.invite !== "failed") return false;
       if (filter !== "all" && filter !== "failed" && g.rsvp !== filter) return false;
       if (!query) return true;
@@ -50,7 +60,20 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
         (g.company ?? "").toLowerCase().includes(q)
       );
     });
-  }, [guests, query, filter]);
+    const val = (g: Guest): string => {
+      switch (sortKey) {
+        case "name": return `${g.firstName} ${g.lastName}`.toLowerCase();
+        case "company": return (g.company ?? "").toLowerCase();
+        case "dietary": return (g.dietary ?? "").toLowerCase();
+        case "access": return (g.access ?? "").toLowerCase();
+        case "rsvp": return g.rsvp;
+        case "invite": return g.invite;
+      }
+    };
+    const sorted = [...list].sort((a, b) => val(a).localeCompare(val(b)));
+    if (sortDir === "desc") sorted.reverse();
+    return sorted;
+  }, [guests, query, filter, sortKey, sortDir]);
 
   const counts = useMemo(() => ({
     total: guests.length,
