@@ -166,12 +166,12 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
         <Table className="table-fixed">
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40">
-              <TableHead className="px-3 text-xs">Guest</TableHead>
-              <TableHead className="hidden px-3 text-xs md:table-cell">Company</TableHead>
-              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell">Dietary</TableHead>
-              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell">Access</TableHead>
-              <TableHead className="w-[110px] px-2 text-xs">RSVP</TableHead>
-              <TableHead className="w-[90px] px-2 text-xs">Invite</TableHead>
+              <TableHead className="px-3 text-xs"><SortHeader label="Guest" active={sortKey === "name"} dir={sortDir} onClick={() => toggleSort("name")} /></TableHead>
+              <TableHead className="hidden px-3 text-xs md:table-cell"><SortHeader label="Company" active={sortKey === "company"} dir={sortDir} onClick={() => toggleSort("company")} /></TableHead>
+              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell"><SortHeader label="Dietary" active={sortKey === "dietary"} dir={sortDir} onClick={() => toggleSort("dietary")} /></TableHead>
+              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell"><SortHeader label="Access" active={sortKey === "access"} dir={sortDir} onClick={() => toggleSort("access")} /></TableHead>
+              <TableHead className="w-[110px] px-2 text-xs"><SortHeader label="RSVP" active={sortKey === "rsvp"} dir={sortDir} onClick={() => toggleSort("rsvp")} /></TableHead>
+              <TableHead className="w-[90px] px-2 text-xs"><SortHeader label="Invite" active={sortKey === "invite"} dir={sortDir} onClick={() => toggleSort("invite")} /></TableHead>
               <TableHead className="w-10 px-1" />
             </TableRow>
           </TableHeader>
