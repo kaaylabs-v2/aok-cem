@@ -37,7 +37,7 @@ interface Props {
   eventId: string;
 }
 
-type SortKey = "requestedAt" | "seniority" | "position" | "acceptanceRate" | "priority";
+type SortKey = "name" | "company" | "requestedAt" | "seniority" | "position" | "acceptanceRate" | "priority";
 type SortDir = "asc" | "desc";
 
 const SENIORITY_RANK: Record<Seniority, number> = {
