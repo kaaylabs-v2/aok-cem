@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import {
   useRequests, requestApi, BookingRequest, Priority, Seniority,
-  FLAG_LABEL, SENIORITY_TONE, PRIORITY_TONE, PRIORITY_LABEL, RiskFlag,
+  FLAG_LABEL, SENIORITY_TONE, RiskFlag,
 } from "@/data/requests";
 import { guestApi, logAudit } from "@/data/guests";
 import { RequestHistoryDrawer } from "./RequestHistoryDrawer";
