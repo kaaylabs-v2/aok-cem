@@ -15,7 +15,7 @@ import {
 import {
   Search, Plus, Send, MoreHorizontal, RefreshCw, Pencil, Trash2,
   AlertTriangle, BellRing, CheckCircle2, XCircle, Mail, MailX, ChevronDown,
-  Users, Clock,
+  Users, Clock, ArrowUp, ArrowDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Guest, RsvpStatus, InviteStatus, useGuests, guestApi, rsvpLabel, inviteLabel } from "@/data/guests";
@@ -29,6 +29,9 @@ interface Props {
   onSendUpdateAck?: () => void;
 }
 
+type SortKey = "name" | "company" | "dietary" | "access" | "rsvp" | "invite";
+type SortDir = "asc" | "desc";
+
 export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props) {
   const guests = useGuests(eventId);
   const [query, setQuery] = useState("");
@@ -36,9 +39,16 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Guest | null>(null);
   const [removing, setRemoving] = useState<Guest | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>("name");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else { setSortKey(key); setSortDir("asc"); }
+  };
 
   const filtered = useMemo(() => {
-    return guests.filter((g) => {
+    const list = guests.filter((g) => {
       if (filter === "failed" && g.invite !== "failed") return false;
       if (filter !== "all" && filter !== "failed" && g.rsvp !== filter) return false;
       if (!query) return true;
@@ -50,7 +60,20 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
         (g.company ?? "").toLowerCase().includes(q)
       );
     });
-  }, [guests, query, filter]);
+    const val = (g: Guest): string => {
+      switch (sortKey) {
+        case "name": return `${g.firstName} ${g.lastName}`.toLowerCase();
+        case "company": return (g.company ?? "").toLowerCase();
+        case "dietary": return (g.dietary ?? "").toLowerCase();
+        case "access": return (g.access ?? "").toLowerCase();
+        case "rsvp": return g.rsvp;
+        case "invite": return g.invite;
+      }
+    };
+    const sorted = [...list].sort((a, b) => val(a).localeCompare(val(b)));
+    if (sortDir === "desc") sorted.reverse();
+    return sorted;
+  }, [guests, query, filter, sortKey, sortDir]);
 
   const counts = useMemo(() => ({
     total: guests.length,
@@ -143,12 +166,12 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
         <Table className="table-fixed">
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40">
-              <TableHead className="px-3 text-xs">Guest</TableHead>
-              <TableHead className="hidden px-3 text-xs md:table-cell">Company</TableHead>
-              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell">Dietary</TableHead>
-              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell">Access</TableHead>
-              <TableHead className="w-[110px] px-2 text-xs">RSVP</TableHead>
-              <TableHead className="w-[90px] px-2 text-xs">Invite</TableHead>
+              <TableHead className="px-3 text-xs"><SortHeader label="Guest" active={sortKey === "name"} dir={sortDir} onClick={() => toggleSort("name")} /></TableHead>
+              <TableHead className="hidden px-3 text-xs md:table-cell"><SortHeader label="Company" active={sortKey === "company"} dir={sortDir} onClick={() => toggleSort("company")} /></TableHead>
+              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell"><SortHeader label="Dietary" active={sortKey === "dietary"} dir={sortDir} onClick={() => toggleSort("dietary")} /></TableHead>
+              <TableHead className="hidden w-[90px] px-2 text-xs lg:table-cell"><SortHeader label="Access" active={sortKey === "access"} dir={sortDir} onClick={() => toggleSort("access")} /></TableHead>
+              <TableHead className="w-[110px] px-2 text-xs"><SortHeader label="RSVP" active={sortKey === "rsvp"} dir={sortDir} onClick={() => toggleSort("rsvp")} /></TableHead>
+              <TableHead className="w-[90px] px-2 text-xs"><SortHeader label="Invite" active={sortKey === "invite"} dir={sortDir} onClick={() => toggleSort("invite")} /></TableHead>
               <TableHead className="w-10 px-1" />
             </TableRow>
           </TableHeader>
@@ -276,6 +299,17 @@ function FilterPill({ children, active, onClick, tone }: { children: React.React
     </button>
   );
 }
+
+function SortHeader({ label, active, dir, onClick }: { label: string; active: boolean; dir: "asc" | "desc"; onClick: () => void }) {
+  const Arrow = dir === "asc" ? ArrowUp : ArrowDown;
+  return (
+    <button type="button" onClick={onClick} className={cn("inline-flex items-center gap-1 text-xs font-medium transition-colors", active ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+      {label}
+      <Arrow className={cn("h-3 w-3", active ? "opacity-100" : "opacity-30")} />
+    </button>
+  );
+}
+
 
 function RsvpChip({ status }: { status: RsvpStatus }) {
   const map: Record<RsvpStatus, string> = {
