@@ -104,6 +104,8 @@ export function RequestsList({ eventId }: Props) {
     const dir = sortDir === "asc" ? 1 : -1;
     return [...r].sort((a, b) => {
       switch (sortKey) {
+        case "name": return (`${a.firstName} ${a.lastName}`).localeCompare(`${b.firstName} ${b.lastName}`) * dir;
+        case "company": return a.company.localeCompare(b.company) * dir;
         case "requestedAt": return (+new Date(a.requestedAt) - +new Date(b.requestedAt)) * dir;
         case "seniority": return (SENIORITY_RANK[a.seniority] - SENIORITY_RANK[b.seniority]) * dir;
         case "position": return a.position.localeCompare(b.position) * dir;
