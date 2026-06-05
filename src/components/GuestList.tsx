@@ -298,7 +298,16 @@ function FilterPill({ children, active, onClick, tone }: { children: React.React
       {children}
     </button>
   );
+function SortHeader({ label, active, dir, onClick }: { label: string; active: boolean; dir: "asc" | "desc"; onClick: () => void }) {
+  const Arrow = dir === "asc" ? ArrowUp : ArrowDown;
+  return (
+    <button type="button" onClick={onClick} className={cn("inline-flex items-center gap-1 text-xs font-medium transition-colors", active ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
+      {label}
+      <Arrow className={cn("h-3 w-3", active ? "opacity-100" : "opacity-30")} />
+    </button>
+  );
 }
+
 
 function RsvpChip({ status }: { status: RsvpStatus }) {
   const map: Record<RsvpStatus, string> = {
