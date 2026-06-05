@@ -15,7 +15,7 @@ import {
 import {
   Search, Plus, Send, MoreHorizontal, RefreshCw, Pencil, Trash2,
   AlertTriangle, BellRing, CheckCircle2, XCircle, Mail, MailX, ChevronDown,
-  Users, Clock, ArrowUp, ArrowDown,
+  Users, Clock, ArrowUp, ArrowDown, ArrowDownUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Guest, RsvpStatus, InviteStatus, useGuests, guestApi, rsvpLabel, inviteLabel } from "@/data/guests";
@@ -301,11 +301,14 @@ function FilterPill({ children, active, onClick, tone }: { children: React.React
 }
 
 function SortHeader({ label, active, dir, onClick }: { label: string; active: boolean; dir: "asc" | "desc"; onClick: () => void }) {
-  const Arrow = dir === "asc" ? ArrowUp : ArrowDown;
   return (
     <button type="button" onClick={onClick} className={cn("inline-flex items-center gap-1 text-xs font-medium transition-colors", active ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
       {label}
-      <Arrow className={cn("h-3 w-3", active ? "opacity-100" : "opacity-30")} />
+      {active ? (
+        dir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
+      ) : (
+        <ArrowDownUp className="h-3 w-3 opacity-60" />
+      )}
     </button>
   );
 }
