@@ -345,6 +345,30 @@ export function RequestsList({ eventId }: Props) {
             </button>
           </div>
 
+          {/* Column headers */}
+          <div className="hidden items-center gap-3 border-b border-border bg-muted/30 px-4 py-2 sm:flex">
+            <div className="flex items-center gap-2.5">
+              <div className="h-4 w-4" /> {/* checkbox spacer */}
+            </div>
+            <div className="min-w-0 flex-1">
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Name</span>
+            </div>
+            <div className="flex shrink-0 items-center gap-6">
+              <div className="min-w-[140px]">
+                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Company</span>
+              </div>
+              <div className="w-[88px]">
+                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Seniority</span>
+              </div>
+              <div className="min-w-[78px] text-right">
+                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Date</span>
+              </div>
+              <div className="w-[150px]">
+                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Actions</span>
+              </div>
+            </div>
+          </div>
+
           {filtered.length === 0 ? (
             <div className="px-4 py-10 text-center text-sm text-muted-foreground">
               No pending requests match this view
