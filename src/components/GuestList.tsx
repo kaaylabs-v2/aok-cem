@@ -298,6 +298,8 @@ function FilterPill({ children, active, onClick, tone }: { children: React.React
       {children}
     </button>
   );
+}
+
 function SortHeader({ label, active, dir, onClick }: { label: string; active: boolean; dir: "asc" | "desc"; onClick: () => void }) {
   const Arrow = dir === "asc" ? ArrowUp : ArrowDown;
   return (
