@@ -13,8 +13,11 @@ import AuditTrail from "./pages/AuditTrail.tsx";
 import Users from "./pages/Users.tsx";
 import UserGroups from "./pages/UserGroups.tsx";
 import UserDetail from "./pages/UserDetail.tsx";
+import Delegations from "./pages/Delegations.tsx";
+import DelegationDetail from "./pages/DelegationDetail.tsx";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { ActingProvider } from "./context/ActingContext.tsx";
 
 
 const queryClient = new QueryClient();
@@ -25,22 +28,25 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/v2" element={<IndexV2 />} />
-          <Route path="/events/:id" element={<EventDetail />} />
-          <Route path="/enquiries" element={<Enquiries />} />
-          <Route path="/approvals" element={<Approvals />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/audit" element={<AuditTrail />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/users/groups" element={<UserGroups />} />
-          <Route path="/users/:id" element={<UserDetail />} />
-          <Route path="/login" element={<Login />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        
+        <ActingProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/v2" element={<IndexV2 />} />
+            <Route path="/events/:id" element={<EventDetail />} />
+            <Route path="/enquiries" element={<Enquiries />} />
+            <Route path="/approvals" element={<Approvals />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/audit" element={<AuditTrail />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/groups" element={<UserGroups />} />
+            <Route path="/users/delegations" element={<Delegations />} />
+            <Route path="/users/delegations/:id" element={<DelegationDetail />} />
+            <Route path="/users/:id" element={<UserDetail />} />
+            <Route path="/login" element={<Login />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ActingProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -14,6 +14,8 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { notifications as initial, NotificationItem } from "@/data/portfolio";
+import { PrincipalSwitcher } from "@/components/delegations/PrincipalSwitcher";
+import { ActingOnBehalfBadge } from "@/components/delegations/ActingOnBehalfBadge";
 import { cn } from "@/lib/utils";
 
 const tenants = ["AOK Events", "Northwind Live", "Helix Conferences"];
@@ -62,8 +64,11 @@ export function TopBar({ onOpenNotification, showSidebarTrigger = false }: Props
           </DropdownMenuContent>
         </DropdownMenu>
 
+        <ActingOnBehalfBadge className="ml-3 hidden lg:inline-flex" />
+
         {/* Right cluster */}
         <div className="ml-auto flex items-center gap-1.5">
+          <PrincipalSwitcher />
           {searchOpen ? (
             <div className="relative animate-fade-in">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
