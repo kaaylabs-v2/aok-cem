@@ -112,12 +112,16 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                 </span>
               </span>
               <span className="h-3.5 w-px bg-border" />
-              <span className="inline-flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setMapsConfirmOpen(true)}
+                className="inline-flex items-center gap-2 rounded-md -mx-1 px-1 py-0.5 hover:bg-muted/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors"
+              >
                 <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-rose-100/60 bg-rose-50 text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300">
                   <MapPin className="h-3.5 w-3.5" strokeWidth={2.5} />
                 </span>
                 <span className="whitespace-nowrap text-[13px] font-semibold tracking-tight text-foreground leading-none">{event.venue}</span>
-              </span>
+              </button>
               <span className="h-3.5 w-px bg-border" />
               <span className="inline-flex items-center gap-2">
                 <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-emerald-100/60 bg-emerald-50 text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
