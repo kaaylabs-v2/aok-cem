@@ -68,6 +68,7 @@ function buildSeed(): Record<string, BookingRequest[]> {
   for (const eid of EVENT_IDS) {
     const size = SIZE_BY_EVENT[eid] ?? 5;
     const offset = (parseInt(eid.slice(1), 10) * 2) % POOL.length;
+    const hostOffset = (parseInt(eid.slice(1), 10) * 2) % 8;
     const list: BookingRequest[] = [];
     for (let i = 0; i < size; i++) {
       const base = POOL[(offset + i) % POOL.length];
@@ -75,13 +76,14 @@ function buildSeed(): Record<string, BookingRequest[]> {
         ...base,
         id: uid(),
         eventId: eid,
-        // spread request times for FCFS ordering
+        hostId: seedHostId(i, hostOffset),
         requestedAt: new Date(now - (size - i) * 3600000 - i * 1800000).toISOString(),
         status: "pending",
       });
     }
     out[eid] = list;
   }
+
   return out;
 }
 
