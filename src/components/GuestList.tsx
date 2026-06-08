@@ -232,12 +232,14 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                       </div>
                       <div className="min-w-0 leading-tight">
                         <div className="flex items-center gap-1.5">
-                          <p className="truncate text-xs font-medium">{host.department}</p>
-                          <span className={cn("inline-flex shrink-0 items-center rounded-full border px-1.5 py-px text-[10px] font-medium", SENIORITY_TONE[host.seniority])}>
-                            {host.seniority}
+                          <span className="shrink-0 text-xs text-muted-foreground">—</span>
+                          <span className="inline-flex shrink-0 items-center rounded-full border border-border bg-muted/40 px-1.5 py-px text-[10px] font-medium text-muted-foreground">
+                            Host
                           </span>
                         </div>
-                        <p className="truncate text-[11px] text-muted-foreground">{host.businessUnit}</p>
+                        <p className="truncate text-[11px] text-muted-foreground" title={`${host.department} · ${host.seniority} · ${host.businessUnit}`}>
+                          {host.department} · {host.seniority} · {host.businessUnit}
+                        </p>
                       </div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
