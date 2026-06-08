@@ -89,13 +89,13 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
   }, [filtered]);
 
   const counts = useMemo(() => ({
-    total: guests.length + hostsAttending.size,
-    accepted: guests.filter((g) => g.rsvp === "accepted").length + hostsAttending.size,
+    total: guests.length,
+    accepted: guests.filter((g) => g.rsvp === "accepted").length,
     declined: guests.filter((g) => g.rsvp === "declined").length,
     pending: guests.filter((g) => g.rsvp === "pending").length,
     failed: guests.filter((g) => g.invite === "failed").length,
     notSent: guests.filter((g) => g.invite === "not_sent").length,
-  }), [guests, hostsAttending]);
+  }), [guests]);
 
   const openAdd = () => { setEditing(null); setFormOpen(true); };
   const openEdit = (g: Guest) => { setEditing(g); setFormOpen(true); };
