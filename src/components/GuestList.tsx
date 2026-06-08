@@ -236,8 +236,8 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                           {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                         </button>
                         <button onClick={() => openHost(host)} className="min-w-0 flex-1 text-left">
-                          <p className="truncate text-sm font-semibold">{hostName(host)}</p>
-                          <p className="truncate text-[11px] text-muted-foreground">
+                          <p className="truncate text-xs font-semibold">{hostName(host)}</p>
+                          <p className="truncate text-[10px] text-muted-foreground">
                             {items.length} guest{items.length === 1 ? "" : "s"}
                             {host.flags.length > 0 && (
                               <span className="ml-1.5 inline-flex items-center gap-1 text-warning-foreground">
