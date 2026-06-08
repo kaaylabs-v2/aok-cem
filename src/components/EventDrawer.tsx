@@ -341,6 +341,26 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
         </div>
       </SheetContent>
       <GuestFormDialog open={bookOpen} onOpenChange={setBookOpen} eventId={event.id} />
+      <AlertDialog open={mapsConfirmOpen} onOpenChange={setMapsConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Open in Google Maps?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will open <span className="font-medium text-foreground">{event.venue}</span> in Google Maps in a new tab.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue)}`, "_blank", "noopener,noreferrer");
+              }}
+            >
+              Open Maps
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Sheet>
   );
 }
