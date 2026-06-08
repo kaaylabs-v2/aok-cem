@@ -23,6 +23,7 @@ import {
 import {
   AlertTriangle, ArrowDownUp, ArrowDown, ArrowUp, CheckCircle2, XCircle,
   History, Search, Filter, Download, Inbox, Clock, Flame, Flag,
+  ChevronRight, ChevronDown, Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -30,8 +31,11 @@ import {
   useRequests, requestApi, BookingRequest, Priority, Seniority,
   FLAG_LABEL, SENIORITY_TONE, RiskFlag,
 } from "@/data/requests";
+import { Host, HOSTS, hostById, hostInitials, hostName } from "@/data/hosts";
 import { guestApi, logAudit } from "@/data/guests";
 import { RequestHistoryDrawer } from "./RequestHistoryDrawer";
+import { HostSummaryDrawer } from "./HostSummaryDrawer";
+
 
 interface Props {
   eventId: string;
