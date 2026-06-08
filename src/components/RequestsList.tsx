@@ -72,11 +72,21 @@ export function RequestsList({ eventId }: Props) {
   const [historyFor, setHistoryFor] = useState<BookingRequest | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [showAll, setShowAll] = useState<Set<string>>(new Set());
+  const [hostDrawer, setHostDrawer] = useState<Host | null>(null);
+  const [hostDrawerOpen, setHostDrawerOpen] = useState(false);
   const toggleExpand = (id: string) => {
     const next = new Set(expanded);
     next.has(id) ? next.delete(id) : next.add(id);
     setExpanded(next);
   };
+  const toggleShowAll = (id: string) => {
+    const next = new Set(showAll);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setShowAll(next);
+  };
+  const openHost = (h: Host) => { setHostDrawer(h); setHostDrawerOpen(true); };
+
 
   const departments = useMemo(
     () => Array.from(new Set(requests.map((r) => r.department))).sort(),
