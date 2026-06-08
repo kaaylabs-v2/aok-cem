@@ -229,14 +229,15 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                         </button>
                       </div>
                       <div className="min-w-0 leading-tight">
-                        <p className="truncate text-xs font-medium">{host.department}</p>
+                        <div className="flex items-center gap-1.5">
+                          <p className="truncate text-xs font-medium">{host.department}</p>
+                          <span className={cn("inline-flex shrink-0 items-center rounded-full border px-1.5 py-px text-[10px] font-medium", SENIORITY_TONE[host.seniority])}>
+                            {host.seniority}
+                          </span>
+                        </div>
                         <p className="truncate text-[11px] text-muted-foreground">{host.businessUnit}</p>
                       </div>
-                      <div className="min-w-0">
-                        <span className={cn("inline-flex items-center rounded-full border px-1.5 py-px text-[10px] font-medium", SENIORITY_TONE[host.seniority])}>
-                          {host.seniority}
-                        </span>
-                      </div>
+                      <div className="min-w-0 text-xs text-muted-foreground">—</div>
                       <div className="flex flex-wrap items-center gap-1 text-[11px]">
                         <SummaryChip count={accepted} tone="success" label="Accepted" />
                         <SummaryChip count={pending} tone="muted" label="Pending" />
