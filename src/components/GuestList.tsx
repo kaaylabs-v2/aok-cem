@@ -45,8 +45,18 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
 
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [showAll, setShowAll] = useState<Set<string>>(new Set());
+  const [hostsAttending, setHostsAttending] = useState<Set<string>>(new Set());
   const [drawerHost, setDrawerHost] = useState<Host | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleHostAttending = (hostId: string) => {
+    setHostsAttending((prev) => {
+      const next = new Set(prev);
+      next.has(hostId) ? next.delete(hostId) : next.add(hostId);
+      toast.success(next.has(hostId) ? "Host marked as attending" : "Host marked as not attending");
+      return next;
+    });
+  };
 
   const toggleExpand = (hostId: string) => {
     const next = new Set(expanded);
@@ -88,13 +98,13 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
   }, [filtered]);
 
   const counts = useMemo(() => ({
-    total: guests.length,
-    accepted: guests.filter((g) => g.rsvp === "accepted").length,
+    total: guests.length + hostsAttending.size,
+    accepted: guests.filter((g) => g.rsvp === "accepted").length + hostsAttending.size,
     declined: guests.filter((g) => g.rsvp === "declined").length,
     pending: guests.filter((g) => g.rsvp === "pending").length,
     failed: guests.filter((g) => g.invite === "failed").length,
     notSent: guests.filter((g) => g.invite === "not_sent").length,
-  }), [guests]);
+  }), [guests, hostsAttending]);
 
   const openAdd = () => { setEditing(null); setFormOpen(true); };
   const openEdit = (g: Guest) => { setEditing(g); setFormOpen(true); };
@@ -198,7 +208,8 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
             <ul className="divide-y divide-border">
               {groups.map(({ host, items }) => {
                 const isOpen = expanded.has(host.id);
-                const accepted = items.filter((g) => g.rsvp === "accepted").length;
+                const isHostAttending = hostsAttending.has(host.id);
+                const accepted = items.filter((g) => g.rsvp === "accepted").length + (isHostAttending ? 1 : 0);
                 const pending = items.filter((g) => g.rsvp === "pending").length;
                 const declined = items.filter((g) => g.rsvp === "declined").length;
                 const visibleItems = showAll.has(host.id) ? items : items.slice(0, COLLAPSED_PREVIEW);
@@ -235,7 +246,25 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                       </div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
                       <div className="min-w-0 truncate text-xs text-muted-foreground">—</div>
-                      <div className="min-w-0 text-xs text-muted-foreground">—</div>
+                      <div className="min-w-0 text-xs text-muted-foreground">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              onClick={() => toggleHostAttending(host.id)}
+                              className={cn(
+                                "inline-flex items-center gap-1 rounded-full border px-1.5 py-px text-[10px] font-medium transition-colors",
+                                isHostAttending
+                                  ? "border-success/30 bg-success/15 text-success hover:bg-success/25"
+                                  : "border-border bg-muted/40 text-muted-foreground hover:bg-muted"
+                              )}
+                            >
+                              {isHostAttending ? <CheckCircle2 className="h-2.5 w-2.5" /> : null}
+                              {isHostAttending ? "Going" : "Attend?"}
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>{isHostAttending ? "Host is attending — click to remove" : "Mark host as attending this event"}</TooltipContent>
+                        </Tooltip>
+                      </div>
                       <div className="flex flex-wrap items-center gap-1 text-[11px]">
                         <SummaryChip count={accepted} tone="success" label="Accepted" />
                         <SummaryChip count={pending} tone="muted" label="Pending" />
