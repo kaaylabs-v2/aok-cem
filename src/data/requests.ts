@@ -2,6 +2,8 @@
 // Tenant-scoped, per-event, in-memory only.
 
 import { useEffect, useState } from "react";
+import { seedHostId } from "./hosts";
+
 
 export type Seniority = "Partner" | "Director" | "VP" | "Manager" | "Associate";
 export type Priority = "High" | "Medium" | "Low";
@@ -15,6 +17,8 @@ export type RiskFlag =
 export interface BookingRequest {
   id: string;
   eventId: string;
+  hostId: string;
+
   firstName: string;
   lastName: string;
   email: string;

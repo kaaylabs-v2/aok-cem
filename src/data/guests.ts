@@ -3,6 +3,7 @@
 // page reloads (no persistent guest profiles across events).
 
 import { useEffect, useState } from "react";
+import { DEFAULT_HOST_ID, seedHostId } from "./hosts";
 
 export type RsvpStatus = "accepted" | "declined" | "pending";
 export type InviteStatus = "not_sent" | "sent" | "failed";
@@ -10,6 +11,7 @@ export type InviteStatus = "not_sent" | "sent" | "failed";
 export interface Guest {
   id: string;
   eventId: string;
+  hostId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -20,6 +22,7 @@ export interface Guest {
   invite: InviteStatus;
   bounced?: boolean;
 }
+
 
 export interface AuditEntry {
   id: string;
@@ -67,8 +70,8 @@ function buildSeed(): Record<string, Guest[]> {
   const out: Record<string, Guest[]> = {};
   for (const eid of EVENT_IDS) {
     const size = SIZE_BY_EVENT[eid] ?? 6;
-    // Rotate the pool so each event gets a different slice of guests.
     const offset = (parseInt(eid.slice(1), 10) * 3) % POOL.length;
+    const hostOffset = parseInt(eid.slice(1), 10) % 8;
     const list: Guest[] = [];
     for (let i = 0; i < size; i++) {
       const base = POOL[(offset + i) % POOL.length];
@@ -76,7 +79,7 @@ function buildSeed(): Record<string, Guest[]> {
         ...base,
         id: uid(),
         eventId: eid,
-        // Make emails unique per event to avoid duplicate-email collisions.
+        hostId: seedHostId(i, hostOffset),
         email: base.email.replace("@", `+${eid}@`),
       });
     }
@@ -84,6 +87,7 @@ function buildSeed(): Record<string, Guest[]> {
   }
   return out;
 }
+
 
 let store: Record<string, Guest[]> = buildSeed();
 
@@ -140,17 +144,18 @@ export function logAudit(eventId: string, action: string, target?: string, previ
 }
 
 export const guestApi = {
-  add(eventId: string, g: Omit<Guest, "id" | "eventId" | "rsvp" | "invite">, sendInvite = false) {
+  add(eventId: string, g: Omit<Guest, "id" | "eventId" | "rsvp" | "invite" | "hostId"> & { hostId?: string }, sendInvite = false) {
     const list = store[eventId] ?? [];
     const dup = list.find((x) => x.email.toLowerCase() === g.email.toLowerCase());
     if (dup) return { ok: false as const, reason: "duplicate" as const };
-    const guest: Guest = { ...g, id: uid(), eventId, rsvp: "pending", invite: sendInvite ? "sent" : "not_sent" };
+    const guest: Guest = { ...g, hostId: g.hostId ?? DEFAULT_HOST_ID, id: uid(), eventId, rsvp: "pending", invite: sendInvite ? "sent" : "not_sent" };
     store[eventId] = [...list, guest];
     log(eventId, "Guest added", `${guest.firstName} ${guest.lastName}`);
     if (sendInvite) log(eventId, "Invite sent", guest.email);
     emit();
     return { ok: true as const, guest };
   },
+
   update(eventId: string, id: string, patch: Partial<Guest>) {
     const list = store[eventId] ?? [];
     const prev = list.find((g) => g.id === id);
