@@ -45,18 +45,9 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
 
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [showAll, setShowAll] = useState<Set<string>>(new Set());
-  const [hostsAttending, setHostsAttending] = useState<Set<string>>(new Set());
   const [drawerHost, setDrawerHost] = useState<Host | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const toggleHostAttending = (hostId: string) => {
-    setHostsAttending((prev) => {
-      const next = new Set(prev);
-      next.has(hostId) ? next.delete(hostId) : next.add(hostId);
-      toast.success(next.has(hostId) ? "Host marked as attending" : "Host marked as not attending");
-      return next;
-    });
-  };
 
   const toggleExpand = (hostId: string) => {
     const next = new Set(expanded);
