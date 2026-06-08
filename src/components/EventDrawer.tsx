@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useTransition } from "react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -32,6 +33,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
   const [pendingUpdate, setPendingUpdate] = useState(false);
   const [publishState, setPublishState] = useState<PublishState>("published");
   const [bookOpen, setBookOpen] = useState(false);
+  const [mapsConfirmOpen, setMapsConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (open && event) {
@@ -110,12 +112,16 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
                 </span>
               </span>
               <span className="h-3.5 w-px bg-border" />
-              <span className="inline-flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setMapsConfirmOpen(true)}
+                className="inline-flex items-center gap-2 rounded-md -mx-1 px-1 py-0.5 hover:bg-muted/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors"
+              >
                 <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-rose-100/60 bg-rose-50 text-rose-600 dark:border-rose-500/20 dark:bg-rose-500/10 dark:text-rose-300">
                   <MapPin className="h-3.5 w-3.5" strokeWidth={2.5} />
                 </span>
                 <span className="whitespace-nowrap text-[13px] font-semibold tracking-tight text-foreground leading-none">{event.venue}</span>
-              </span>
+              </button>
               <span className="h-3.5 w-px bg-border" />
               <span className="inline-flex items-center gap-2">
                 <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-emerald-100/60 bg-emerald-50 text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300">
@@ -335,6 +341,26 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
         </div>
       </SheetContent>
       <GuestFormDialog open={bookOpen} onOpenChange={setBookOpen} eventId={event.id} />
+      <AlertDialog open={mapsConfirmOpen} onOpenChange={setMapsConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Open in Google Maps?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will open <span className="font-medium text-foreground">{event.venue}</span> in Google Maps in a new tab.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue)}`, "_blank", "noopener,noreferrer");
+              }}
+            >
+              Open Maps
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Sheet>
   );
 }
