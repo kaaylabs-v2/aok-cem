@@ -231,18 +231,15 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                           </p>
                         </button>
                       </div>
-                      <div className="min-w-0 leading-tight">
-                        <div className="flex items-center gap-1.5">
-                          <span className="shrink-0 text-xs text-muted-foreground">—</span>
-                          <span className="inline-flex shrink-0 items-center rounded-full border border-border bg-muted/40 px-1.5 py-px text-[10px] font-medium text-muted-foreground">
-                            Host
-                          </span>
-                        </div>
-                        <p className="truncate text-[11px] text-muted-foreground" title={`${host.department} · ${host.seniority} · ${host.businessUnit}`}>
-                          {host.department} · {host.seniority} · {host.businessUnit}
-                        </p>
+                      <div className="min-w-0">
+                        <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-1.5 py-px text-[10px] font-medium text-primary">
+                          Host
+                        </span>
                       </div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
+                      <div className="min-w-0 truncate text-xs text-muted-foreground" title={`${host.department} · ${host.businessUnit}`}>
+                        {host.department}
+                      </div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
                       <div className="flex flex-wrap items-center gap-1 text-[11px]">
                         <SummaryChip count={accepted} tone="success" label="Accepted" />
