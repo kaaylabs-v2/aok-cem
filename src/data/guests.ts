@@ -3,7 +3,7 @@
 // page reloads (no persistent guest profiles across events).
 
 import { useEffect, useState } from "react";
-import { DEFAULT_HOST_ID, seedHostId } from "./hosts";
+import { DEFAULT_HOST_ID, HOSTS, hostById, seedHostId } from "./hosts";
 
 export type RsvpStatus = "accepted" | "declined" | "pending";
 export type InviteStatus = "not_sent" | "sent" | "failed";
