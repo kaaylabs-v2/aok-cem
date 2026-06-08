@@ -463,23 +463,15 @@ export function RequestsList({ eventId }: Props) {
                           {new Date(items[0].requestedAt).toLocaleDateString(undefined, { day: "2-digit", month: "short" })}
                         </div>
                         <div className="flex shrink-0 items-center justify-end gap-1">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={() => openHost(host)}>
-                                <Users className="h-3.5 w-3.5" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Host summary</TooltipContent>
-                          </Tooltip>
-                          <Button size="sm" variant="outline" className="h-7 shrink-0 rounded-lg border-destructive/40 px-2.5 text-[11px] font-semibold text-destructive hover:bg-destructive/10"
+                          <Button size="sm" variant="outline" className="h-7 shrink-0 rounded-lg border-destructive/40 px-2 text-[11px] font-semibold text-destructive hover:bg-destructive/10"
                             onClick={() => {
                               const next = new Set<string>(items.map((i) => i.id));
                               setSelected(next);
                               setBulkDeclineOpen(true);
                             }}>
-                            <XCircle className="mr-1 h-3.5 w-3.5" /> Decline
+                            Decline
                           </Button>
-                          <Button size="sm" className="h-7 shrink-0 rounded-lg bg-success px-2.5 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90"
+                          <Button size="sm" className="h-7 shrink-0 rounded-lg bg-success px-2 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90"
                             onClick={() => {
                               const ids = items.map((i) => i.id);
                               const approved = requestApi.bulkApprove(eventId, ids);
@@ -487,7 +479,7 @@ export function RequestsList({ eventId }: Props) {
                               logAudit(eventId, "Bulk request approval", `${approved.length} guest${approved.length === 1 ? "" : "s"} for ${hostName(host)}`);
                               toast.success(`Approved ${approved.length} guest${approved.length === 1 ? "" : "s"} for ${hostName(host)}`);
                             }}>
-                            <CheckCircle2 className="mr-1 h-3.5 w-3.5" /> Approve all
+                            Approve all
                           </Button>
                         </div>
                       </div>
