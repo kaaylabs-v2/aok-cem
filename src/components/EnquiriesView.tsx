@@ -21,6 +21,16 @@ import {
 import { format } from "date-fns";
 import { toast } from "sonner";
 
+const CURRENCIES = [
+  { code: "USD", symbol: "$" },
+  { code: "EUR", symbol: "€" },
+  { code: "GBP", symbol: "£" },
+  { code: "AED", symbol: "د.إ" },
+  { code: "CHF", symbol: "Fr" },
+  { code: "JPY", symbol: "¥" },
+] as const;
+const CURRENCY_SYMBOL: Record<string, string> = Object.fromEntries(CURRENCIES.map((c) => [c.code, c.symbol]));
+
 const STATUS_CHIP: Record<EnquiryStatus, string> = {
   submitted: "bg-[hsl(220_10%_92%)] text-[hsl(220_10%_35%)]",
   in_progress: "bg-[hsl(220_85%_94%)] text-[hsl(220_85%_45%)]",
