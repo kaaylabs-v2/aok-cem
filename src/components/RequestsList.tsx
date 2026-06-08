@@ -729,6 +729,25 @@ function FlagChip({ flag }: { flag: RiskFlag }) {
   );
 }
 
+function FlagSummary({ flags }: { flags: RiskFlag[] }) {
+  if (flags.length === 0) return null;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="inline-flex items-center gap-1 rounded-full border border-warning/40 bg-warning/10 px-1.5 py-0.5 text-[10px] font-medium text-warning-foreground">
+          <AlertTriangle className="h-2.5 w-2.5" />
+          {flags.length} {flags.length === 1 ? "flag" : "flags"}
+        </span>
+      </TooltipTrigger>
+      <TooltipContent>
+        <ul className="space-y-0.5 text-[11px]">
+          {flags.map((f) => <li key={f}>• {FLAG_LABEL[f]}</li>)}
+        </ul>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
 function RiskCell({ score, acceptance, flags }: { score: number; acceptance: number; flags: RiskFlag[] }) {
   const tone = score >= 75 ? "success" : score >= 50 ? "warning" : "danger";
   const dot = tone === "success" ? "bg-success" : tone === "warning" ? "bg-warning" : "bg-destructive";
