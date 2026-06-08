@@ -247,11 +247,6 @@ export function EnquiriesView({ pushNotification }: Props) {
                 </SheetTitle>
               </SheetHeader>
 
-              {selected.lastSyncedAt && (
-                <div className="mt-3 flex items-center gap-1.5 text-[11px] text-foreground/50">
-                  <Clock className="h-3 w-3" /> Last synced {relTime(selected.lastSyncedAt)} from 3D CRM
-                </div>
-              )}
 
               <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
                 <Field icon={<CalendarDays className="h-4 w-4" />} label="Preferred dates"
