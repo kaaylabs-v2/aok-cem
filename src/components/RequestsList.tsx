@@ -505,8 +505,8 @@ export function RequestsList({ eventId }: Props) {
                                     <p className="truncate font-medium leading-tight">{r.firstName} {r.lastName}</p>
                                     <p className="truncate text-[11px] text-muted-foreground">{r.position}</p>
                                     {uniqueFlags.length > 0 && (
-                                      <div className="mt-1 flex flex-wrap gap-1">
-                                        {uniqueFlags.slice(0, 2).map((f) => <FlagChip key={f} flag={f} />)}
+                                      <div className="mt-1">
+                                        <FlagSummary flags={uniqueFlags} />
                                       </div>
                                     )}
                                   </div>
