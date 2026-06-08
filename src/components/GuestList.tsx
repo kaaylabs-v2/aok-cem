@@ -176,7 +176,33 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
           <div className="min-w-[760px]">
           {/* Column header */}
           <div className="sticky top-0 z-10 grid grid-cols-[minmax(200px,1.3fr),64px,110px,100px,72px,120px,32px] items-center gap-1 border-b border-border bg-muted/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-            <span>Host / Guest</span>
+            <span className="flex items-center gap-2">
+              Host / Guest
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => setExpanded(new Set(groups.map((g) => g.host.id)))}
+                    className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted"
+                    aria-label="Expand all"
+                  >
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Expand all</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => { setExpanded(new Set()); setShowAll(new Set()); }}
+                    className="flex h-5 w-5 items-center justify-center rounded hover:bg-muted"
+                    aria-label="Collapse all"
+                  >
+                    <ChevronRight className="h-3 w-3" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Collapse all</TooltipContent>
+              </Tooltip>
+            </span>
             <span>Role</span>
             <span>Invited By</span>
             <span>Company</span>
