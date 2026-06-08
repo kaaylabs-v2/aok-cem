@@ -206,7 +206,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                 return (
                   <li key={host.id}>
                     {/* Host row */}
-                    <div className="group grid grid-cols-[minmax(260px,1.4fr),160px,130px,100px,130px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
+                    <div className="group grid grid-cols-[minmax(240px,1.4fr),150px,120px,90px,140px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
                       <div className="flex min-w-0 items-center gap-2">
                         <button
                           onClick={() => toggleExpand(host.id)}
@@ -262,7 +262,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                     {isOpen && (
                       <ul className="divide-y divide-border/60 bg-background">
                         {visibleItems.map((g) => (
-                          <li key={g.id} className="grid grid-cols-[minmax(260px,1.4fr),160px,130px,100px,130px,40px] items-center gap-3 px-4 py-2.5 text-sm">
+                          <li key={g.id} className="grid grid-cols-[minmax(240px,1.4fr),150px,120px,90px,140px,40px] items-center gap-3 px-4 py-2.5 text-sm">
                             <div className="flex min-w-0 items-start gap-2 pl-7">
                               <span className="mt-1 shrink-0 text-muted-foreground">↳</span>
                               <Avatar className="h-7 w-7 shrink-0">
