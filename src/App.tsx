@@ -9,6 +9,10 @@ import EventDetail from "./pages/EventDetail.tsx";
 import Enquiries from "./pages/Enquiries.tsx";
 import Approvals from "./pages/Approvals.tsx";
 import Reports from "./pages/Reports.tsx";
+import AuditTrail from "./pages/AuditTrail.tsx";
+import Users from "./pages/Users.tsx";
+import UserGroups from "./pages/UserGroups.tsx";
+import UserDetail from "./pages/UserDetail.tsx";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -28,6 +32,10 @@ const App = () => (
           <Route path="/enquiries" element={<Enquiries />} />
           <Route path="/approvals" element={<Approvals />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/audit" element={<AuditTrail />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/groups" element={<UserGroups />} />
+          <Route path="/users/:id" element={<UserDetail />} />
           <Route path="/login" element={<Login />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
