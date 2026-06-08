@@ -367,7 +367,7 @@ export function RequestsList({ eventId }: Props) {
           </div>
 
           {/* Column headers */}
-          <div className="hidden grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 border-b border-border bg-muted/30 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
+          <div className="hidden grid-cols-[minmax(220px,1fr),150px,120px,80px,80px,200px] items-center gap-3 border-b border-border bg-muted/30 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
             <span>Host / Requester</span>
             <span>Invited By</span>
             <button onClick={() => toggleSort("company")} className={cn("inline-flex items-center gap-1 text-left", sortKey === "company" ? "text-foreground" : "hover:text-foreground")}>
