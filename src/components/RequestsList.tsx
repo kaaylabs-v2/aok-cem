@@ -367,7 +367,7 @@ export function RequestsList({ eventId }: Props) {
           </div>
 
           {/* Column headers */}
-          <div className="hidden grid-cols-[minmax(200px,1fr),130px,110px,70px,70px,110px] items-center gap-3 border-b border-border bg-muted/30 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
+          <div className="hidden grid-cols-[minmax(180px,1fr),110px,90px,60px,60px,100px] items-center gap-2 border-b border-border bg-muted/30 px-3 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
             <span>Host / Requester</span>
             <span>Invited By</span>
             <button onClick={() => toggleSort("company")} className={cn("inline-flex items-center gap-1 text-left", sortKey === "company" ? "text-foreground" : "hover:text-foreground")}>
@@ -413,7 +413,7 @@ export function RequestsList({ eventId }: Props) {
                   return (
                     <li key={host.id}>
                       {/* Host row */}
-                      <div className={cn("grid grid-cols-[minmax(200px,1fr),130px,110px,70px,70px,110px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/30",
+                      <div className={cn("grid grid-cols-[minmax(180px,1fr),110px,90px,60px,60px,100px] items-center gap-2 bg-muted/20 px-3 py-2.5 transition-colors hover:bg-muted/30",
                         someSelected && "bg-primary/5")}>
                         <div className="flex min-w-0 items-center gap-2">
                           <button onClick={() => toggleExpand(host.id)}
@@ -496,7 +496,7 @@ export function RequestsList({ eventId }: Props) {
                             const d = new Date(r.requestedAt);
                             const uniqueFlags = r.flags.filter((f) => !host.flags.includes(f));
                             return (
-                              <li key={r.id} className={cn("grid grid-cols-[minmax(200px,1fr),130px,110px,70px,70px,110px] items-center gap-3 px-4 py-2.5 text-sm",
+                              <li key={r.id} className={cn("grid grid-cols-[minmax(180px,1fr),110px,90px,60px,60px,100px] items-center gap-2 px-3 py-2 text-sm",
                                 selected.has(r.id) && "bg-primary/5")}>
                                 <div className="flex min-w-0 items-start gap-2 pl-8">
                                   <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} className="mt-0.5" />
