@@ -539,12 +539,22 @@ export function RequestsList({ eventId }: Props) {
                                     </TooltipTrigger>
                                     <TooltipContent>History</TooltipContent>
                                   </Tooltip>
-                                  <Button size="sm" variant="outline" className="h-7 shrink-0 rounded-lg border-destructive/40 px-2 text-[11px] font-semibold text-destructive hover:bg-destructive/10" onClick={() => setDeclineFor(r)}>
-                                    Decline
-                                  </Button>
-                                  <Button size="sm" className="h-7 shrink-0 rounded-lg bg-success px-2 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
-                                    Approve
-                                  </Button>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Button size="icon" variant="outline" className="h-7 w-7 shrink-0 rounded-lg border-destructive/40 text-destructive hover:bg-destructive/10" onClick={() => setDeclineFor(r)}>
+                                        <XCircle className="h-3.5 w-3.5" />
+                                      </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Decline</TooltipContent>
+                                  </Tooltip>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Button size="icon" className="h-7 w-7 shrink-0 rounded-lg bg-success text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
+                                        <CheckCircle2 className="h-3.5 w-3.5" />
+                                      </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Approve</TooltipContent>
+                                  </Tooltip>
                                 </div>
                               </li>
                             );
