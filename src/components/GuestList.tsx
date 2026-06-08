@@ -160,14 +160,6 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
               {counts.failed > 0 && <SelectItem value="failed">Failed · {counts.failed}</SelectItem>}
             </SelectContent>
           </Select>
-          <Button size="sm" variant="outline" className="h-9 rounded-full"
-            onClick={() => setExpanded(new Set(groups.map((g) => g.host.id)))}>
-            Expand all
-          </Button>
-          <Button size="sm" variant="outline" className="h-9 rounded-full"
-            onClick={() => { setExpanded(new Set()); setShowAll(new Set()); }}>
-            Collapse all
-          </Button>
           <div className="ml-auto flex gap-2">
             <Button size="sm" variant="outline" className="h-9 rounded-full" onClick={handleSendAll} disabled={counts.notSent === 0}>
               <Send className="mr-1.5 h-3.5 w-3.5" />
