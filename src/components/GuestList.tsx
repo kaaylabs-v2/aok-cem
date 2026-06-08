@@ -181,10 +181,11 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
         {/* Grouped host → guest table */}
         <div className="overflow-hidden rounded-2xl border border-border bg-card">
           {/* Column header */}
-          <div className="sticky top-0 z-10 grid grid-cols-[1fr,180px,140px,110px,40px] items-center gap-3 border-b border-border bg-muted/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="sticky top-0 z-10 grid grid-cols-[1fr,180px,140px,110px,100px,40px] items-center gap-3 border-b border-border bg-muted/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
             <span>Host / Guest</span>
             <span>Invited By</span>
             <span>Company</span>
+            <span>Access</span>
             <span>Status</span>
             <span />
           </div>
@@ -204,7 +205,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                 return (
                   <li key={host.id}>
                     {/* Host row */}
-                    <div className="group grid grid-cols-[1fr,180px,140px,110px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
+                    <div className="group grid grid-cols-[1fr,180px,140px,110px,100px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
                       <div className="flex min-w-0 items-center gap-2">
                         <button
                           onClick={() => toggleExpand(host.id)}
@@ -238,6 +239,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                         <p className="truncate text-[11px] text-muted-foreground">{host.businessUnit}</p>
                       </div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
+                      <div className="min-w-0 text-xs text-muted-foreground">—</div>
                       <div className="flex flex-wrap items-center gap-1 text-[11px]">
                         <SummaryChip count={accepted} tone="success" label="Accepted" />
                         <SummaryChip count={pending} tone="muted" label="Pending" />
@@ -259,7 +261,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                     {isOpen && (
                       <ul className="divide-y divide-border/60 bg-background">
                         {visibleItems.map((g) => (
-                          <li key={g.id} className="grid grid-cols-[1fr,180px,140px,110px,40px] items-center gap-3 px-4 py-2.5 text-sm">
+                          <li key={g.id} className="grid grid-cols-[1fr,180px,140px,110px,100px,40px] items-center gap-3 px-4 py-2.5 text-sm">
                             <div className="flex min-w-0 items-start gap-2 pl-8">
                               <span className="mt-1 text-muted-foreground">↳</span>
                               <div className="min-w-0">
@@ -271,6 +273,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                               <span className="truncate">{hostName(host)}</span>
                             </div>
                             <div className="min-w-0 truncate text-xs text-muted-foreground">{g.company || "—"}</div>
+                            <div className="min-w-0 truncate text-xs text-muted-foreground">{g.access || "—"}</div>
                             <div className="flex flex-col items-start gap-1">
                               <RsvpChip status={g.rsvp} />
                               <InviteChip status={g.invite} />
