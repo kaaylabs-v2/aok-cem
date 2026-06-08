@@ -216,9 +216,6 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                         >
                           {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                         </button>
-                        <Avatar className="h-8 w-8 shrink-0">
-                          <AvatarFallback className="bg-primary/10 text-[11px] font-semibold text-primary">{hostInitials(host)}</AvatarFallback>
-                        </Avatar>
                         <button onClick={() => openHost(host)} className="min-w-0 flex-1 text-left">
                           <p className="truncate text-sm font-semibold">{hostName(host)}</p>
                           <p className="truncate text-[11px] text-muted-foreground">
