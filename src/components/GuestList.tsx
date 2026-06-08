@@ -237,9 +237,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                         </span>
                       </div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
-                      <div className="min-w-0 truncate text-xs text-muted-foreground" title={`${host.department} · ${host.businessUnit}`}>
-                        {host.department}
-                      </div>
+                      <div className="min-w-0 truncate text-xs text-muted-foreground">—</div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
                       <div className="flex flex-wrap items-center gap-1 text-[11px]">
                         <SummaryChip count={accepted} tone="success" label="Accepted" />
