@@ -413,7 +413,7 @@ export function RequestsList({ eventId }: Props) {
                   return (
                     <li key={host.id}>
                       {/* Host row */}
-                      <div className={cn("grid grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/30",
+                      <div className={cn("grid grid-cols-[minmax(220px,1fr),150px,120px,80px,80px,200px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/30",
                         someSelected && "bg-primary/5")}>
                         <div className="flex min-w-0 items-center gap-2">
                           <button onClick={() => toggleExpand(host.id)}
