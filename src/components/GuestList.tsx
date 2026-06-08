@@ -173,9 +173,9 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
 
         {/* Grouped host → guest table */}
         <div className="overflow-x-auto rounded-2xl border border-border bg-card">
-          <div className="min-w-[760px]">
+          <div className="min-w-[640px]">
           {/* Column header */}
-          <div className="sticky top-0 z-10 grid grid-cols-[minmax(200px,1.3fr),64px,110px,100px,72px,120px,32px] items-center gap-1 border-b border-border bg-muted/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="sticky top-0 z-10 grid grid-cols-[minmax(160px,1.3fr),56px,90px,90px,64px,100px,28px] items-center gap-1 border-b border-border bg-muted/40 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
             <span className="flex items-center gap-2">
               Host / Guest
               <Tooltip>
@@ -226,7 +226,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                 return (
                   <li key={host.id}>
                     {/* Host row */}
-                    <div className="group grid grid-cols-[minmax(200px,1.3fr),64px,110px,100px,72px,120px,32px] items-center gap-1 bg-muted/20 px-3 py-2 transition-colors hover:bg-muted/40">
+                    <div className="group grid grid-cols-[minmax(160px,1.3fr),56px,90px,90px,64px,100px,28px] items-center gap-1 bg-muted/20 px-2 py-1.5 transition-colors hover:bg-muted/40">
                       <div className="flex min-w-0 items-center gap-2">
                         <button
                           onClick={() => toggleExpand(host.id)}
@@ -236,8 +236,8 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                           {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                         </button>
                         <button onClick={() => openHost(host)} className="min-w-0 flex-1 text-left">
-                          <p className="truncate text-sm font-semibold">{hostName(host)}</p>
-                          <p className="truncate text-[11px] text-muted-foreground">
+                          <p className="truncate text-xs font-semibold">{hostName(host)}</p>
+                          <p className="truncate text-[10px] text-muted-foreground">
                             {items.length} guest{items.length === 1 ? "" : "s"}
                             {host.flags.length > 0 && (
                               <span className="ml-1.5 inline-flex items-center gap-1 text-warning-foreground">
@@ -276,19 +276,19 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                     {isOpen && (
                       <ul className="divide-y divide-border/60 bg-background">
                         {visibleItems.map((g) => (
-                          <li key={g.id} className="grid grid-cols-[minmax(200px,1.3fr),64px,110px,100px,72px,120px,32px] items-center gap-1 px-3 py-1.5 text-sm">
-                            <div className="flex min-w-0 items-start gap-2 pl-7">
-                              <span className="mt-1 shrink-0 text-muted-foreground">↳</span>
-                              <Avatar className="h-7 w-7 shrink-0">
-                                <AvatarFallback className="bg-muted text-[10px] font-semibold text-muted-foreground">
+                          <li key={g.id} className="grid grid-cols-[minmax(160px,1.3fr),56px,90px,90px,64px,100px,28px] items-center gap-1 px-2 py-1 text-xs">
+                            <div className="flex min-w-0 items-center gap-1.5 pl-5">
+                              <span className="shrink-0 text-muted-foreground">↳</span>
+                              <Avatar className="h-6 w-6 shrink-0">
+                                <AvatarFallback className="bg-muted text-[9px] font-semibold text-muted-foreground">
                                   {(g.firstName[0] + g.lastName[0]).toUpperCase()}
                                 </AvatarFallback>
                               </Avatar>
                               <div className="min-w-0 flex-1">
-                                <p className="truncate font-medium leading-tight" title={`${g.firstName} ${g.lastName}`}>
+                                <p className="truncate text-xs font-medium leading-tight" title={`${g.firstName} ${g.lastName}`}>
                                   {g.firstName} {g.lastName}
                                 </p>
-                                <p className="truncate text-[11px] text-muted-foreground" title={g.email}>{g.email}</p>
+                                <p className="truncate text-[10px] text-muted-foreground" title={g.email}>{g.email}</p>
                               </div>
                             </div>
                             <div className="min-w-0">
@@ -296,11 +296,11 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                                 Guest
                               </span>
                             </div>
-                            <div className="min-w-0 text-[11px] text-muted-foreground">
+                            <div className="min-w-0 text-[10px] text-muted-foreground">
                               <span className="truncate block" title={hostName(host)}>{hostName(host)}</span>
                             </div>
-                            <div className="min-w-0 truncate text-xs text-muted-foreground" title={g.company || ""}>{g.company || "—"}</div>
-                            <div className="min-w-0 truncate text-xs text-muted-foreground">{g.access || "—"}</div>
+                            <div className="min-w-0 truncate text-[11px] text-muted-foreground" title={g.company || ""}>{g.company || "—"}</div>
+                            <div className="min-w-0 truncate text-[11px] text-muted-foreground">{g.access || "—"}</div>
                             <div className="flex flex-col items-start gap-1">
                               <RsvpChip status={g.rsvp} />
                               <InviteChip status={g.invite} />
