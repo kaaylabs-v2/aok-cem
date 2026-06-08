@@ -844,10 +844,20 @@ function NewEnquiryDialog({
                     );
                   }
                   const v = values[f.key];
+                  let display: string = "—";
+                  if (v) {
+                    if (f.kind === "money") {
+                      const cur = values[`${f.key}Currency`] || "USD";
+                      const sym = CURRENCY_SYMBOL[cur] || "$";
+                      const tax = values[`${f.key}TaxIncluded`] === "1";
+                      display = `${sym}${Number(v).toLocaleString()} ${cur}${tax ? " (tax incl.)" : ""}`;
+                    } else {
+                      display = v;
+                    }
+                  }
                   return (
                     <p key={f.key}>
-                      <span className="text-foreground/50">{f.label}:</span>{" "}
-                      {v ? (f.kind === "money" ? `$${Number(v).toLocaleString()}` : v) : "—"}
+                      <span className="text-foreground/50">{f.label}:</span> {display}
                     </p>
                   );
                 })}
