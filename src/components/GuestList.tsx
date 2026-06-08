@@ -336,6 +336,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
               })}
             </ul>
           )}
+          </div>
         </div>
 
         {counts.failed > 0 && (
