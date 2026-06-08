@@ -33,6 +33,7 @@ export function EventDrawer({ event, open, onOpenChange }: Props) {
   const [pendingUpdate, setPendingUpdate] = useState(false);
   const [publishState, setPublishState] = useState<PublishState>("published");
   const [bookOpen, setBookOpen] = useState(false);
+  const [mapsConfirmOpen, setMapsConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (open && event) {
