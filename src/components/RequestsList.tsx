@@ -437,13 +437,8 @@ export function RequestsList({ eventId }: Props) {
                               {items.length} guest request{items.length === 1 ? "" : "s"}
                             </p>
                             {allHostFlags.length > 0 && (
-                              <div className="mt-1 flex flex-wrap gap-1">
-                                {allHostFlags.slice(0, 2).map((f) => <FlagChip key={f} flag={f} />)}
-                                {allHostFlags.length > 2 && (
-                                  <span className="inline-flex items-center rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                                    +{allHostFlags.length - 2}
-                                  </span>
-                                )}
+                              <div className="mt-1">
+                                <FlagSummary flags={allHostFlags} />
                               </div>
                             )}
                           </button>
