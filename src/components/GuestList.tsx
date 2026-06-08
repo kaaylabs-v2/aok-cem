@@ -181,7 +181,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
         {/* Grouped host → guest table */}
         <div className="overflow-hidden rounded-2xl border border-border bg-card">
           {/* Column header */}
-          <div className="sticky top-0 z-10 grid grid-cols-[1fr,180px,140px,110px,100px,40px] items-center gap-3 border-b border-border bg-muted/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="sticky top-0 z-10 grid grid-cols-[minmax(260px,1.4fr),160px,130px,100px,130px,40px] items-center gap-3 border-b border-border bg-muted/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
             <span>Host / Guest</span>
             <span>Invited By</span>
             <span>Company</span>
@@ -205,7 +205,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                 return (
                   <li key={host.id}>
                     {/* Host row */}
-                    <div className="group grid grid-cols-[1fr,180px,140px,110px,100px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
+                    <div className="group grid grid-cols-[minmax(260px,1.4fr),160px,130px,100px,130px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
                       <div className="flex min-w-0 items-center gap-2">
                         <button
                           onClick={() => toggleExpand(host.id)}
@@ -261,18 +261,25 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                     {isOpen && (
                       <ul className="divide-y divide-border/60 bg-background">
                         {visibleItems.map((g) => (
-                          <li key={g.id} className="grid grid-cols-[1fr,180px,140px,110px,100px,40px] items-center gap-3 px-4 py-2.5 text-sm">
-                            <div className="flex min-w-0 items-start gap-2 pl-8">
-                              <span className="mt-1 text-muted-foreground">↳</span>
-                              <div className="min-w-0">
-                                <p className="truncate font-medium leading-tight">{g.firstName} {g.lastName}</p>
-                                <p className="truncate text-[11px] text-muted-foreground">{g.email}</p>
+                          <li key={g.id} className="grid grid-cols-[minmax(260px,1.4fr),160px,130px,100px,130px,40px] items-center gap-3 px-4 py-2.5 text-sm">
+                            <div className="flex min-w-0 items-start gap-2 pl-7">
+                              <span className="mt-1 shrink-0 text-muted-foreground">↳</span>
+                              <Avatar className="h-7 w-7 shrink-0">
+                                <AvatarFallback className="bg-muted text-[10px] font-semibold text-muted-foreground">
+                                  {(g.firstName[0] + g.lastName[0]).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="min-w-0 flex-1">
+                                <p className="truncate font-medium leading-tight" title={`${g.firstName} ${g.lastName}`}>
+                                  {g.firstName} {g.lastName}
+                                </p>
+                                <p className="truncate text-[11px] text-muted-foreground" title={g.email}>{g.email}</p>
                               </div>
                             </div>
-                            <div className="text-[11px] text-muted-foreground">
-                              <span className="truncate">{hostName(host)}</span>
+                            <div className="min-w-0 text-[11px] text-muted-foreground">
+                              <span className="truncate block" title={hostName(host)}>{hostName(host)}</span>
                             </div>
-                            <div className="min-w-0 truncate text-xs text-muted-foreground">{g.company || "—"}</div>
+                            <div className="min-w-0 truncate text-xs text-muted-foreground" title={g.company || ""}>{g.company || "—"}</div>
                             <div className="min-w-0 truncate text-xs text-muted-foreground">{g.access || "—"}</div>
                             <div className="flex flex-col items-start gap-1">
                               <RsvpChip status={g.rsvp} />
