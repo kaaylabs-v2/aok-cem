@@ -207,7 +207,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                 return (
                   <li key={host.id}>
                     {/* Host row */}
-                    <div className="group grid grid-cols-[minmax(240px,1.4fr),150px,120px,90px,140px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
+                    <div className="group grid grid-cols-[minmax(240px,1.4fr),80px,140px,120px,90px,140px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
                       <div className="flex min-w-0 items-center gap-2">
                         <button
                           onClick={() => toggleExpand(host.id)}
