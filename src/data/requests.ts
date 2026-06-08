@@ -2,6 +2,8 @@
 // Tenant-scoped, per-event, in-memory only.
 
 import { useEffect, useState } from "react";
+import { seedHostId } from "./hosts";
+
 
 export type Seniority = "Partner" | "Director" | "VP" | "Manager" | "Associate";
 export type Priority = "High" | "Medium" | "Low";
@@ -15,6 +17,8 @@ export type RiskFlag =
 export interface BookingRequest {
   id: string;
   eventId: string;
+  hostId: string;
+
   firstName: string;
   lastName: string;
   email: string;
@@ -40,7 +44,7 @@ export interface BookingRequest {
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
-const POOL: Omit<BookingRequest, "id" | "eventId" | "requestedAt" | "status" | "declineReason">[] = [
+const POOL: Omit<BookingRequest, "id" | "eventId" | "hostId" | "requestedAt" | "status" | "declineReason">[] = [
   { firstName: "Sarah", lastName: "Johnson", email: "sarah.j@meridian.com", department: "Corporate Banking", company: "Meridian Capital", requestedFor: "Sarah Johnson", seniority: "Director", position: "Managing Director", usageScore: 92, acceptanceRate: 95, priority: "High", flags: [], previousBookings: 18, previousRequests: 22, noShows: 0, attendanceSummary: "100% attendance over past 12 months", usageHistory: [{ month: "Jan", score: 88 }, { month: "Feb", score: 90 }, { month: "Mar", score: 92 }] },
   { firstName: "Daniel", lastName: "Reeves", email: "d.reeves@blackoak.io", department: "Investment Banking", company: "BlackOak Partners", requestedFor: "Daniel Reeves", seniority: "VP", position: "Vice President", usageScore: 78, acceptanceRate: 82, priority: "Medium", flags: [], previousBookings: 12, previousRequests: 15, noShows: 1, attendanceSummary: "93% attendance", usageHistory: [{ month: "Jan", score: 72 }, { month: "Feb", score: 75 }, { month: "Mar", score: 78 }] },
   { firstName: "Priya", lastName: "Shah", email: "priya.shah@northwind.io", department: "Wealth Management", company: "Northwind", requestedFor: "Priya Shah", seniority: "Partner", position: "Senior Partner", usageScore: 95, acceptanceRate: 98, priority: "High", flags: [], previousBookings: 27, previousRequests: 28, noShows: 0, attendanceSummary: "100% attendance, 5 referrals", usageHistory: [{ month: "Jan", score: 94 }, { month: "Feb", score: 95 }, { month: "Mar", score: 95 }] },
@@ -64,6 +68,7 @@ function buildSeed(): Record<string, BookingRequest[]> {
   for (const eid of EVENT_IDS) {
     const size = SIZE_BY_EVENT[eid] ?? 5;
     const offset = (parseInt(eid.slice(1), 10) * 2) % POOL.length;
+    const hostOffset = (parseInt(eid.slice(1), 10) * 2) % 8;
     const list: BookingRequest[] = [];
     for (let i = 0; i < size; i++) {
       const base = POOL[(offset + i) % POOL.length];
@@ -71,13 +76,14 @@ function buildSeed(): Record<string, BookingRequest[]> {
         ...base,
         id: uid(),
         eventId: eid,
-        // spread request times for FCFS ordering
+        hostId: seedHostId(i, hostOffset),
         requestedAt: new Date(now - (size - i) * 3600000 - i * 1800000).toISOString(),
         status: "pending",
       });
     }
     out[eid] = list;
   }
+
   return out;
 }
 

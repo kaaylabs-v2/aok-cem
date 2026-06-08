@@ -23,6 +23,7 @@ import {
 import {
   AlertTriangle, ArrowDownUp, ArrowDown, ArrowUp, CheckCircle2, XCircle,
   History, Search, Filter, Download, Inbox, Clock, Flame, Flag,
+  ChevronRight, ChevronDown, Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -30,8 +31,11 @@ import {
   useRequests, requestApi, BookingRequest, Priority, Seniority,
   FLAG_LABEL, SENIORITY_TONE, RiskFlag,
 } from "@/data/requests";
+import { Host, HOSTS, hostById, hostInitials, hostName } from "@/data/hosts";
 import { guestApi, logAudit } from "@/data/guests";
 import { RequestHistoryDrawer } from "./RequestHistoryDrawer";
+import { HostSummaryDrawer } from "./HostSummaryDrawer";
+
 
 interface Props {
   eventId: string;
@@ -39,6 +43,9 @@ interface Props {
 
 type SortKey = "name" | "company" | "requestedAt" | "seniority" | "position" | "acceptanceRate" | "priority";
 type SortDir = "asc" | "desc";
+
+const COLLAPSED_PREVIEW = 2;
+
 
 const SENIORITY_RANK: Record<Seniority, number> = {
   Partner: 5, Director: 4, VP: 3, Manager: 2, Associate: 1,
@@ -68,11 +75,21 @@ export function RequestsList({ eventId }: Props) {
   const [historyFor, setHistoryFor] = useState<BookingRequest | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [showAll, setShowAll] = useState<Set<string>>(new Set());
+  const [hostDrawer, setHostDrawer] = useState<Host | null>(null);
+  const [hostDrawerOpen, setHostDrawerOpen] = useState(false);
   const toggleExpand = (id: string) => {
     const next = new Set(expanded);
     next.has(id) ? next.delete(id) : next.add(id);
     setExpanded(next);
   };
+  const toggleShowAll = (id: string) => {
+    const next = new Set(showAll);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setShowAll(next);
+  };
+  const openHost = (h: Host) => { setHostDrawer(h); setHostDrawerOpen(true); };
+
 
   const departments = useMemo(
     () => Array.from(new Set(requests.map((r) => r.department))).sort(),
@@ -325,7 +342,7 @@ export function RequestsList({ eventId }: Props) {
           </div>
         )}
 
-        {/* Card list */}
+        {/* Grouped host → guest list */}
         <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
           {/* Header bar */}
           <div className="flex items-center gap-2.5 border-b border-border bg-muted/40 px-4 py-2">
@@ -337,38 +354,32 @@ export function RequestsList({ eventId }: Props) {
             <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               {filtered.length} Pending
             </span>
+            <div className="ml-auto flex gap-2">
+              <Button size="sm" variant="ghost" className="h-7 rounded-full px-3 text-[11px]"
+                onClick={() => setExpanded(new Set(Array.from(new Set(filtered.map((r) => r.hostId)))))}>
+                Expand all
+              </Button>
+              <Button size="sm" variant="ghost" className="h-7 rounded-full px-3 text-[11px]"
+                onClick={() => { setExpanded(new Set()); setShowAll(new Set()); }}>
+                Collapse all
+              </Button>
+            </div>
           </div>
 
           {/* Column headers */}
-          <div className="hidden items-center gap-3 border-b border-border bg-muted/30 px-4 py-2 sm:flex">
-            <div className="flex items-center gap-2.5">
-              <div className="h-4 w-4" /> {/* checkbox spacer */}
-            </div>
-            <button onClick={() => toggleSort("name")} className="min-w-0 flex-1 text-left">
-              <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide", sortKey === "name" ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-                Name {sortKey === "name" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
-              </span>
+          <div className="hidden grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 border-b border-border bg-muted/30 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
+            <span>Host / Requester</span>
+            <span>Invited By</span>
+            <button onClick={() => toggleSort("company")} className={cn("inline-flex items-center gap-1 text-left", sortKey === "company" ? "text-foreground" : "hover:text-foreground")}>
+              Company {sortKey === "company" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
             </button>
-            <div className="flex shrink-0 items-center gap-6">
-              <button onClick={() => toggleSort("company")} className="min-w-[140px] text-left">
-                <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide", sortKey === "company" ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-                  Company {sortKey === "company" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
-                </span>
-              </button>
-              <button onClick={() => toggleSort("seniority")} className="w-[88px] text-left">
-                <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide", sortKey === "seniority" ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-                  Seniority {sortKey === "seniority" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
-                </span>
-              </button>
-              <button onClick={() => toggleSort("requestedAt")} className="min-w-[78px] text-right">
-                <span className={cn("inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide", sortKey === "requestedAt" ? "text-foreground" : "text-muted-foreground hover:text-foreground")}>
-                  Date {sortKey === "requestedAt" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
-                </span>
-              </button>
-              <div className="w-[150px]">
-                <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Actions</span>
-              </div>
-            </div>
+            <button onClick={() => toggleSort("seniority")} className={cn("inline-flex items-center gap-1 text-left", sortKey === "seniority" ? "text-foreground" : "hover:text-foreground")}>
+              Seniority {sortKey === "seniority" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
+            </button>
+            <button onClick={() => toggleSort("requestedAt")} className={cn("inline-flex items-center gap-1 text-left", sortKey === "requestedAt" ? "text-foreground" : "hover:text-foreground")}>
+              Date {sortKey === "requestedAt" ? (sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />) : <ArrowDownUp className="h-3 w-3 opacity-60" />}
+            </button>
+            <span className="text-right">Actions</span>
           </div>
 
           {filtered.length === 0 ? (
@@ -377,83 +388,191 @@ export function RequestsList({ eventId }: Props) {
             </div>
           ) : (
             <ul className="divide-y divide-border">
-              {filtered.map((r) => {
-                const d = new Date(r.requestedAt);
+              {(() => {
+                // Group filtered requests by hostId, preserving the current sort
+                // order within each host group.
+                const map = new Map<string, BookingRequest[]>();
+                for (const r of filtered) {
+                  const list = map.get(r.hostId) ?? [];
+                  list.push(r);
+                  map.set(r.hostId, list);
+                }
+                const groups = Array.from(map.entries()).map(([hid, items]) => ({
+                  host: hostById(hid) ?? HOSTS[0],
+                  items,
+                }));
+                return groups.map(({ host, items }) => {
+                  const isOpen = expanded.has(host.id);
+                  const visibleItems = showAll.has(host.id) ? items : items.slice(0, COLLAPSED_PREVIEW);
+                  const hiddenCount = items.length - visibleItems.length;
+                  const allSelected = items.every((i) => selected.has(i.id));
+                  const someSelected = items.some((i) => selected.has(i.id));
+                  const hostCtxFlags = Array.from(new Set(items.flatMap((i) => i.flags)));
+                  const allHostFlags = Array.from(new Set([...host.flags, ...hostCtxFlags]));
 
-                const hasFlags = r.flags.length > 0;
-
-                return (
-                  <li key={r.id} className={cn("transition-colors", selected.has(r.id) ? "bg-primary/5" : hasFlags ? "bg-muted/20" : "")}>
-                    <div className="flex items-start gap-3 px-4 py-3">
-                      <div className="flex items-center pt-0.5">
-                        <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} />
-                      </div>
-
-
-                      {/* Identity */}
-                      <div className="min-w-0 flex-1">
-                        <h3 className="truncate text-sm font-semibold text-foreground">{r.firstName} {r.lastName}</h3>
-                        {hasFlags && (
-                          <div className="mt-2 flex flex-wrap gap-1">
-                            {r.flags.slice(0, 2).map((f) => <FlagChip key={f} flag={f} />)}
-                            {r.flags.length > 2 && (
-                              <span className="inline-flex items-center rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                                +{r.flags.length - 2} more
-                              </span>
+                  return (
+                    <li key={host.id}>
+                      {/* Host row */}
+                      <div className={cn("grid grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/30",
+                        someSelected && "bg-primary/5")}>
+                        <div className="flex min-w-0 items-center gap-2">
+                          <button onClick={() => toggleExpand(host.id)}
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md hover:bg-muted"
+                            aria-label={isOpen ? "Collapse" : "Expand"}>
+                            {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+                          </button>
+                          <Checkbox
+                            checked={allSelected}
+                            onCheckedChange={() => {
+                              const next = new Set(selected);
+                              if (allSelected) items.forEach((i) => next.delete(i.id));
+                              else items.forEach((i) => next.add(i.id));
+                              setSelected(next);
+                            }}
+                            aria-label="Select host group"
+                          />
+                          <button onClick={() => openHost(host)} className="min-w-0 flex-1 text-left">
+                            <p className="truncate text-sm font-semibold">{hostName(host)}</p>
+                            <p className="truncate text-[11px] text-muted-foreground">
+                              {items.length} guest request{items.length === 1 ? "" : "s"}
+                              {" · Usage "}{host.usageScore}{" · "}{host.acceptanceRate}% acceptance
+                            </p>
+                            {allHostFlags.length > 0 && (
+                              <div className="mt-1 flex flex-wrap gap-1">
+                                {allHostFlags.slice(0, 2).map((f) => <FlagChip key={f} flag={f} />)}
+                                {allHostFlags.length > 2 && (
+                                  <span className="inline-flex items-center rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                                    +{allHostFlags.length - 2}
+                                  </span>
+                                )}
+                              </div>
                             )}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Right cluster */}
-                      <div className="flex shrink-0 items-center gap-6">
-                        <div className="hidden min-w-[140px] text-sm text-foreground sm:block">
-                          <p className="truncate font-medium">{r.company}</p>
+                          </button>
                         </div>
-                        <div className="hidden w-[88px] sm:block">
-                          <span className={cn("inline-flex items-center whitespace-nowrap rounded-full border px-1.5 py-px text-[10px] font-medium leading-none", SENIORITY_TONE[r.seniority])}>
-                            {r.seniority}
+                        <div className="min-w-0 leading-tight">
+                          <p className="truncate text-xs font-medium">{host.department}</p>
+                          <p className="truncate text-[11px] text-muted-foreground">{host.businessUnit}</p>
+                        </div>
+                        <div className="min-w-0 truncate text-xs text-muted-foreground">
+                          {items.length} compan{items.length === 1 ? "y" : "ies"}
+                        </div>
+                        <div>
+                          <span className={cn("inline-flex items-center rounded-full border px-1.5 py-px text-[10px] font-medium", SENIORITY_TONE[host.seniority])}>
+                            {host.seniority}
                           </span>
                         </div>
-
-                        <div className="min-w-[78px] text-right leading-tight">
-                          <p className="text-xs font-medium tabular-nums text-foreground">
-                            {d.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })}
-                          </p>
-                          <p className="text-[10px] tabular-nums text-muted-foreground">
-                            {d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
-                          </p>
+                        <div className="text-xs tabular-nums text-muted-foreground">
+                          {new Date(items[0].requestedAt).toLocaleDateString(undefined, { day: "2-digit", month: "short" })}
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center justify-end gap-1">
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openHistory(r)}>
-                                <History className="h-3.5 w-3.5" />
+                              <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openHost(host)}>
+                                <Users className="h-3.5 w-3.5" />
                               </Button>
                             </TooltipTrigger>
-                            <TooltipContent>View history</TooltipContent>
+                            <TooltipContent>Host summary</TooltipContent>
                           </Tooltip>
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button size="icon" variant="ghost" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => setDeclineFor(r)}>
+                              <Button size="icon" variant="ghost" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive"
+                                onClick={() => {
+                                  const next = new Set<string>(items.map((i) => i.id));
+                                  setSelected(next);
+                                  setBulkDeclineOpen(true);
+                                }}>
                                 <XCircle className="h-3.5 w-3.5" />
                               </Button>
                             </TooltipTrigger>
-                            <TooltipContent>Decline</TooltipContent>
+                            <TooltipContent>Decline all guests</TooltipContent>
                           </Tooltip>
-                          <Button size="sm" className="h-7 rounded-lg bg-success px-3 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
-                            Approve
+                          <Button size="sm" className="h-7 rounded-lg bg-success px-3 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90"
+                            onClick={() => {
+                              const ids = items.map((i) => i.id);
+                              const approved = requestApi.bulkApprove(eventId, ids);
+                              approved.forEach(moveToGuestList);
+                              logAudit(eventId, "Bulk request approval", `${approved.length} guest${approved.length === 1 ? "" : "s"} for ${hostName(host)}`);
+                              toast.success(`Approved ${approved.length} guest${approved.length === 1 ? "" : "s"} for ${hostName(host)}`);
+                            }}>
+                            Approve all
                           </Button>
                         </div>
                       </div>
-                    </div>
 
-                  </li>
-                );
-              })}
+                      {/* Guest request rows */}
+                      {isOpen && (
+                        <ul className="divide-y divide-border/60 bg-background">
+                          {visibleItems.map((r) => {
+                            const d = new Date(r.requestedAt);
+                            const uniqueFlags = r.flags.filter((f) => !host.flags.includes(f));
+                            return (
+                              <li key={r.id} className={cn("grid grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 px-4 py-2.5 text-sm",
+                                selected.has(r.id) && "bg-primary/5")}>
+                                <div className="flex min-w-0 items-start gap-2 pl-8">
+                                  <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} className="mt-0.5" />
+                                  <span className="mt-0.5 text-muted-foreground">↳</span>
+                                  <div className="min-w-0">
+                                    <p className="truncate font-medium leading-tight">{r.firstName} {r.lastName}</p>
+                                    <p className="truncate text-[11px] text-muted-foreground">{r.position}</p>
+                                    {uniqueFlags.length > 0 && (
+                                      <div className="mt-1 flex flex-wrap gap-1">
+                                        {uniqueFlags.slice(0, 2).map((f) => <FlagChip key={f} flag={f} />)}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="text-[11px] text-muted-foreground">
+                                  <p className="truncate">{hostName(host)}</p>
+                                  <p className="truncate text-[10px]">{host.department}</p>
+                                </div>
+                                <div className="min-w-0 truncate text-xs text-foreground">{r.company}</div>
+                                <div>
+                                  <span className={cn("inline-flex items-center rounded-full border px-1.5 py-px text-[10px] font-medium", SENIORITY_TONE[r.seniority])}>
+                                    {r.seniority}
+                                  </span>
+                                </div>
+                                <div className="text-xs leading-tight tabular-nums text-muted-foreground">
+                                  <p>{d.toLocaleDateString(undefined, { day: "2-digit", month: "short" })}</p>
+                                  <p className="text-[10px]">{d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</p>
+                                </div>
+                                <div className="flex items-center justify-end gap-1">
+                                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openHistory(r)}>
+                                    <History className="h-3.5 w-3.5" />
+                                  </Button>
+                                  <Button size="icon" variant="ghost" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => setDeclineFor(r)}>
+                                    <XCircle className="h-3.5 w-3.5" />
+                                  </Button>
+                                  <Button size="sm" className="h-7 rounded-lg bg-success px-3 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
+                                    Approve
+                                  </Button>
+                                </div>
+                              </li>
+                            );
+                          })}
+                          {hiddenCount > 0 && (
+                            <li className="px-4 py-2 pl-14">
+                              <button onClick={() => toggleShowAll(host.id)} className="text-xs font-medium text-primary hover:underline">
+                                + {hiddenCount} more guest{hiddenCount === 1 ? "" : "s"}
+                              </button>
+                            </li>
+                          )}
+                          {showAll.has(host.id) && items.length > COLLAPSED_PREVIEW && (
+                            <li className="px-4 py-2 pl-14">
+                              <button onClick={() => toggleShowAll(host.id)} className="text-xs font-medium text-muted-foreground hover:underline">
+                                Show less
+                              </button>
+                            </li>
+                          )}
+                        </ul>
+                      )}
+                    </li>
+                  );
+                });
+              })()}
             </ul>
           )}
         </div>
+
 
 
 
@@ -501,6 +620,23 @@ export function RequestsList({ eventId }: Props) {
         />
 
         <RequestHistoryDrawer request={historyFor} open={historyOpen} onOpenChange={setHistoryOpen} />
+
+        <HostSummaryDrawer
+          host={hostDrawer}
+          context="requests"
+          open={hostDrawerOpen}
+          onOpenChange={setHostDrawerOpen}
+          guestCount={hostDrawer ? requests.filter((r) => r.hostId === hostDrawer.id).length : 0}
+          breakdown={hostDrawer
+            ? requests.filter((r) => r.hostId === hostDrawer.id).map((r) => ({
+                id: r.id,
+                label: `${r.firstName} ${r.lastName}`,
+                sub: `${r.company} · ${r.position}`,
+              }))
+            : []}
+          contextFlags={hostDrawer ? Array.from(new Set(requests.filter((r) => r.hostId === hostDrawer.id).flatMap((r) => r.flags))) : []}
+        />
+
       </div>
     </TooltipProvider>
   );
