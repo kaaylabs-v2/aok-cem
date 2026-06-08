@@ -448,9 +448,8 @@ export function RequestsList({ eventId }: Props) {
                             )}
                           </button>
                         </div>
-                        <div className="min-w-0 leading-tight">
-                          <p className="truncate text-xs font-medium">{host.department}</p>
-                          <p className="truncate text-[11px] text-muted-foreground">{host.businessUnit}</p>
+                        <div className="min-w-0 text-xs text-muted-foreground">
+                          —
                         </div>
                         <div className="min-w-0 truncate text-xs text-muted-foreground">
                           {items.length} compan{items.length === 1 ? "y" : "ies"}
