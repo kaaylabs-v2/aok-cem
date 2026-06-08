@@ -46,7 +46,6 @@ type SortDir = "asc" | "desc";
 
 const COLLAPSED_PREVIEW = 2;
 
-type SortDir = "asc" | "desc";
 
 const SENIORITY_RANK: Record<Seniority, number> = {
   Partner: 5, Director: 4, VP: 3, Manager: 2, Associate: 1,
