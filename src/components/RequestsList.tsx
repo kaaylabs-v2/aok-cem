@@ -501,7 +501,7 @@ export function RequestsList({ eventId }: Props) {
                             const d = new Date(r.requestedAt);
                             const uniqueFlags = r.flags.filter((f) => !host.flags.includes(f));
                             return (
-                              <li key={r.id} className={cn("grid grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 px-4 py-2.5 text-sm",
+                              <li key={r.id} className={cn("grid grid-cols-[minmax(220px,1fr),150px,120px,80px,80px,200px] items-center gap-3 px-4 py-2.5 text-sm",
                                 selected.has(r.id) && "bg-primary/5")}>
                                 <div className="flex min-w-0 items-start gap-2 pl-8">
                                   <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} className="mt-0.5" />
