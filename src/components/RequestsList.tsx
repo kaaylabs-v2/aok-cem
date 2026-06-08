@@ -367,7 +367,7 @@ export function RequestsList({ eventId }: Props) {
           </div>
 
           {/* Column headers */}
-          <div className="hidden grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 border-b border-border bg-muted/30 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
+          <div className="hidden grid-cols-[minmax(220px,1fr),150px,120px,80px,80px,200px] items-center gap-3 border-b border-border bg-muted/30 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:grid">
             <span>Host / Requester</span>
             <span>Invited By</span>
             <button onClick={() => toggleSort("company")} className={cn("inline-flex items-center gap-1 text-left", sortKey === "company" ? "text-foreground" : "hover:text-foreground")}>
@@ -413,7 +413,7 @@ export function RequestsList({ eventId }: Props) {
                   return (
                     <li key={host.id}>
                       {/* Host row */}
-                      <div className={cn("grid grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/30",
+                      <div className={cn("grid grid-cols-[minmax(220px,1fr),150px,120px,80px,80px,200px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/30",
                         someSelected && "bg-primary/5")}>
                         <div className="flex min-w-0 items-center gap-2">
                           <button onClick={() => toggleExpand(host.id)}
@@ -464,29 +464,24 @@ export function RequestsList({ eventId }: Props) {
                         <div className="text-xs tabular-nums text-muted-foreground">
                           {new Date(items[0].requestedAt).toLocaleDateString(undefined, { day: "2-digit", month: "short" })}
                         </div>
-                        <div className="flex items-center justify-end gap-1">
+                        <div className="flex shrink-0 items-center justify-end gap-1">
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openHost(host)}>
+                              <Button size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={() => openHost(host)}>
                                 <Users className="h-3.5 w-3.5" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>Host summary</TooltipContent>
                           </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button size="icon" variant="ghost" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive"
-                                onClick={() => {
-                                  const next = new Set<string>(items.map((i) => i.id));
-                                  setSelected(next);
-                                  setBulkDeclineOpen(true);
-                                }}>
-                                <XCircle className="h-3.5 w-3.5" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Decline all guests</TooltipContent>
-                          </Tooltip>
-                          <Button size="sm" className="h-7 rounded-lg bg-success px-3 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90"
+                          <Button size="sm" variant="outline" className="h-7 shrink-0 rounded-lg border-destructive/40 px-2.5 text-[11px] font-semibold text-destructive hover:bg-destructive/10"
+                            onClick={() => {
+                              const next = new Set<string>(items.map((i) => i.id));
+                              setSelected(next);
+                              setBulkDeclineOpen(true);
+                            }}>
+                            <XCircle className="mr-1 h-3.5 w-3.5" /> Decline
+                          </Button>
+                          <Button size="sm" className="h-7 shrink-0 rounded-lg bg-success px-2.5 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90"
                             onClick={() => {
                               const ids = items.map((i) => i.id);
                               const approved = requestApi.bulkApprove(eventId, ids);
@@ -494,7 +489,7 @@ export function RequestsList({ eventId }: Props) {
                               logAudit(eventId, "Bulk request approval", `${approved.length} guest${approved.length === 1 ? "" : "s"} for ${hostName(host)}`);
                               toast.success(`Approved ${approved.length} guest${approved.length === 1 ? "" : "s"} for ${hostName(host)}`);
                             }}>
-                            Approve all
+                            <CheckCircle2 className="mr-1 h-3.5 w-3.5" /> Approve all
                           </Button>
                         </div>
                       </div>
@@ -506,7 +501,7 @@ export function RequestsList({ eventId }: Props) {
                             const d = new Date(r.requestedAt);
                             const uniqueFlags = r.flags.filter((f) => !host.flags.includes(f));
                             return (
-                              <li key={r.id} className={cn("grid grid-cols-[1fr,180px,140px,90px,90px,150px] items-center gap-3 px-4 py-2.5 text-sm",
+                              <li key={r.id} className={cn("grid grid-cols-[minmax(220px,1fr),150px,120px,80px,80px,200px] items-center gap-3 px-4 py-2.5 text-sm",
                                 selected.has(r.id) && "bg-primary/5")}>
                                 <div className="flex min-w-0 items-start gap-2 pl-8">
                                   <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleOne(r.id)} className="mt-0.5" />
@@ -535,15 +530,15 @@ export function RequestsList({ eventId }: Props) {
                                   <p>{d.toLocaleDateString(undefined, { day: "2-digit", month: "short" })}</p>
                                   <p className="text-[10px]">{d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</p>
                                 </div>
-                                <div className="flex items-center justify-end gap-1">
-                                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openHistory(r)}>
+                                <div className="flex shrink-0 items-center justify-end gap-1">
+                                  <Button size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={() => openHistory(r)}>
                                     <History className="h-3.5 w-3.5" />
                                   </Button>
-                                  <Button size="icon" variant="ghost" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => setDeclineFor(r)}>
-                                    <XCircle className="h-3.5 w-3.5" />
+                                  <Button size="sm" variant="outline" className="h-7 shrink-0 rounded-lg border-destructive/40 px-2.5 text-[11px] font-semibold text-destructive hover:bg-destructive/10" onClick={() => setDeclineFor(r)}>
+                                    <XCircle className="mr-1 h-3.5 w-3.5" /> Decline
                                   </Button>
-                                  <Button size="sm" className="h-7 rounded-lg bg-success px-3 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
-                                    Approve
+                                  <Button size="sm" className="h-7 shrink-0 rounded-lg bg-success px-2.5 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
+                                    <CheckCircle2 className="mr-1 h-3.5 w-3.5" /> Approve
                                   </Button>
                                 </div>
                               </li>
