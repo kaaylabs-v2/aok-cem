@@ -437,13 +437,8 @@ export function RequestsList({ eventId }: Props) {
                               {items.length} guest request{items.length === 1 ? "" : "s"}
                             </p>
                             {allHostFlags.length > 0 && (
-                              <div className="mt-1 flex flex-wrap gap-1">
-                                {allHostFlags.slice(0, 2).map((f) => <FlagChip key={f} flag={f} />)}
-                                {allHostFlags.length > 2 && (
-                                  <span className="inline-flex items-center rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                                    +{allHostFlags.length - 2}
-                                  </span>
-                                )}
+                              <div className="mt-1">
+                                <FlagSummary flags={allHostFlags} />
                               </div>
                             )}
                           </button>
@@ -725,6 +720,25 @@ function FlagChip({ flag }: { flag: RiskFlag }) {
         </span>
       </TooltipTrigger>
       <TooltipContent>{FLAG_LABEL[flag]} — requires additional review</TooltipContent>
+    </Tooltip>
+  );
+}
+
+function FlagSummary({ flags }: { flags: RiskFlag[] }) {
+  if (flags.length === 0) return null;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="inline-flex items-center gap-1 rounded-full border border-warning/40 bg-warning/10 px-1.5 py-0.5 text-[10px] font-medium text-warning-foreground">
+          <AlertTriangle className="h-2.5 w-2.5" />
+          {flags.length} {flags.length === 1 ? "flag" : "flags"}
+        </span>
+      </TooltipTrigger>
+      <TooltipContent>
+        <ul className="space-y-0.5 text-[11px]">
+          {flags.map((f) => <li key={f}>• {FLAG_LABEL[f]}</li>)}
+        </ul>
+      </TooltipContent>
     </Tooltip>
   );
 }
