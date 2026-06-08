@@ -180,10 +180,11 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
 
         {/* Grouped host → guest table */}
         <div className="overflow-x-auto rounded-2xl border border-border bg-card">
-          <div className="min-w-[900px]">
+          <div className="min-w-[980px]">
           {/* Column header */}
-          <div className="sticky top-0 z-10 grid grid-cols-[minmax(240px,1.4fr),150px,120px,90px,140px,40px] items-center gap-3 border-b border-border bg-muted/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="sticky top-0 z-10 grid grid-cols-[minmax(240px,1.4fr),80px,140px,120px,90px,140px,40px] items-center gap-3 border-b border-border bg-muted/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
             <span>Host / Guest</span>
+            <span>Role</span>
             <span>Invited By</span>
             <span>Company</span>
             <span>Access</span>
@@ -206,7 +207,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                 return (
                   <li key={host.id}>
                     {/* Host row */}
-                    <div className="group grid grid-cols-[minmax(240px,1.4fr),150px,120px,90px,140px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
+                    <div className="group grid grid-cols-[minmax(240px,1.4fr),80px,140px,120px,90px,140px,40px] items-center gap-3 bg-muted/20 px-4 py-3 transition-colors hover:bg-muted/40">
                       <div className="flex min-w-0 items-center gap-2">
                         <button
                           onClick={() => toggleExpand(host.id)}
@@ -230,18 +231,13 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                           </p>
                         </button>
                       </div>
-                      <div className="min-w-0 leading-tight">
-                        <div className="flex items-center gap-1.5">
-                          <span className="shrink-0 text-xs text-muted-foreground">—</span>
-                          <span className="inline-flex shrink-0 items-center rounded-full border border-border bg-muted/40 px-1.5 py-px text-[10px] font-medium text-muted-foreground">
-                            Host
-                          </span>
-                        </div>
-                        <p className="truncate text-[11px] text-muted-foreground" title={`${host.department} · ${host.seniority} · ${host.businessUnit}`}>
-                          {host.department} · {host.seniority} · {host.businessUnit}
-                        </p>
+                      <div className="min-w-0">
+                        <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-1.5 py-px text-[10px] font-medium text-primary">
+                          Host
+                        </span>
                       </div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
+                      <div className="min-w-0 truncate text-xs text-muted-foreground">—</div>
                       <div className="min-w-0 text-xs text-muted-foreground">—</div>
                       <div className="flex flex-wrap items-center gap-1 text-[11px]">
                         <SummaryChip count={accepted} tone="success" label="Accepted" />
@@ -264,7 +260,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                     {isOpen && (
                       <ul className="divide-y divide-border/60 bg-background">
                         {visibleItems.map((g) => (
-                          <li key={g.id} className="grid grid-cols-[minmax(240px,1.4fr),150px,120px,90px,140px,40px] items-center gap-3 px-4 py-2.5 text-sm">
+                          <li key={g.id} className="grid grid-cols-[minmax(240px,1.4fr),80px,140px,120px,90px,140px,40px] items-center gap-3 px-4 py-2.5 text-sm">
                             <div className="flex min-w-0 items-start gap-2 pl-7">
                               <span className="mt-1 shrink-0 text-muted-foreground">↳</span>
                               <Avatar className="h-7 w-7 shrink-0">
@@ -278,6 +274,11 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
                                 </p>
                                 <p className="truncate text-[11px] text-muted-foreground" title={g.email}>{g.email}</p>
                               </div>
+                            </div>
+                            <div className="min-w-0">
+                              <span className="inline-flex items-center rounded-full border border-border bg-muted/40 px-1.5 py-px text-[10px] font-medium text-muted-foreground">
+                                Guest
+                              </span>
                             </div>
                             <div className="min-w-0 text-[11px] text-muted-foreground">
                               <span className="truncate block" title={hostName(host)}>{hostName(host)}</span>
