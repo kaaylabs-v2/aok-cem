@@ -38,7 +38,7 @@ const uid = () => Math.random().toString(36).slice(2, 10);
 const ACTOR = "Alex Morgan"; // current CEM user
 
 // Pool of realistic guest profiles to seed every event with a meaningful list.
-const POOL: Omit<Guest, "id" | "eventId">[] = [
+const POOL: Omit<Guest, "id" | "eventId" | "hostId">[] = [
   { firstName: "Priya", lastName: "Shah", email: "priya.shah@northwind.io", company: "Northwind", dietary: "Vegetarian", access: "—", rsvp: "accepted", invite: "sent" },
   { firstName: "Marco", lastName: "Bianchi", email: "marco@helio.co", company: "Helio", dietary: "—", access: "Step-free access", rsvp: "pending", invite: "sent" },
   { firstName: "Yuki", lastName: "Tanaka", email: "yuki.t@orbital.jp", company: "Orbital", dietary: "Gluten-free", access: "—", rsvp: "declined", invite: "sent" },
