@@ -620,6 +620,23 @@ export function RequestsList({ eventId }: Props) {
         />
 
         <RequestHistoryDrawer request={historyFor} open={historyOpen} onOpenChange={setHistoryOpen} />
+
+        <HostSummaryDrawer
+          host={hostDrawer}
+          context="requests"
+          open={hostDrawerOpen}
+          onOpenChange={setHostDrawerOpen}
+          guestCount={hostDrawer ? requests.filter((r) => r.hostId === hostDrawer.id).length : 0}
+          breakdown={hostDrawer
+            ? requests.filter((r) => r.hostId === hostDrawer.id).map((r) => ({
+                id: r.id,
+                label: `${r.firstName} ${r.lastName}`,
+                sub: `${r.company} · ${r.position}`,
+              }))
+            : []}
+          contextFlags={hostDrawer ? Array.from(new Set(requests.filter((r) => r.hostId === hostDrawer.id).flatMap((r) => r.flags))) : []}
+        />
+
       </div>
     </TooltipProvider>
   );
