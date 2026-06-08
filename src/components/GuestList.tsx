@@ -182,7 +182,7 @@ export function GuestList({ eventId, hasPendingUpdate, onSendUpdateAck }: Props)
         <div className="overflow-x-auto rounded-2xl border border-border bg-card">
           <div className="min-w-[760px]">
           {/* Column header */}
-          <div className="sticky top-0 z-10 grid grid-cols-[minmax(200px,1.3fr),64px,110px,100px,72px,120px,32px] items-center gap-2 border-b border-border bg-muted/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="sticky top-0 z-10 grid grid-cols-[minmax(200px,1.3fr),64px,110px,100px,72px,120px,32px] items-center gap-1 border-b border-border bg-muted/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
             <span>Host / Guest</span>
             <span>Role</span>
             <span>Invited By</span>
