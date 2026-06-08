@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
@@ -19,6 +20,16 @@ import {
 } from "@/data/portfolio";
 import { format } from "date-fns";
 import { toast } from "sonner";
+
+const CURRENCIES = [
+  { code: "USD", symbol: "$" },
+  { code: "EUR", symbol: "€" },
+  { code: "GBP", symbol: "£" },
+  { code: "AED", symbol: "د.إ" },
+  { code: "CHF", symbol: "Fr" },
+  { code: "JPY", symbol: "¥" },
+] as const;
+const CURRENCY_SYMBOL: Record<string, string> = Object.fromEntries(CURRENCIES.map((c) => [c.code, c.symbol]));
 
 const STATUS_CHIP: Record<EnquiryStatus, string> = {
   submitted: "bg-[hsl(220_10%_92%)] text-[hsl(220_10%_35%)]",
@@ -455,6 +466,7 @@ const FIELD_SCHEMA: Record<Enquiry["eventType"], FieldDef[]> = {
     { key: "guests", label: "Number of Guests", kind: "number" },
     { key: "venue", label: "Venue", kind: "text", placeholder: "if known" },
     { key: "type", label: "Type", kind: "text", placeholder: "e.g. ticket only, drinks package, Bobby Moore package" },
+    { key: "budget", label: "Budget", kind: "money" },
   ],
   "Tickets": [
     { key: "event", label: "Event", kind: "text", placeholder: "if known" },
@@ -462,6 +474,7 @@ const FIELD_SCHEMA: Record<Enquiry["eventType"], FieldDef[]> = {
     { key: "guests", label: "Number of Guests", kind: "number" },
     { key: "venue", label: "Venue", kind: "text", placeholder: "if known" },
     { key: "type", label: "Type", kind: "text", placeholder: "e.g. seated, standing, premium" },
+    { key: "budget", label: "Budget", kind: "money" },
   ],
   "Private Dining": [
     { key: "restaurant", label: "Restaurant", kind: "text", placeholder: "if known" },
@@ -470,6 +483,7 @@ const FIELD_SCHEMA: Record<Enquiry["eventType"], FieldDef[]> = {
     { key: "specialRequests", label: "Special Requests", kind: "textarea", placeholder: "dietary, seating, allergies…" },
     { key: "location", label: "Location", kind: "text", placeholder: "city or area" },
     { key: "preferredCuisine", label: "Preferred Cuisine", kind: "text", placeholder: "e.g. Italian, Japanese" },
+    { key: "budget", label: "Budget", kind: "money" },
   ],
   "Bespoke Events": [
     { key: "details", label: "Details", kind: "textarea", placeholder: "Tell us about the event you have in mind" },
@@ -683,16 +697,38 @@ function NewEnquiryDialog({
       );
     }
     if (f.kind === "money") {
+      const currency = values[`${f.key}Currency`] || "USD";
+      const taxIncluded = values[`${f.key}TaxIncluded`] === "1";
+      const symbol = CURRENCY_SYMBOL[currency] || "$";
       return (
-        <div className="relative mt-1.5">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/50">$</span>
-          <Input
-            type="number" min={0}
-            value={values[f.key] || ""}
-            onChange={(e) => setVal(f.key, e.target.value)}
-            placeholder={f.placeholder || "0"}
-            className="pl-7"
-          />
+        <div className="mt-1.5 space-y-2">
+          <div className="flex gap-2">
+            <Select value={currency} onValueChange={(v) => setVal(`${f.key}Currency`, v)}>
+              <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {CURRENCIES.map((c) => (
+                  <SelectItem key={c.code} value={c.code}>{c.code} {c.symbol}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="relative flex-1">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/50">{symbol}</span>
+              <Input
+                type="number" min={0}
+                value={values[f.key] || ""}
+                onChange={(e) => setVal(f.key, e.target.value)}
+                placeholder={f.placeholder || "0"}
+                className="pl-7"
+              />
+            </div>
+          </div>
+          <label className="flex items-center gap-2 text-xs text-foreground/70">
+            <Checkbox
+              checked={taxIncluded}
+              onCheckedChange={(c) => setVal(`${f.key}TaxIncluded`, c ? "1" : "")}
+            />
+            Tax included
+          </label>
         </div>
       );
     }
@@ -808,10 +844,20 @@ function NewEnquiryDialog({
                     );
                   }
                   const v = values[f.key];
+                  let display: string = "—";
+                  if (v) {
+                    if (f.kind === "money") {
+                      const cur = values[`${f.key}Currency`] || "USD";
+                      const sym = CURRENCY_SYMBOL[cur] || "$";
+                      const tax = values[`${f.key}TaxIncluded`] === "1";
+                      display = `${sym}${Number(v).toLocaleString()} ${cur}${tax ? " (tax incl.)" : ""}`;
+                    } else {
+                      display = v;
+                    }
+                  }
                   return (
                     <p key={f.key}>
-                      <span className="text-foreground/50">{f.label}:</span>{" "}
-                      {v ? (f.kind === "money" ? `$${Number(v).toLocaleString()}` : v) : "—"}
+                      <span className="text-foreground/50">{f.label}:</span> {display}
                     </p>
                   );
                 })}
