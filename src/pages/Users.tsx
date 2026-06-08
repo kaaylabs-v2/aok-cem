@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AppShell } from "@/components/AppShell";
+import { UsersTabs } from "@/components/users/UsersTabs";
 import { StatCard } from "@/components/StatCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +30,7 @@ const STATUS_BADGE: Record<User["status"], string> = {
 };
 
 const Users = () => {
+  const { pathname } = useLocation();
   const [list, setList] = useState<User[]>(USERS);
   const [query, setQuery] = useState("");
   const [groupF, setGroupF] = useState("all");
@@ -89,6 +91,7 @@ const Users = () => {
     <>
       <AppShell onOpenNotification={onOpenNotification}>
         <div className="space-y-6">
+          <UsersTabs currentPath={pathname} />
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h1 className="text-2xl font-bold tracking-tight">Users &amp; Permissions</h1>

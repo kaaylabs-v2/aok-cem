@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { UsersTabs } from "@/components/users/UsersTabs";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,7 @@ import { PermissionMatrix } from "@/components/users/PermissionMatrix";
 import { toast } from "sonner";
 
 const UserGroups = () => {
+  const { pathname } = useLocation();
   const [groups, setGroups] = useState<UserGroup[]>(USER_GROUPS);
   const [editing, setEditing] = useState<UserGroup | null>(null);
   const [creating, setCreating] = useState(false);
@@ -47,6 +49,7 @@ const UserGroups = () => {
   return (
     <AppShell onOpenNotification={onOpenNotification}>
       <div className="space-y-6">
+        <UsersTabs currentPath={pathname} />
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <div className="mb-1"><Link to="/users" className="inline-flex items-center text-xs text-muted-foreground hover:text-foreground"><ChevronLeft className="h-3 w-3" /> Back to users</Link></div>
