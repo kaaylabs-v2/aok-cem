@@ -435,7 +435,6 @@ export function RequestsList({ eventId }: Props) {
                             <p className="truncate text-sm font-semibold">{hostName(host)}</p>
                             <p className="truncate text-[11px] text-muted-foreground">
                               {items.length} guest request{items.length === 1 ? "" : "s"}
-                              {" · Usage "}{host.usageScore}{" · "}{host.acceptanceRate}% acceptance
                             </p>
                             {allHostFlags.length > 0 && (
                               <div className="mt-1 flex flex-wrap gap-1">
