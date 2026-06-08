@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { AppShell } from "@/components/AppShell";
+import { UsersTabs } from "@/components/users/UsersTabs";
 import { StatCard } from "@/components/StatCard";
 import { AuditDetailDrawer } from "@/components/AuditDetailDrawer";
 import { Button } from "@/components/ui/button";
@@ -35,6 +37,7 @@ function downloadCsv(rows: AuditRecord[]) {
 }
 
 const AuditTrail = () => {
+  const { pathname } = useLocation();
   const [query, setQuery] = useState("");
   const [bookingF, setBookingF] = useState("all");
   const [eventF, setEventF] = useState("all");
@@ -106,6 +109,7 @@ const AuditTrail = () => {
     <>
       <AppShell onOpenNotification={onOpenNotification}>
         <div className="space-y-6">
+          <UsersTabs currentPath={pathname} />
           {/* Header */}
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
