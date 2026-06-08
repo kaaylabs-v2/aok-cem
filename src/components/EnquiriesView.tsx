@@ -687,16 +687,38 @@ function NewEnquiryDialog({
       );
     }
     if (f.kind === "money") {
+      const currency = values[`${f.key}Currency`] || "USD";
+      const taxIncluded = values[`${f.key}TaxIncluded`] === "1";
+      const symbol = CURRENCY_SYMBOL[currency] || "$";
       return (
-        <div className="relative mt-1.5">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/50">$</span>
-          <Input
-            type="number" min={0}
-            value={values[f.key] || ""}
-            onChange={(e) => setVal(f.key, e.target.value)}
-            placeholder={f.placeholder || "0"}
-            className="pl-7"
-          />
+        <div className="mt-1.5 space-y-2">
+          <div className="flex gap-2">
+            <Select value={currency} onValueChange={(v) => setVal(`${f.key}Currency`, v)}>
+              <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {CURRENCIES.map((c) => (
+                  <SelectItem key={c.code} value={c.code}>{c.code} {c.symbol}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="relative flex-1">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/50">{symbol}</span>
+              <Input
+                type="number" min={0}
+                value={values[f.key] || ""}
+                onChange={(e) => setVal(f.key, e.target.value)}
+                placeholder={f.placeholder || "0"}
+                className="pl-7"
+              />
+            </div>
+          </div>
+          <label className="flex items-center gap-2 text-xs text-foreground/70">
+            <Checkbox
+              checked={taxIncluded}
+              onCheckedChange={(c) => setVal(`${f.key}TaxIncluded`, c ? "1" : "")}
+            />
+            Tax included
+          </label>
         </div>
       );
     }
