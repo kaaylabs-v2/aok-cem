@@ -456,6 +456,7 @@ const FIELD_SCHEMA: Record<Enquiry["eventType"], FieldDef[]> = {
     { key: "guests", label: "Number of Guests", kind: "number" },
     { key: "venue", label: "Venue", kind: "text", placeholder: "if known" },
     { key: "type", label: "Type", kind: "text", placeholder: "e.g. ticket only, drinks package, Bobby Moore package" },
+    { key: "budget", label: "Budget", kind: "money" },
   ],
   "Tickets": [
     { key: "event", label: "Event", kind: "text", placeholder: "if known" },
@@ -463,6 +464,7 @@ const FIELD_SCHEMA: Record<Enquiry["eventType"], FieldDef[]> = {
     { key: "guests", label: "Number of Guests", kind: "number" },
     { key: "venue", label: "Venue", kind: "text", placeholder: "if known" },
     { key: "type", label: "Type", kind: "text", placeholder: "e.g. seated, standing, premium" },
+    { key: "budget", label: "Budget", kind: "money" },
   ],
   "Private Dining": [
     { key: "restaurant", label: "Restaurant", kind: "text", placeholder: "if known" },
@@ -471,6 +473,7 @@ const FIELD_SCHEMA: Record<Enquiry["eventType"], FieldDef[]> = {
     { key: "specialRequests", label: "Special Requests", kind: "textarea", placeholder: "dietary, seating, allergies…" },
     { key: "location", label: "Location", kind: "text", placeholder: "city or area" },
     { key: "preferredCuisine", label: "Preferred Cuisine", kind: "text", placeholder: "e.g. Italian, Japanese" },
+    { key: "budget", label: "Budget", kind: "money" },
   ],
   "Bespoke Events": [
     { key: "details", label: "Details", kind: "textarea", placeholder: "Tell us about the event you have in mind" },
