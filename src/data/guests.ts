@@ -83,6 +83,27 @@ function buildSeed(): Record<string, Guest[]> {
         email: base.email.replace("@", `+${eid}@`),
       });
     }
+    // Mock: in some events the host themselves is also attending — add them as
+    // a guest entry under their own host group so the row shows the host name.
+    const hostsInEvent = Array.from(new Set(list.map((g) => g.hostId)));
+    const attendingHostIds = hostsInEvent.filter((_, idx) => (parseInt(eid.slice(1), 10) + idx) % 3 === 0);
+    for (const hid of attendingHostIds) {
+      const h = hostById(hid);
+      if (!h) continue;
+      list.push({
+        id: uid(),
+        eventId: eid,
+        hostId: hid,
+        firstName: h.firstName,
+        lastName: h.lastName,
+        email: h.email.replace("@", `+${eid}@`),
+        company: "Internal · Host",
+        dietary: "—",
+        access: "—",
+        rsvp: "accepted",
+        invite: "sent",
+      });
+    }
     out[eid] = list;
   }
   return out;
