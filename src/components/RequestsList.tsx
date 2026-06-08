@@ -530,15 +530,15 @@ export function RequestsList({ eventId }: Props) {
                                   <p>{d.toLocaleDateString(undefined, { day: "2-digit", month: "short" })}</p>
                                   <p className="text-[10px]">{d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</p>
                                 </div>
-                                <div className="flex items-center justify-end gap-1">
-                                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openHistory(r)}>
+                                <div className="flex shrink-0 items-center justify-end gap-1">
+                                  <Button size="icon" variant="ghost" className="h-7 w-7 shrink-0" onClick={() => openHistory(r)}>
                                     <History className="h-3.5 w-3.5" />
                                   </Button>
-                                  <Button size="icon" variant="ghost" className="h-7 w-7 hover:bg-destructive/10 hover:text-destructive" onClick={() => setDeclineFor(r)}>
-                                    <XCircle className="h-3.5 w-3.5" />
+                                  <Button size="sm" variant="outline" className="h-7 shrink-0 rounded-lg border-destructive/40 px-2.5 text-[11px] font-semibold text-destructive hover:bg-destructive/10" onClick={() => setDeclineFor(r)}>
+                                    <XCircle className="mr-1 h-3.5 w-3.5" /> Decline
                                   </Button>
-                                  <Button size="sm" className="h-7 rounded-lg bg-success px-3 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
-                                    Approve
+                                  <Button size="sm" className="h-7 shrink-0 rounded-lg bg-success px-2.5 text-[11px] font-semibold text-white shadow-sm hover:bg-success/90" onClick={() => handleApprove(r)}>
+                                    <CheckCircle2 className="mr-1 h-3.5 w-3.5" /> Approve
                                   </Button>
                                 </div>
                               </li>
