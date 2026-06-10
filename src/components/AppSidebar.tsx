@@ -23,6 +23,7 @@ const items = [
   { title: "Enquiries", url: "/enquiries", icon: Inbox },
   { title: "Approvals", url: "/approvals", icon: ShieldCheck },
   { title: "Users & Permissions", url: "/users", icon: UserCog },
+  { title: "Delegations", url: "/users/delegations", icon: UsersIcon },
   { title: "Audit Trail", url: "/audit", icon: ScrollText },
   { title: "Reports", url: "/reports", icon: FileBarChart2 },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
