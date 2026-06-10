@@ -19,6 +19,7 @@ import { EventDrawer } from "@/components/EventDrawer";
 import { WaitlistDialog } from "@/components/WaitlistDialog";
 import { Badge } from "@/components/ui/badge";
 import { AppShell } from "@/components/AppShell";
+import { RecentReportsWidget } from "@/components/reports/RecentReportsWidget";
 
 type StatusTab = "all" | EventStatus;
 
@@ -501,6 +502,7 @@ const Index = () => {
                   </>
                 )}
               </section>
+              <RecentReportsWidget />
       </AppShell>
       <EventDrawer event={selected} open={drawerOpen} onOpenChange={setDrawerOpen} />
       <WaitlistDialog open={waitlistOpen} onOpenChange={setWaitlistOpen} />
