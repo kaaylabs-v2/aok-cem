@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, Boxes, BarChart3, Settings, Inbox, Headphones, LogOut, ChevronsLeft, ChevronsRight, ShieldCheck, FileBarChart2, ScrollText, UserCog } from "lucide-react";
+import { LayoutDashboard, Calendar, Boxes, BarChart3, Settings, Inbox, Headphones, LogOut, ChevronsLeft, ChevronsRight, ShieldCheck, FileBarChart2, ScrollText, UserCog, Users as UsersIcon } from "lucide-react";
 import logo from "@/assets/aok-logo.png";
 import {
   Sidebar,
