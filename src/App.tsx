@@ -9,6 +9,9 @@ import EventDetail from "./pages/EventDetail.tsx";
 import Enquiries from "./pages/Enquiries.tsx";
 import Approvals from "./pages/Approvals.tsx";
 import Reports from "./pages/Reports.tsx";
+import ReportsCustom from "./pages/ReportsCustom.tsx";
+import ReportsScheduled from "./pages/ReportsScheduled.tsx";
+import ReportView from "./pages/ReportView.tsx";
 import AuditTrail from "./pages/AuditTrail.tsx";
 import Users from "./pages/Users.tsx";
 import UserGroups from "./pages/UserGroups.tsx";
@@ -36,6 +39,9 @@ const App = () => (
             <Route path="/enquiries" element={<Enquiries />} />
             <Route path="/approvals" element={<Approvals />} />
             <Route path="/reports" element={<Reports />} />
+            <Route path="/reports/custom" element={<ReportsCustom />} />
+            <Route path="/reports/scheduled" element={<ReportsScheduled />} />
+            <Route path="/reports/view/:templateId" element={<ReportView />} />
             <Route path="/audit" element={<AuditTrail />} />
             <Route path="/users" element={<Users />} />
             <Route path="/users/groups" element={<UserGroups />} />
