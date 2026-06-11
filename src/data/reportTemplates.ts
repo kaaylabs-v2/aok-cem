@@ -3,15 +3,17 @@
 
 import {
   BarChart3, ShieldAlert, DollarSign, Inbox, ShieldCheck, UserCog,
+  Handshake, Star, Gift, Building2,
   type LucideIcon,
 } from "lucide-react";
 import { events as portfolioEvents, utilisation } from "@/data/portfolio";
 import { complianceRows } from "@/data/reports";
 import { DELEGATIONS } from "@/data/delegations";
 import { userById, userFullName } from "@/data/users";
+import { ENGAGEMENTS, FEEDBACK, summariseVenueSourcing, savingsValue, savingsPct, fmtGbp } from "@/data/venueSourcing";
 
 export type ReportPillar =
-  | "Inventory" | "Enquiries" | "Compliance" | "Approvals" | "Delegations" | "Spend";
+  | "Inventory" | "Enquiries" | "Compliance" | "Approvals" | "Delegations" | "Spend" | "Venue Sourcing";
 
 export type ReportVisualization =
   | "bar" | "line" | "pie" | "donut" | "funnel" | "kpi" | "table" | "heatmap";
