@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, Boxes, BarChart3, Settings, Inbox, Headphones, LogOut, ChevronsLeft, ChevronsRight, ShieldCheck, FileBarChart2, ScrollText, UserCog, Users as UsersIcon } from "lucide-react";
+import { LayoutDashboard, Calendar, Boxes, BarChart3, Settings, Inbox, Headphones, LogOut, ChevronsLeft, ChevronsRight, ShieldCheck, FileBarChart2, ScrollText, UserCog, Users as UsersIcon, Handshake } from "lucide-react";
 import logo from "@/assets/aok-logo.png";
 import {
   Sidebar,
@@ -22,10 +22,11 @@ const items = [
   { title: "Inventory", url: "/inventory", icon: Boxes },
   { title: "Enquiries", url: "/enquiries", icon: Inbox },
   { title: "Approvals", url: "/approvals", icon: ShieldCheck },
+  { title: "Venue Sourcing", url: "/venue-sourcing", icon: Handshake },
+  { title: "Reports", url: "/reports", icon: FileBarChart2 },
   { title: "Users & Permissions", url: "/users", icon: UserCog },
   { title: "Delegations", url: "/users/delegations", icon: UsersIcon },
   { title: "Audit Trail", url: "/audit", icon: ScrollText },
-  { title: "Reports", url: "/reports", icon: FileBarChart2 },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
 ];
 
