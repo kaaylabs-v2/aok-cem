@@ -1,10 +1,10 @@
-import { CloudCheck, CloudAlert } from "lucide-react";
+import { CheckCircle2, AlertTriangle } from "lucide-react";
 import { TENANT_CONFIG } from "@/data/venueSourcing";
 import { cn } from "@/lib/utils";
 
 export function SyncBanner({ lastSynced }: { lastSynced: string }) {
   const ok = TENANT_CONFIG.apiAvailable;
-  const Icon = ok ? CloudCheck : CloudAlert;
+  const Icon = ok ? CheckCircle2 : AlertTriangle;
   return (
     <div className={cn(
       "flex flex-wrap items-center gap-2 rounded-xl border px-3 py-2 text-xs",
