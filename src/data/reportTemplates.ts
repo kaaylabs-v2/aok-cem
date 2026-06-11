@@ -3,15 +3,17 @@
 
 import {
   BarChart3, ShieldAlert, DollarSign, Inbox, ShieldCheck, UserCog,
+  Handshake, Star, Gift, Building2,
   type LucideIcon,
 } from "lucide-react";
 import { events as portfolioEvents, utilisation } from "@/data/portfolio";
 import { complianceRows } from "@/data/reports";
 import { DELEGATIONS } from "@/data/delegations";
 import { userById, userFullName } from "@/data/users";
+import { ENGAGEMENTS, FEEDBACK, summariseVenueSourcing, savingsValue, savingsPct, fmtGbp } from "@/data/venueSourcing";
 
 export type ReportPillar =
-  | "Inventory" | "Enquiries" | "Compliance" | "Approvals" | "Delegations" | "Spend";
+  | "Inventory" | "Enquiries" | "Compliance" | "Approvals" | "Delegations" | "Spend" | "Venue Sourcing";
 
 export type ReportVisualization =
   | "bar" | "line" | "pie" | "donut" | "funnel" | "kpi" | "table" | "heatmap";
@@ -292,9 +294,127 @@ const delegationTemplate: ReportTemplate = (() => {
   };
 })();
 
+// --- Venue Sourcing (CEM-12/13)
+const venueSourcingKpis = summariseVenueSourcing();
+
+const venueSavingsTemplate: ReportTemplate = (() => {
+  const bar: ChartSeries[] = ENGAGEMENTS
+    .map((e) => ({ label: e.venue, value: Math.round(savingsValue(e) ?? 0) }))
+    .sort((a, b) => b.value - a.value).slice(0, 8);
+  const rows = ENGAGEMENTS.slice(0, 14).map((e) => [
+    e.id, e.eventName, e.venue,
+    fmtGbp(e.initialQuote), fmtGbp(e.finalContractPrice ?? e.negotiatedPrice),
+    fmtGbp(savingsValue(e)), savingsPct(e) == null ? "Pending" : `${savingsPct(e)!.toFixed(1)}%`,
+  ]);
+  return {
+    id: "venue-savings", name: "Venue Savings Report",
+    description: "Negotiated savings, contract values and ROI across venue sourcing engagements.",
+    pillar: "Venue Sourcing", icon: Handshake, lastGenerated: iso(-2),
+    visualizations: ["kpi", "bar", "line", "table"], defaultFormat: "PDF", large: true,
+    kpis: [
+      { label: "Total Savings", value: fmtGbp(venueSourcingKpis.totalSavings), trend: 12 },
+      { label: "Avg. Saving %", value: `${venueSourcingKpis.avgSavingPct.toFixed(1)}%`, trend: 3 },
+      { label: "Engagements", value: String(venueSourcingKpis.totalEngagements), trend: 6 },
+      { label: "Completed", value: String(venueSourcingKpis.completed), trend: 4 },
+    ],
+    bar, trend: monthsBack(12),
+    columns: ["ID", "Event", "Venue", "Initial", "Final", "Savings", "%"],
+    rows,
+  };
+})();
+
+const venueFeedbackTemplate: ReportTemplate = (() => {
+  const rows = FEEDBACK.map((f) => {
+    const e = ENGAGEMENTS.find((x) => x.id === f.engagementId);
+    return [
+      e?.eventName ?? f.engagementId, e?.venue ?? "—",
+      f.venueRating, f.serviceRating,
+      new Date(f.submittedAt).toLocaleDateString(),
+    ];
+  });
+  return {
+    id: "venue-feedback", name: "Venue Feedback Report",
+    description: "Venue ratings, AOK service ratings, and qualitative feedback (1–10 scale).",
+    pillar: "Venue Sourcing", icon: Star, lastGenerated: iso(-3),
+    visualizations: ["kpi", "bar", "table"], defaultFormat: "PDF",
+    kpis: [
+      { label: "Submitted", value: String(venueSourcingKpis.feedbackSubmitted), trend: 4 },
+      { label: "Pending", value: String(venueSourcingKpis.pendingFeedback), trend: -2 },
+      { label: "Avg. Venue", value: `${venueSourcingKpis.avgVenueRating.toFixed(1)}/10`, trend: 2 },
+      { label: "Avg. Service", value: `${venueSourcingKpis.avgServiceRating.toFixed(1)}/10`, trend: 3 },
+    ],
+    bar: FEEDBACK.map((f) => {
+      const e = ENGAGEMENTS.find((x) => x.id === f.engagementId);
+      return { label: e?.venue ?? f.engagementId, value: f.venueRating };
+    }),
+    columns: ["Event", "Venue", "Venue Rating", "Service Rating", "Submitted"],
+    rows,
+  };
+})();
+
+const supplierPerformanceTemplate: ReportTemplate = (() => {
+  const byVenue = new Map<string, { count: number; ratingSum: number; ratings: number; savings: number }>();
+  ENGAGEMENTS.forEach((e) => {
+    const v = byVenue.get(e.venue) ?? { count: 0, ratingSum: 0, ratings: 0, savings: 0 };
+    v.count++; v.savings += savingsValue(e) ?? 0;
+    const fb = FEEDBACK.find((f) => f.engagementId === e.id);
+    if (fb) { v.ratingSum += fb.venueRating; v.ratings++; }
+    byVenue.set(e.venue, v);
+  });
+  const bar = Array.from(byVenue.entries()).map(([label, v]) => ({
+    label, value: v.ratings ? Math.round((v.ratingSum / v.ratings) * 10) / 10 : 0,
+  }));
+  const rows = Array.from(byVenue.entries()).map(([venue, v]) => [
+    venue, v.count, v.ratings ? `${(v.ratingSum / v.ratings).toFixed(1)}/10` : "Pending",
+    fmtGbp(v.savings),
+  ]);
+  return {
+    id: "supplier-performance", name: "Supplier Performance Report",
+    description: "Venue supplier performance combining savings, ratings, and engagement volume.",
+    pillar: "Venue Sourcing", icon: Building2, lastGenerated: iso(-5),
+    visualizations: ["bar", "table"], defaultFormat: "PDF",
+    kpis: [
+      { label: "Suppliers", value: String(byVenue.size), trend: 2 },
+      { label: "Avg. Rating", value: `${venueSourcingKpis.avgVenueRating.toFixed(1)}/10`, trend: 2 },
+      { label: "Total Savings", value: fmtGbp(venueSourcingKpis.totalSavings), trend: 12 },
+      { label: "Engagements", value: String(venueSourcingKpis.totalEngagements), trend: 6 },
+    ],
+    bar,
+    columns: ["Venue", "Engagements", "Avg. Rating", "Total Savings"],
+    rows,
+  };
+})();
+
+const concessionSummaryTemplate: ReportTemplate = (() => {
+  const byType = new Map<string, number>();
+  ENGAGEMENTS.forEach((e) => e.concessions.forEach((c) =>
+    byType.set(c.type, (byType.get(c.type) ?? 0) + 1)));
+  const pie = Array.from(byType.entries()).map(([label, value]) => ({ label, value }));
+  const rows = ENGAGEMENTS.filter((e) => e.concessions.length > 0).slice(0, 14).map((e) => [
+    e.id, e.eventName, e.venue, e.concessions.length, fmtGbp(e.concessionsValue),
+  ]);
+  return {
+    id: "concession-summary", name: "Concession Summary Report",
+    description: "Breakdown of concessions secured across engagements (descriptive, non-monetary).",
+    pillar: "Venue Sourcing", icon: Gift, lastGenerated: iso(-6),
+    visualizations: ["pie", "bar", "table"], defaultFormat: "CSV",
+    kpis: [
+      { label: "Concession Types", value: String(byType.size), trend: 1 },
+      { label: "Total Concessions", value: String(Array.from(byType.values()).reduce((s, n) => s + n, 0)), trend: 5 },
+      { label: "Value Secured", value: fmtGbp(venueSourcingKpis.totalConcessions), trend: 8 },
+      { label: "Engagements w/ Concessions", value: String(ENGAGEMENTS.filter((e) => e.concessions.length > 0).length), trend: 2 },
+    ],
+    bar: pie, pie,
+    columns: ["ID", "Event", "Venue", "# Concessions", "Value"],
+    rows,
+  };
+})();
+
 export const REPORT_TEMPLATES: ReportTemplate[] = [
   utilisationTemplate, complianceTemplate, spendTemplate,
   enquiryTemplate, approvalTemplate, delegationTemplate,
+  venueSavingsTemplate, venueFeedbackTemplate,
+  supplierPerformanceTemplate, concessionSummaryTemplate,
 ];
 
 export const templateById = (id: string) =>

@@ -9,6 +9,8 @@ import EventDetail from "./pages/EventDetail.tsx";
 import Enquiries from "./pages/Enquiries.tsx";
 import Approvals from "./pages/Approvals.tsx";
 import Reports from "./pages/Reports.tsx";
+import VenueSourcing from "./pages/VenueSourcing.tsx";
+import VenueFeedback from "./pages/VenueFeedback.tsx";
 import ReportsCustom from "./pages/ReportsCustom.tsx";
 import ReportsScheduled from "./pages/ReportsScheduled.tsx";
 import ReportView from "./pages/ReportView.tsx";
@@ -39,6 +41,8 @@ const App = () => (
             <Route path="/enquiries" element={<Enquiries />} />
             <Route path="/approvals" element={<Approvals />} />
             <Route path="/reports" element={<Reports />} />
+            <Route path="/venue-sourcing" element={<VenueSourcing />} />
+            <Route path="/venue-sourcing/feedback" element={<VenueFeedback />} />
             <Route path="/reports/custom" element={<ReportsCustom />} />
             <Route path="/reports/scheduled" element={<ReportsScheduled />} />
             <Route path="/reports/view/:templateId" element={<ReportView />} />
